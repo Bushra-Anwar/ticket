@@ -1,0 +1,3125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>City Lite • F&B Counter Station #02 — Concessions POS & Data ERP</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#f4f1f1',
+            crimson: {
+              50: '#fef2f2',
+              100: '#fde2e2',
+              500: '#df232a',
+              600: '#d31920',
+              700: '#b31218',
+              800: '#8d1115',
+              900: '#4a0b0d'
+            },
+            ink: {
+              900: '#1a1616',
+              700: '#3b3333',
+              500: '#6e6363',
+              400: '#988c8c'
+            }
+          },
+          fontFamily: {
+            serif: ['"Times New Roman"', 'Times', 'serif'],
+            sans: ['Arial', 'Helvetica', 'sans-serif'],
+            mono: ['Arial', 'Helvetica', 'sans-serif']
+          },
+          boxShadow: {
+            'card': '0 8px 24px -4px rgba(40, 18, 18, 0.05), 0 2px 8px -1px rgba(40, 18, 18, 0.03)',
+            'card-hover': '0 14px 32px -4px rgba(185, 25, 30, 0.1), 0 4px 12px -2px rgba(40, 18, 18, 0.05)',
+            'crimson': '0 6px 18px -2px rgba(211, 25, 32, 0.38)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-style: normal !important; /* Strictly no cursive or italic anywhere */
+    }
+    body {
+      background-color: #f4f1f1;
+      background-image:
+        radial-gradient(at 18% 15%, rgba(226, 175, 175, 0.24) 0px, transparent 50%),
+        radial-gradient(at 85% 40%, rgba(225, 165, 165, 0.18) 0px, transparent 48%);
+      color: #1a1616;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-serif {
+      font-family: 'Times New Roman', Times, serif !important;
+      font-style: normal !important;
+    }
+
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1ebeb; }
+    ::-webkit-scrollbar-thumb { background: #d2c2c2; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #b59d9d; }
+
+    /* Pulse Dot */
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.9); }
+    }
+    .live-dot { animation: pulseDot 1.8s infinite ease-in-out; }
+
+    /* Dedicated 80mm POS Thermal Print Styling */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #thermalPrintArea, #thermalPrintArea * {
+        visibility: visible !important;
+      }
+      #thermalPrintArea {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 80mm !important;
+        max-width: 80mm !important;
+        padding: 4mm !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        border: none !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-crimson-600 selection:text-white">
+
+  <!-- FLOATING TOAST NOTIFICATIONS (LOW STOCK <=2, ONLINE APP ORDERS, BILLING) -->
+  <div id="toastStack" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none no-print"></div>
+
+  <!-- COLLAPSIBLE LEFT SIDEBAR DRAWER + OVERLAY (WORKABLE SIDEBAR FEATURES) -->
+  <div id="sidebarBackdrop" onclick="toggleSidebar(false)" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 hidden no-print transition-opacity"></div>
+
+  <aside id="appSidebar" class="fixed top-0 left-0 h-screen w-[275px] bg-white border-r border-[#eae2e2] shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between no-print">
+    <div class="p-4 overflow-y-auto space-y-5">
+      <!-- Brand Header -->
+      <div class="flex items-center justify-between pb-3.5 border-b border-[#f0e8e8]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-crimson-600 flex items-center justify-center text-white font-serif font-bold text-xs shadow-sm">
+            CL
+          </div>
+          <div>
+            <div class="font-serif font-bold text-base text-ink-900 leading-none">City Lite</div>
+            <div class="text-[9px] font-mono uppercase tracking-widest text-crimson-600 mt-0.5">F&amp;B COUNTER • ERP</div>
+          </div>
+        </div>
+        <button onclick="toggleSidebar(false)" class="p-1.5 rounded-lg hover:bg-[#f6f0f0] text-ink-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Station #02 Live Telemetry Box -->
+      <div class="p-3 rounded-xl bg-crimson-50/70 border border-crimson-100 space-y-1.5">
+        <div class="flex items-center justify-between text-[9.5px] font-mono font-bold text-crimson-700">
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span> STATION #02 ACTIVE</span>
+          <span>80MM POS</span>
+        </div>
+        <div class="text-xs font-bold text-ink-900">Sunita Mehta • Cashier #02</div>
+        <div class="text-[10.5px] font-mono text-ink-500 flex justify-between">
+          <span>Low Stock (&le;2): <strong id="sidebarLowStockCount" class="text-crimson-600">1</strong></span>
+          <span>App Orders: <strong id="sidebarOnlineCount" class="text-emerald-700">42</strong></span>
+        </div>
+      </div>
+
+      <!-- Sidebar Navigation Groups -->
+      <div>
+        <div class="px-2 mb-2 text-[9px] font-mono font-bold uppercase tracking-[0.14em] text-ink-400">F&amp;B COUNTER TERMINALS</div>
+        <nav class="space-y-1" id="sidebarNavPrimary"></nav>
+      </div>
+
+      <div>
+        <div class="px-2 mb-2 text-[9px] font-mono font-bold uppercase tracking-[0.14em] text-ink-400">INVENTORY, OFFERS &amp; GST DATA</div>
+        <nav class="space-y-1" id="sidebarNavSecondary"></nav>
+      </div>
+
+      <!-- Quick Simulation Tools in Sidebar -->
+      <div class="p-3.5 rounded-xl bg-[#faf6f6] border border-[#ece2e2] space-y-2">
+        <div class="text-[9.5px] font-mono font-bold uppercase tracking-wider text-ink-500">LIVE COUNTER SIMULATORS</div>
+        <button onclick="simulateIncomingAppOrder(); toggleSidebar(false);" class="w-full py-2 px-3 rounded-lg bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-[10.5px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+          <span>Simulate Customer App Order</span>
+        </button>
+        <button onclick="triggerLowStockDemo(); toggleSidebar(false);" class="w-full py-2 px-3 rounded-lg bg-white hover:bg-crimson-50 text-crimson-700 border border-crimson-200 font-mono text-[10.5px] font-bold flex items-center justify-center gap-1.5 transition">
+          <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+          <span>Test &ldquo;2 Left&rdquo; Low Stock Alert</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-3.5 border-t border-[#eee6e6] bg-[#faf7f7] flex items-center justify-between text-[10px] font-mono text-ink-500">
+      <span>GSTIN: 24AAAPC1234H1ZV</span>
+      <span class="text-emerald-700 font-bold">● 5% GST SYNC</span>
+    </div>
+  </aside>
+
+  <!-- ================= TOP NAVBAR (EXACT USER LAYOUT: LOGO FIRST -> SIDEBAR NEXT TO POS BILLING -> TABS -> NOTIFICATION -> SUNITA MEHTA FAR RIGHT) ================= -->
+  <header class="sticky top-0 z-30 bg-[#f7f4f4]/95 backdrop-blur-md border-b border-[#e8e0e0] px-3 lg:px-5 py-2 no-print">
+    <div class="w-full flex flex-wrap items-center justify-between gap-1">
+      
+      <!-- Left & Center Group: 1. City Lite Logo FIRST -> 2. Sidebar Toggle right next to POS Food Billing -> 3. Nav Tabs -> 4. Notification Bell right after Data/Tabs -->
+      <div class="flex items-center flex-wrap gap-1">
+        
+        <!-- 1. City Lite F&B COUNTER Logo (FIRST ITEM ON FAR LEFT - NO SIDEBAR BEFORE IT) -->
+        <div onclick="switchTab('pos')" class="flex items-center gap-2 pr-2 mr-1 border-r border-[#e5dddd] cursor-pointer shrink-0">
+          <div class="w-8 h-8 rounded-lg bg-crimson-600 flex items-center justify-center text-white shadow-xs">
+            <i data-lucide="popcorn" class="w-4 h-4"></i>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span class="font-serif font-bold text-lg text-ink-900 tracking-tight">City Lite</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider text-crimson-600">F&amp;B COUNTER</span>
+          </div>
+        </div>
+
+        <!-- 2. Sidebar Button + Navigation Tabs (Tight together with zero extra gap) -->
+        <nav class="flex items-center flex-wrap gap-1" id="topNavbarTabs">
+          <!-- Sidebar Toggle Button placed right next to POS Food Billing -->
+          <button onclick="toggleSidebar(true)" title="Open Full F&B ERP Sidebar" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-crimson-50 border border-[#e2d8d8] text-xs font-bold text-ink-800 hover:text-crimson-600 flex items-center gap-1 shadow-2xs transition relative shrink-0">
+            <i data-lucide="menu" class="w-3.5 h-3.5 text-crimson-600"></i>
+            <span>Sidebar</span>
+            <span id="sidebarBadgeDot" class="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
+          </button>
+
+          <button onclick="switchTab('pos')" id="tab-pos" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-crimson-600 text-white shadow-xs shrink-0">
+            POS Food Billing
+          </button>
+          <button onclick="switchTab('catalog')" id="tab-catalog" class="px-3 py-1.5 rounded-lg text-xs font-bold text-ink-700 hover:bg-white transition flex items-center gap-1 shrink-0">
+            <span>Menu Catalog</span>
+            <span id="navRestockBadge" class="px-1.5 py-0.2 rounded-full bg-crimson-100 text-crimson-700 text-[9.5px] font-bold">1 Low</span>
+          </button>
+          <button onclick="switchTab('orders')" id="tab-orders" class="px-3 py-1.5 rounded-lg text-xs font-bold text-ink-700 hover:bg-white transition flex items-center gap-1 shrink-0">
+            <span>Active Orders</span>
+            <span id="navActiveOrdersBadge" class="px-1.5 py-0.2 rounded-full bg-[#eae2e2] text-ink-700 text-[9.5px] font-bold">3</span>
+          </button>
+          <button onclick="switchTab('kds')" id="tab-kds" class="px-3 py-1.5 rounded-lg text-xs font-bold text-ink-700 hover:bg-white transition shrink-0">
+            Kitchen KDS Stream
+          </button>
+          <button onclick="switchTab('data')" id="tab-data" class="px-3 py-1.5 rounded-lg text-xs font-bold text-crimson-700 bg-crimson-50 hover:bg-crimson-100 border border-crimson-200 transition flex items-center gap-1 shrink-0">
+            <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i>
+            <span>Data &amp; Sales Ledger</span>
+          </button>
+
+          <!-- 3. Notification Button placed right after Data & Sales Ledger in Top Bar -->
+          <div class="relative shrink-0">
+            <button onclick="toggleNotificationDrawer()" title="Live Notifications (Online Orders & Stock <= 2)" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-crimson-50 border border-[#e2d8d8] text-xs font-bold text-ink-800 flex items-center gap-1 transition relative">
+              <i data-lucide="bell" class="w-3.5 h-3.5 text-crimson-600"></i>
+              <span>Alerts</span>
+              <span id="notifCountBadge" class="px-1.5 min-w-[16px] h-4 rounded-full bg-crimson-600 text-white text-[9.5px] font-bold flex items-center justify-center">2</span>
+            </button>
+
+            <!-- Notification Dropdown Panel -->
+            <div id="notifDropdown" class="hidden absolute left-0 sm:left-auto sm:right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl border border-[#e5dada] shadow-2xl z-50 overflow-hidden">
+              <div class="px-4 py-3 bg-[#faf6f6] border-b border-[#ece2e2] flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-crimson-600">LIVE ALERTS (APP ORDERS &amp; STOCK &le; 2)</span>
+                <button onclick="clearNotifications()" class="text-[10px] font-bold text-ink-500 hover:text-crimson-600">Clear All</button>
+              </div>
+              <div id="notifListContainer" class="max-h-80 overflow-y-auto divide-y divide-[#f2ecec]"></div>
+            </div>
+          </div>
+
+          <button onclick="switchTab('offers')" id="tab-offers" class="px-3 py-1.5 rounded-lg text-xs font-bold text-ink-700 hover:bg-white transition flex items-center gap-1 shrink-0">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-crimson-600"></i>
+            <span>Movie + Offers</span>
+          </button>
+
+          <!-- Simulate Online App Order Button -->
+          <button onclick="simulateIncomingAppOrder()" title="Simulate Customer Ordering Food from Mobile App" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[10.5px] font-bold uppercase tracking-wider shadow-xs transition shrink-0">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+            <span>+ App Order</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- 4. FAR RIGHT CORNER: Cashier Profile Sunita Mehta pinned strictly to the right edge -->
+      <div class="flex items-center gap-2 ml-auto pl-2 border-l border-[#e4dada] shrink-0">
+        <div class="text-right leading-tight">
+          <div class="text-xs font-serif font-bold text-ink-900">Sunita Mehta</div>
+          <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400">CASHIER · STATION #02</div>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-crimson-700 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+          <i data-lucide="user" class="w-4 h-4"></i>
+        </div>
+        <button onclick="openShiftSummaryModal()" title="Shift Handover & EOD Summary" class="p-1.5 rounded-lg hover:bg-white text-ink-500 hover:text-crimson-600 transition">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- LOW STOCK (<= 2 LEFT) CRITICAL BANNER (Auto-appears whenever any item has <= 2 units left) -->
+  <div id="criticalLowStockBanner" class="hidden bg-crimson-600 text-white px-4 lg:px-7 py-2 text-xs no-print">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 font-medium">
+        <span class="px-2 py-0.5 rounded bg-white text-crimson-700 font-mono text-[10px] font-bold uppercase">STOCK ALERT &le; 2 LEFT</span>
+        <span id="criticalLowStockText">Items running out! Immediate restock required at Concessions Foyer Station #02.</span>
+      </div>
+      <button onclick="openEasyRestockModal()" class="px-3 py-1 rounded-lg bg-white text-crimson-700 font-mono text-[10.5px] font-bold uppercase tracking-wider shadow-xs hover:bg-crimson-50 transition">
+        ⚡ Quick Restock Now
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="flex-1 max-w-[1440px] w-full mx-auto px-4 lg:px-7 py-5 space-y-5 no-print">
+
+    <!-- ======================================================================= -->
+    <!-- TAB 1: POS FOOD BILLING (EXACT DESIGN FROM PHOTO screen_2.jpg)          -->
+    <!-- ======================================================================= -->
+    <div id="view-pos" class="space-y-5">
+
+      <!-- 1. DARK 3D CONCESSION SHOWCASE VIEWPORT (EXACT MATCH TO PHOTO TOP STAGE) -->
+      <section class="relative w-full h-[215px] sm:h-[235px] rounded-2xl bg-[#070606] border border-[#2a2222] shadow-lg overflow-hidden select-none">
+        <!-- Top Overlay Pills inside 3D Viewport -->
+        <div class="absolute top-3.5 left-4 z-10 flex flex-wrap items-center gap-2">
+          <button onclick="set3DShowcaseMode('all')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1c1616]/90 hover:bg-[#2a2020] border border-crimson-800/60 text-[10px] font-mono font-bold uppercase tracking-wider text-white shadow-sm transition">
+            <span class="w-2 h-2 rounded-full bg-crimson-500 live-dot"></span>
+            <span>3D CONCESSION SHOWCASE</span>
+          </button>
+          <button onclick="set3DShowcaseMode('spin')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1c1616]/85 hover:bg-[#2a2020] border border-white/10 text-[10px] font-mono text-white/80 transition">
+            <i data-lucide="box" class="w-3 h-3 text-crimson-500"></i>
+            <span>Live 360° Inspection</span>
+          </button>
+          <button onclick="set3DShowcaseMode('inspect')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1c1616]/85 hover:bg-[#2a2020] border border-white/10 text-[10px] font-mono text-white/80 transition">
+            <i data-lucide="cup-soda" class="w-3 h-3 text-amber-400"></i>
+            <span>Inspect Popcorn / Beverage</span>
+          </button>
+        </div>
+
+        <!-- Top-Right Quick Add from 3D Stage -->
+        <div id="showcaseInspectBadge" class="absolute top-3.5 right-4 z-10 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10.5px] font-mono text-white/90">
+          <span id="showcaseSelectedLabel">Focused: Blockbuster Tub + Coke</span>
+          <button onclick="quickAddShowcaseItem()" class="px-2 py-0.5 rounded bg-crimson-600 hover:bg-crimson-500 text-white font-bold text-[9.5px]">+ ADD</button>
+        </div>
+
+        <!-- Interactive HTML5 3D-Style Turntable Canvas -->
+        <canvas id="concession3DCanvas" class="w-full h-full cursor-grab active:cursor-grabbing block"></canvas>
+
+        <!-- Bottom-Right Drag / Zoom Pill (Exact Match to Photo) -->
+        <div class="absolute bottom-3.5 right-4 z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1c1616]/90 border border-white/10 text-[10px] font-mono text-white/75 pointer-events-none">
+          <i data-lucide="compass" class="w-3 h-3 text-amber-400"></i>
+          <span>Drag / Move to Rotate · Scroll to Zoom</span>
+        </div>
+      </section>
+
+      <!-- 2. STATION #02 · CONCESSIONS FOYER KPI BAR (EXACT MATCH TO PHOTO) -->
+      <section class="bg-white rounded-2xl p-4 sm:px-6 border border-[#e9e0e0] shadow-card flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <!-- Left Station Title & Status -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-11 h-11 rounded-xl bg-crimson-600 text-white flex items-center justify-center shadow-crimson shrink-0">
+            <i data-lucide="calculator" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2.5">
+              <h1 class="font-serif font-bold text-xl sm:text-[22px] text-ink-900 tracking-tight">
+                Station #02 · Concessions Foyer
+              </h1>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-crimson-50 border border-crimson-100 text-[9px] font-mono font-bold uppercase tracking-wider text-crimson-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-crimson-600 live-dot"></span>
+                TERMINAL LIVE
+              </span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono text-ink-500 mt-0.5">
+              <span class="flex items-center gap-1"><i data-lucide="printer" class="w-3 h-3"></i> Thermal 80mm Online</span>
+              <span>·</span>
+              <span class="flex items-center gap-1"><i data-lucide="scan-barcode" class="w-3 h-3"></i> Scanner Ready [F2 Search]</span>
+              <span>·</span>
+              <span>Cashier: <strong class="text-ink-800">Sunita Mehta (Op #02)</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 3 KPI Boxes (SHIFT CASH HANDLED, ORDERS BILLED, AVG DISPATCH TIME) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0">
+          <!-- KPI 1: SHIFT CASH HANDLED -->
+          <div onclick="switchTab('data')" title="Click to inspect full Cash vs Online GST breakdown" class="px-4 py-2.5 rounded-xl bg-[#fcf9f9] hover:bg-crimson-50/40 border border-[#ebe2e2] cursor-pointer transition min-w-[165px]">
+            <div class="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider text-ink-400">
+              <i data-lucide="banknote" class="w-3 h-3 text-ink-400"></i>
+              <span>SHIFT CASH HANDLED</span>
+            </div>
+            <div class="font-serif font-bold text-xl text-ink-900 tabular-nums mt-0.5" id="kpiShiftCash">₹18,600</div>
+            <div class="text-[9.5px] font-mono text-ink-400" id="kpiShiftCashSub">Reconciled till 19:42</div>
+          </div>
+
+          <!-- KPI 2: ORDERS BILLED -->
+          <div onclick="switchTab('data')" title="Click to inspect Counter vs Online App orders" class="px-4 py-2.5 rounded-xl bg-[#fcf9f9] hover:bg-crimson-50/40 border border-[#ebe2e2] cursor-pointer transition min-w-[155px]">
+            <div class="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider text-ink-400">
+              <i data-lucide="receipt" class="w-3 h-3 text-ink-400"></i>
+              <span>ORDERS BILLED</span>
+            </div>
+            <div class="font-serif font-bold text-xl text-ink-900 tabular-nums mt-0.5">
+              <span id="kpiOrdersBilled">184</span> <span class="text-xs font-sans font-normal text-ink-400">txns</span>
+            </div>
+            <div class="text-[9.5px] font-mono font-bold text-crimson-600" id="kpiOrdersSplitSub">Shift Target: 92%</div>
+          </div>
+
+          <!-- KPI 3: AVG DISPATCH TIME -->
+          <div onclick="switchTab('kds')" class="px-4 py-2.5 rounded-xl bg-[#fcf9f9] hover:bg-crimson-50/40 border border-[#ebe2e2] cursor-pointer transition min-w-[155px]">
+            <div class="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider text-ink-400">
+              <i data-lucide="timer" class="w-3 h-3 text-ink-400"></i>
+              <span>AVG DISPATCH TIME</span>
+            </div>
+            <div class="font-serif font-bold text-xl text-crimson-600 tabular-nums mt-0.5">
+              3.8 <span class="text-xs font-sans font-normal text-ink-400">min</span>
+            </div>
+            <div class="text-[9.5px] font-mono text-ink-400">Target &lt; 4.5 min</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. MAIN SPLIT WORKSPACE: LEFT MENU GRID (7 COLS) + RIGHT CART #CLP-8842 (5 COLS) -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ================= LEFT 7 COLS: SEARCH, CATEGORY PILLS & 3x3 FOOD GRID ================= -->
+        <div class="lg:col-span-7 xl:col-span-8 space-y-4">
+
+          <!-- Search & Category Filter Bar (Exact Match to Photo) -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+            <!-- Search Input -->
+            <div class="relative flex-1">
+              <i data-lucide="search" class="w-4 h-4 text-ink-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+              <input
+                id="posSearchInput"
+                type="text"
+                oninput="renderPosProductGrid()"
+                placeholder="Search items or press [F2] / Barcode scan..."
+                class="w-full pl-9 pr-12 py-2 rounded-xl bg-white border border-[#e3d8d8] text-xs text-ink-900 placeholder:text-ink-400 focus:outline-none focus:border-crimson-500 shadow-2xs"
+              />
+              <span class="px-1.5 py-0.5 rounded bg-[#f2ecec] border border-[#e2d7d7] font-mono text-[9.5px] text-ink-500 absolute right-2.5 top-1/2 -translate-y-1/2">F2</span>
+            </div>
+
+            <!-- Category Pills -->
+            <div class="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0" id="categoryFilterBar">
+              <!-- Populated dynamically: ALL, COMBOS, POPCORN, NACHOS, PUFFS, DRINKS, OFFERS -->
+            </div>
+
+            <!-- Quick Restock / Add Product Button -->
+            <button onclick="openEasyRestockModal()" title="Restock Low Items or Add New Product with Photo" class="px-3 py-2 rounded-xl bg-white hover:bg-crimson-50 text-crimson-700 border border-[#e3d8d8] font-mono text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 shrink-0 shadow-2xs transition">
+              <i data-lucide="package-plus" class="w-3.5 h-3.5"></i>
+              <span>Restock / +Item</span>
+            </button>
+          </div>
+
+          <!-- 3x3 PRODUCT CARDS GRID -->
+          <div id="posProductGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            <!-- Dynamically rendered from state.products -->
+          </div>
+        </div>
+
+        <!-- ================= RIGHT 5 COLS: CART #CLP-8842 PANEL (EXACT MATCH TO PHOTO) ================= -->
+        <div class="lg:col-span-5 xl:col-span-4 bg-white rounded-2xl p-5 sm:p-6 border border-[#e8dfdf] shadow-card sticky top-20 space-y-4">
+          
+          <!-- Cart Header -->
+          <div class="flex items-start justify-between border-b border-[#f1e9e9] pb-3.5">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-serif font-bold text-xl text-ink-900" id="cartTokenHeading">Cart #CLP-8842</h2>
+                <span class="px-2 py-0.5 rounded bg-crimson-50 border border-crimson-100 text-crimson-700 font-mono text-[9px] font-bold uppercase tracking-wider">
+                  ACTIVE TOKEN
+                </span>
+              </div>
+              <div class="text-[9.5px] font-mono uppercase tracking-widest text-ink-400 mt-0.5" id="cartSourceSublabel">
+                COUNTER POS EXPRESS
+              </div>
+            </div>
+
+            <button onclick="clearCart()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-crimson-50 text-ink-500 hover:text-crimson-600 font-mono text-[10px] font-semibold uppercase transition">
+              <i data-lucide="trash-2" class="w-3 h-3"></i>
+              <span>CLEAR</span>
+            </button>
+          </div>
+
+          <!-- Delivery Mode Toggle: Counter Pickup vs Audi In-Seat -->
+          <div class="grid grid-cols-2 p-1 rounded-xl bg-[#f5f0f0] border border-[#ebe2e2]">
+            <button onclick="setOrderDeliveryMode('Counter Pickup')" id="btnModeCounter" class="py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition bg-white text-ink-900 shadow-xs">
+              <i data-lucide="store" class="w-3.5 h-3.5 text-crimson-600"></i>
+              <span>Counter Pickup</span>
+            </button>
+            <button onclick="setOrderDeliveryMode('Audi In-Seat')" id="btnModeSeat" class="py-2 rounded-lg text-xs font-medium text-ink-500 flex items-center justify-center gap-1.5 transition hover:text-ink-900">
+              <i data-lucide="armchair" class="w-3.5 h-3.5"></i>
+              <span>Audi In-Seat</span>
+            </button>
+          </div>
+
+          <!-- Customer Name & Seat / Phone Input (Recorded in Data Tab & Thermal Invoice!) -->
+          <div class="grid grid-cols-2 gap-2 pt-0.5">
+            <input
+              id="cartCustomerName"
+              type="text"
+              placeholder="Customer Name (Walk-in)"
+              value="Walk-in Guest"
+              class="px-3 py-1.5 rounded-lg bg-[#faf7f7] border border-[#e6dddd] text-[11px] text-ink-800 focus:outline-none focus:border-crimson-500"
+            />
+            <input
+              id="cartSeatOrPhone"
+              type="text"
+              placeholder="Seat / Phone (e.g. Audi 1 E12)"
+              value="Token #42 · Foyer"
+              class="px-3 py-1.5 rounded-lg bg-[#faf7f7] border border-[#e6dddd] text-[11px] font-mono text-ink-800 focus:outline-none focus:border-crimson-500"
+            />
+          </div>
+
+          <!-- Cart Line Items List -->
+          <div id="cartItemsContainer" class="divide-y divide-[#f2ecec] max-h-[260px] overflow-y-auto pr-1">
+            <!-- Populated dynamically by renderCartPanel() -->
+          </div>
+
+          <!-- Subtotal & Statutory 5% F&B GST Breakdown (CGST 2.5% + SGST 2.5%) -->
+          <div class="pt-3 border-t border-[#ece2e2] space-y-1.5 text-xs">
+            <div class="flex items-center justify-between text-ink-600">
+              <span>Items Subtotal</span>
+              <span class="font-mono font-medium text-ink-900 tabular-nums" id="cartSubtotalText">₹560.00</span>
+            </div>
+            <div class="flex items-center justify-between text-ink-500 text-[11px]">
+              <span>CGST (2.5% F&amp;B Concessions)</span>
+              <span class="font-mono tabular-nums" id="cartCgstText">₹14.00</span>
+            </div>
+            <div class="flex items-center justify-between text-ink-500 text-[11px]">
+              <span>SGST (2.5% F&amp;B Concessions)</span>
+              <span class="font-mono tabular-nums" id="cartSgstText">₹14.00</span>
+            </div>
+
+            <!-- Net Bill Box (Exact Match to Photo) -->
+            <div class="mt-2.5 p-3.5 rounded-xl bg-[#fcf6f6] border border-[#f0dede] flex items-center justify-between">
+              <div>
+                <div class="text-[9px] font-mono font-bold uppercase tracking-wider text-ink-500">NET BILL AMOUNT</div>
+                <div class="text-[11px] font-medium text-crimson-600 mt-0.5" id="cartItemCountLabel">3 items + 1 upsell</div>
+              </div>
+              <div class="font-serif font-bold text-2xl sm:text-[28px] text-crimson-600 tabular-nums leading-none" id="cartGrandTotalText">
+                ₹588.00
+              </div>
+            </div>
+
+            <!-- Cash Tendered & Change Return Bar -->
+            <div class="px-3.5 py-2 rounded-xl bg-[#faf7f7] border border-[#ece4e4] flex items-center justify-between text-[11px] font-mono">
+              <div class="flex items-center gap-1.5 text-ink-600">
+                <span>Cash Tendered: ₹</span>
+                <input
+                  id="cashTenderedInput"
+                  type="number"
+                  value="600"
+                  oninput="updateCashChange()"
+                  class="w-16 px-1.5 py-0.5 rounded bg-white border border-[#dfd5d5] font-mono font-bold text-ink-900 text-xs focus:outline-none focus:border-crimson-500"
+                />
+              </div>
+              <div class="font-bold text-crimson-600" id="cashChangeReturnText">
+                Change Return: ₹12.00
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Mode Selector: UPI Scan, Card POS, Cash -->
+          <div class="grid grid-cols-3 gap-2 pt-1">
+            <button onclick="setPaymentMethod('UPI Online')" id="payBtnUpi" class="p-2.5 rounded-xl bg-[#faf7f7] hover:bg-crimson-50/40 border border-[#e6dddd] flex flex-col items-center justify-center gap-1 transition">
+              <i data-lucide="qr-code" class="w-4 h-4 text-crimson-600"></i>
+              <span class="text-[10.5px] font-semibold text-ink-800">UPI Scan</span>
+            </button>
+
+            <button onclick="setPaymentMethod('Card POS')" id="payBtnCard" class="p-2.5 rounded-xl bg-[#faf7f7] hover:bg-crimson-50/40 border border-[#e6dddd] flex flex-col items-center justify-center gap-1 transition">
+              <i data-lucide="credit-card" class="w-4 h-4 text-ink-600"></i>
+              <span class="text-[10.5px] font-semibold text-ink-800">Card POS</span>
+            </button>
+
+            <button onclick="setPaymentMethod('Cash')" id="payBtnCash" class="p-2.5 rounded-xl bg-white border-2 border-crimson-600 flex flex-col items-center justify-center gap-1 shadow-xs transition">
+              <i data-lucide="banknote" class="w-4 h-4 text-crimson-600"></i>
+              <span class="text-[10.5px] font-bold text-ink-900" id="payBtnCashLabel">Cash ₹600</span>
+            </button>
+          </div>
+
+          <!-- Primary CTA: TENDER & PRINT KOT -->
+          <button onclick="tenderAndPrintKot()" class="w-full py-3.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 active:scale-[0.99] text-white font-mono text-xs font-bold uppercase tracking-widest shadow-crimson flex items-center justify-center gap-2 transition">
+            <i data-lucide="receipt" class="w-4 h-4"></i>
+            <span>TENDER &amp; PRINT KOT</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- 4. BOTTOM ACTIVE KITCHEN KDS STREAM (EXACT MATCH TO PHOTO) -->
+      <section class="bg-white rounded-2xl p-5 sm:p-6 border border-[#e9e0e0] shadow-card space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-crimson-600 live-dot"></span>
+            <h3 class="font-serif font-bold text-lg text-ink-900">Active Kitchen KDS Stream</h3>
+            <span class="px-2.5 py-0.5 rounded-md bg-[#f5f0f0] border border-[#e6dddd] font-mono text-[9.5px] font-semibold text-ink-500 uppercase" id="kdsCountBadge">
+              3 ORDERS IN PREPARATION
+            </span>
+          </div>
+
+          <div class="flex items-center gap-4 text-[10.5px] font-mono text-ink-500">
+            <span class="flex items-center gap-1.5 text-crimson-600 font-semibold">
+              <span class="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
+              Live Sync Enabled
+            </span>
+            <button onclick="renderKdsStream()" class="flex items-center gap-1 hover:text-ink-900">
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+              <span>Refresh KDS</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3-Column KDS Cards Grid -->
+        <div id="kdsCardsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Populated dynamically by renderKdsStream() -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 2: MENU CATALOG & EASY PHOTO/PRICE RESTOCK MANAGER                  -->
+    <!-- ======================================================================= -->
+    <div id="view-catalog" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson-600">STATION #02 INVENTORY &amp; CATALOG</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Easy Product Restock &amp; Menu Catalog Manager</h2>
+          <p class="text-xs text-ink-500 mt-0.5">Add new food items with photos &amp; prices, remove items, or restock low inventory (&le; 2 units left triggers automatic alert).</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button onclick="restockAllLowItems()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-xs transition">
+            + Restock All Low Items (+25 Units)
+          </button>
+          <button onclick="openAddNewProductModal()" class="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson transition">
+            + Add New Food / Offer Item
+          </button>
+        </div>
+      </div>
+
+      <!-- Visual Product Restock Cards Grid (With Photo, Price, Sold Count, Left Stock & 1-Click Restock) -->
+      <div id="catalogRestockGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 3: ACTIVE ORDERS (COUNTER POS vs ONLINE APP ORDERS QUEUE)           -->
+    <!-- ======================================================================= -->
+    <div id="view-orders" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson-600">REAL-TIME ORDER DISPATCH</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Active Counter &amp; Online Mobile App Orders</h2>
+          <p class="text-xs text-ink-500">Inspect every order placed from Counter #02 or via the City Lite Customer Mobile App with instant thermal invoice &amp; QR reprint.</p>
+        </div>
+        <button onclick="simulateIncomingAppOrder()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-mono text-xs font-bold uppercase tracking-wider">
+          📲 Simulate New Customer App Order
+        </button>
+      </div>
+
+      <div id="activeOrdersListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 4: FULL-SCREEN KITCHEN KDS STREAM                                   -->
+    <!-- ======================================================================= -->
+    <div id="view-kds" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson-600">KITCHEN DISPLAY SYSTEM (KDS)</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Live Kitchen Preparation &amp; In-Seat Runner Stream</h2>
+        </div>
+        <button onclick="switchTab('pos')" class="px-4 py-2 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold">
+          Back to Billing POS
+        </button>
+      </div>
+      <div id="fullKdsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 5: DATA & SALES LEDGER (ALL USER REQUESTED DATA ANALYTICS!)         -->
+    <!-- ======================================================================= -->
+    <div id="view-data" class="hidden space-y-6">
+      <!-- Top Header -->
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson-600">F&amp;B COUNTER DATA INTELLIGENCE &amp; GST LEDGER</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Complete Product Sales, Category Stock, Payment Split &amp; Customer Order Ledger</h2>
+          <p class="text-xs text-ink-500 mt-0.5">Live tracking of how much each product sold, remaining stock category-wise, Cash vs Online payments, Counter vs Online App orders, and 5% GST total.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="exportDataLedgerCsv()" class="px-4 py-2.5 rounded-xl bg-ink-900 hover:bg-black text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Export Full Data CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Executive Data Summary Cards (Revenue with GST, Cash vs Online, Counter vs App, Stock Health) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dataSummaryCards"></div>
+
+      <!-- Category-Wise Stock & Sales Breakdown + Most Sold vs Least Sold Highlight -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 Cols: Category-Wise Sales & Stock Table -->
+        <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">CATEGORY INVENTORY &amp; REVENUE</span>
+              <h3 class="font-serif font-bold text-lg text-ink-900">Category-Wise Units Sold, Stock Left &amp; Gross (Incl. GST)</h3>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-y border-[#eee6e6] font-mono text-[10px] uppercase text-ink-400">
+                  <th class="py-2.5">Category</th>
+                  <th class="py-2.5">Products</th>
+                  <th class="py-2.5">Units Sold</th>
+                  <th class="py-2.5">Stock Left</th>
+                  <th class="py-2.5 text-right">Gross Sales (w/ 5% GST)</th>
+                </tr>
+              </thead>
+              <tbody id="categoryAnalyticsBody" class="divide-y divide-[#f4eeee] font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Most Sold vs Least Sold Products & Movie+Offers Performance -->
+        <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card space-y-4">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">BESTSELLER VS SLOW-MOVING</span>
+            <h3 class="font-serif font-bold text-lg text-ink-900">Product &amp; Offer Performance Ranking</h3>
+          </div>
+          <div id="mostLeastSoldContainer" class="space-y-3"></div>
+        </div>
+      </div>
+
+      <!-- Product-Wise Detailed Stock & Sales Table -->
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">ITEM-LEVEL INVENTORY LEDGER</span>
+            <h3 class="font-serif font-bold text-lg text-ink-900">Product-by-Product Sold Quantity, Remaining Stock &amp; GST Revenue</h3>
+          </div>
+          <button onclick="openEasyRestockModal()" class="px-3.5 py-1.5 rounded-lg bg-crimson-50 text-crimson-700 border border-crimson-200 font-mono text-[10.5px] font-bold">
+            + Quick Restock Products
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-y border-[#eee6e6] font-mono text-[10px] uppercase text-ink-400">
+                <th class="py-2.5">Product</th>
+                <th class="py-2.5">Category</th>
+                <th class="py-2.5">Base Price</th>
+                <th class="py-2.5">Units Sold</th>
+                <th class="py-2.5">Stock Left</th>
+                <th class="py-2.5">GST (5%)</th>
+                <th class="py-2.5 text-right">Total Sold (Incl. GST)</th>
+                <th class="py-2.5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="productAnalyticsTableBody" class="divide-y divide-[#f4eeee]"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Customer Order History Table (Which Date, Which Customer, When, Source, Payment Mode, GST Total & Thermal Bill) -->
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">CHRONOLOGICAL CUSTOMER ORDER LOG</span>
+            <h3 class="font-serif font-bold text-lg text-ink-900">Customer Orders — Date, Time, Source (Online App vs Counter), Payment &amp; GST Bill</h3>
+          </div>
+          <!-- Filters -->
+          <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+            <select id="filterOrderSource" onchange="renderDataTab()" class="px-3 py-1.5 rounded-lg bg-[#faf7f7] border border-[#e4dada] text-xs">
+              <option value="ALL">All Sources (Counter + App)</option>
+              <option value="Counter POS">Counter POS Only</option>
+              <option value="Online App">Online Customer App Only</option>
+            </select>
+            <select id="filterPaymentType" onchange="renderDataTab()" class="px-3 py-1.5 rounded-lg bg-[#faf7f7] border border-[#e4dada] text-xs">
+              <option value="ALL">All Payments (Cash + UPI + Card)</option>
+              <option value="Cash">Cash Only</option>
+              <option value="UPI Online">UPI Online Only</option>
+              <option value="Card POS">Card POS Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-y border-[#eee6e6] font-mono text-[10px] uppercase text-ink-400">
+                <th class="py-2.5">Order / Token</th>
+                <th class="py-2.5">Date &amp; Time</th>
+                <th class="py-2.5">Customer &amp; Seat</th>
+                <th class="py-2.5">Order Source</th>
+                <th class="py-2.5">Items Ordered</th>
+                <th class="py-2.5">Payment Mode</th>
+                <th class="py-2.5">Subtotal + 5% GST</th>
+                <th class="py-2.5 text-right">Net Total</th>
+                <th class="py-2.5 text-right">Invoice / QR</th>
+              </tr>
+            </thead>
+            <tbody id="customerOrderHistoryBody" class="divide-y divide-[#f4eeee]"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB 6: MOVIE + FOOD OFFERS & % DISCOUNT ANALYTICS                       -->
+    <!-- ======================================================================= -->
+    <div id="view-offers" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-[#e8dfdf] shadow-card flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-[10px] font-mono font-bold uppercase tracking-widest text-crimson-600">PROMOTIONAL BUNDLES &amp; MOVIE OFFERS</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Movie + Food Combo Offers &amp; Discount Conversion Tracker</h2>
+          <p class="text-xs text-ink-500 mt-0.5">Track which Movie + Food bundle or % Discount offer sold the most vs. least, and add them directly to the billing cart.</p>
+        </div>
+        <button onclick="openAddNewProductModal(true)" class="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson">
+          + Create New Movie / % Offer
+        </button>
+      </div>
+
+      <!-- Offer Performance Banner (Most Sold Offer vs Least Sold Offer) -->
+      <div id="offersAnalyticsBanner" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+      <!-- Offer Cards Grid -->
+      <div id="offersCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM STATUS FOOTER BAR (EXACT MATCH TO PHOTO) -->
+  <footer class="mt-auto bg-white/80 border-t border-[#e8e0e0] px-4 lg:px-7 py-2.5 text-[11px] font-mono text-ink-500 no-print">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+        <span>CityLite Palanpur · Cashier Terminal 02 [Online]</span>
+      </div>
+      <div>
+        Thermal Printer: Connected · Cash Drawer: Locked
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL 1: 80MM POS THERMAL RECEIPT + SCANNABLE QR & CUSTOMER DIGITAL INVOICE ================= -->
+  <div id="receiptModalOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto no-print">
+    <div class="bg-white rounded-2xl border border-[#e4dada] shadow-2xl max-w-4xl w-full overflow-hidden my-8">
+      <!-- Modal Top Header -->
+      <div class="px-6 py-4 bg-[#faf6f6] border-b border-[#ece2e2] flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+          <div>
+            <div class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">80MM THERMAL KOT &amp; CUSTOMER QR E-INVOICE</div>
+            <h3 class="font-serif font-bold text-lg text-ink-900" id="receiptModalTitle">Bill Printed • Token #CLP-8842</h3>
+          </div>
+        </div>
+        <button onclick="closeReceiptModal()" class="w-8 h-8 rounded-lg bg-white border border-[#e2d8d8] flex items-center justify-center text-ink-500 hover:text-crimson-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Modal Split Body: Left = Authentic 80mm Thermal Paper Receipt | Right = Customer QR Scan Preview & Download -->
+      <div class="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 bg-[#f6f2f2] max-h-[80vh] overflow-y-auto">
+        
+        <!-- LEFT 6 COLS: 80MM THERMAL PRINT PAPER SLIP -->
+        <div class="lg:col-span-6 flex flex-col items-center">
+          <div id="thermalPrintArea" class="w-full max-w-[330px] bg-white text-black p-5 rounded-md shadow-md border border-[#e0d8d8] font-mono text-[11px] leading-relaxed">
+            <!-- Dynamically populated with Company Details, GSTIN, Items, CGST 2.5%, SGST 2.5%, Total, and QR Code -->
+          </div>
+        </div>
+
+        <!-- RIGHT 6 COLS: INTERACTIVE ACTIONS (PRINT REAL THERMAL, SCAN QR TO VIEW CUSTOMER INVOICE, DOWNLOAD) -->
+        <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+          <div class="bg-white rounded-2xl p-5 border border-[#e8dfdf] space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-mono text-[10px] font-bold">
+                ✓ STOCK DEDUCTED &amp; GST LOGGED
+              </span>
+              <span class="font-mono text-[10.5px] text-ink-400" id="receiptRightTimestamp">19:44:12 IST</span>
+            </div>
+
+            <h4 class="font-serif font-bold text-xl text-ink-900">Thermal Printer &amp; Customer QR Scan</h4>
+            <p class="text-xs text-ink-500 leading-relaxed">
+              The 80mm thermal slip on the left includes full <strong>City Lite Cinema Palanpur</strong> company details, itemized <strong>2.5% CGST + 2.5% SGST (5% GST)</strong>, and a scannable <strong>Customer Invoice QR Code</strong>.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="space-y-2.5 pt-2">
+              <button onclick="triggerRealThermalPrint()" class="w-full py-3 px-4 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson flex items-center justify-center gap-2 transition">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                <span>Print Real 80mm Thermal Receipt</span>
+              </button>
+
+              <button onclick="toggleCustomerScannedView()" class="w-full py-3 px-4 rounded-xl bg-ink-900 hover:bg-black text-white font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition">
+                <i data-lucide="smartphone" class="w-4 h-4 text-emerald-400"></i>
+                <span>Simulate Customer Scanning QR Code (View e-Invoice)</span>
+              </button>
+
+              <button onclick="downloadCustomerInvoiceHtml()" class="w-full py-2.5 px-4 rounded-xl bg-[#faf6f6] hover:bg-crimson-50 text-crimson-700 border border-crimson-200 font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Download Customer GST Invoice (HTML / Print PDF)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Simulated Customer Phone Screen after Scanning QR -->
+          <div id="customerPhonePreviewBox" class="bg-white rounded-2xl p-5 border-2 border-emerald-500 shadow-lg space-y-3">
+            <div class="flex items-center justify-between border-b border-[#eee6e6] pb-2.5">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                <span class="font-mono text-[10px] font-bold uppercase text-emerald-700">CUSTOMER PHONE · QR SCANNED E-BILL</span>
+              </div>
+              <button onclick="downloadCustomerInvoiceHtml()" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-mono text-[9.5px] font-bold">
+                ⬇ Download Bill
+              </button>
+            </div>
+            <div id="customerDigitalInvoiceContent" class="text-xs space-y-2"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: EASY RESTOCK & ADD/EDIT PRODUCT MODAL ================= -->
+  <div id="restockModalOverlay" class="fixed inset-0 bg-black/55 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto no-print">
+    <div class="bg-white rounded-2xl border border-[#e6dddd] shadow-2xl max-w-3xl w-full overflow-hidden my-8">
+      <div class="px-6 py-4 bg-[#faf6f6] border-b border-[#ece2e2] flex items-center justify-between">
+        <div>
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600" id="restockModalSub">INVENTORY REPLENISHMENT</span>
+          <h3 class="font-serif font-bold text-xl text-ink-900" id="restockModalTitle">Quick Restock &amp; Product Manager</h3>
+        </div>
+        <button onclick="closeRestockModal()" class="w-8 h-8 rounded-lg bg-white border border-[#e4dada] flex items-center justify-center text-ink-500 hover:text-crimson-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div id="restockModalBody" class="p-6 max-h-[75vh] overflow-y-auto space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- ================= APPLICATION JAVASCRIPT ENGINE ================= -->
+  <script>
+    // =========================================================================
+    // 1. MASTER REAL-TIME APPLICATION STATE
+    // =========================================================================
+    const state = {
+      activeTab: 'pos',
+      selectedCategory: 'ALL',
+      deliveryMode: 'Counter Pickup',
+      paymentMethod: 'Cash',
+      nextTokenNumber: 8842,
+      nextKotNumber: 1051,
+
+      // Station #02 Shift Totals (Starts at exact photo numbers: ₹18,600 & 184 txns)
+      shiftCashHandled: 18600,
+      shiftOnlineHandled: 29400,
+      ordersBilledTotal: 184,
+      counterOrdersCount: 142,
+      onlineAppOrdersCount: 42,
+
+      // Products Catalog (All 9 exact items from screen_2.jpg + Movie + Offer items)
+      products: [
+        {
+          id: 'p1',
+          name: 'Blockbuster Combo 1',
+          subtitle: 'Jumbo Popcorn + 600ml Coke',
+          category: 'COMBOS',
+          price: 380,
+          stock: 48,
+          soldCount: 64,
+          badge: 'COMBO',
+          statusNote: '48 in stock',
+          isOffer: true,
+          offerTag: 'SAVE ₹60 • MOVIE COMBO',
+          image: 'https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p2',
+          name: 'Gujarati Special Combo',
+          subtitle: '2 Samosas + Masala Chai / Puff',
+          category: 'COMBOS',
+          price: 260,
+          stock: 18,
+          soldCount: 52,
+          badge: 'SPECIAL',
+          statusNote: '18 left [Refill req]',
+          isOffer: true,
+          offerTag: 'REGIONAL HIT • 15% OFF',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p3',
+          name: 'Tub Butter Popcorn',
+          subtitle: 'Warm Theater Fresh Batch',
+          category: 'POPCORN',
+          price: 220,
+          stock: 25,
+          soldCount: 89,
+          badge: null,
+          statusNote: 'Continuous Kettle',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p4',
+          name: 'Loaded Mexican Nachos',
+          subtitle: 'Warm Queso & Jalapeño',
+          category: 'NACHOS',
+          price: 180,
+          stock: 45,
+          soldCount: 47,
+          badge: null,
+          statusNote: '45 in stock',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p5',
+          name: 'Cheese Burst Popcorn',
+          subtitle: 'Double Cheddar Dust',
+          category: 'POPCORN',
+          price: 170,
+          stock: 30,
+          soldCount: 38,
+          badge: null,
+          statusNote: 'Kettle #02 Ready',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p6',
+          name: 'Paneer Tikka Puff',
+          subtitle: 'Flaky Oven Baked',
+          category: 'PUFFS',
+          price: 120,
+          stock: 22,
+          soldCount: 31,
+          badge: null,
+          statusNote: '22 in warmer',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p7',
+          name: 'Fountain Coca-Cola',
+          subtitle: 'Chilled 500ml Dispenser',
+          category: 'DRINKS',
+          price: 100,
+          stock: 60,
+          soldCount: 95,
+          badge: null,
+          statusNote: 'CO2 Pressure OK',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p8',
+          name: 'Crispy Cinema Samosa',
+          subtitle: 'Spiced Aloo / 2 Pcs',
+          category: 'PUFFS',
+          price: 90,
+          stock: 28,
+          soldCount: 44,
+          badge: null,
+          statusNote: 'Warmer #01 Active',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p9',
+          name: 'Warm Choco Brownie',
+          subtitle: 'Fudge Drizzled · 120g',
+          category: 'PUFFS',
+          price: 140,
+          stock: 3, // Starts at 3 so billing the current cart leaves 2 and triggers the <=2 Low Stock Alert!
+          soldCount: 29,
+          badge: null,
+          statusNote: '3 units left',
+          isOffer: false,
+          offerTag: null,
+          image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p10',
+          name: 'Stree 2 Couple Feast + 2 VIP Cokes',
+          subtitle: 'Movie Tie-In • XL Caramel Tub + Nachos + 2 Coke',
+          category: 'OFFERS',
+          price: 490,
+          stock: 2, // Already at 2 left to demonstrate low stock alert & Movie+Offer!
+          soldCount: 74,
+          badge: '20% OFF',
+          statusNote: '2 left [Restock Alert]',
+          isOffer: true,
+          offerTag: 'STREE 2 MOVIE + FOOD OFFER (20% OFF)',
+          image: 'https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=600&q=80'
+        },
+        {
+          id: 'p11',
+          name: 'Deadpool Wolverine Nacho Bucket Deal',
+          subtitle: '2x Double Cheese Nachos + Choco Brownie',
+          category: 'OFFERS',
+          price: 399,
+          stock: 14,
+          soldCount: 12,
+          badge: '15% OFF',
+          statusNote: '14 in stock',
+          isOffer: true,
+          offerTag: 'MARVEL VIP OFFER (15% OFF)',
+          image: 'https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80'
+        }
+      ],
+
+      // Cart #CLP-8842 pre-loaded with exact items from photo so initial total is ₹560 + ₹14 CGST + ₹14 SGST = ₹588.00
+      cart: [
+        { productId: 'p3', name: 'Tub Butter Popcorn', price: 220, qty: 1, isUpsell: false },
+        { productId: 'p4', name: 'Loaded Mexican Nachos', price: 180, qty: 1, isUpsell: false },
+        { productId: 'p9', name: 'Warm Choco Brownie', price: 140, qty: 1, isUpsell: false },
+        { productId: 'upsell-coke', name: 'Fountain Coca-Cola', price: 20, qty: 1, isUpsell: true, upsellTag: 'Complimentary' }
+      ],
+
+      // Active Kitchen KDS Stream (Exact 3 KOT cards from photo)
+      kdsOrders: [
+        {
+          kotId: 'KOT #1048',
+          subHeader: 'COUNTER PICKUP DESK · TOKEN #48',
+          elapsed: '2M 14S ELAPSED',
+          elapsedStyle: 'bg-crimson-50 text-crimson-700 border-crimson-100',
+          cardBorder: 'border-[#e6dddd]',
+          isSeatRunner: false,
+          items: [
+            { label: '1x Jumbo Butter Popcorn', state: 'POPPING', stateColor: 'text-crimson-600 font-bold' },
+            { label: '1x Fountain Coke (Large)', state: 'DISPENSED', stateColor: 'text-ink-400' }
+          ],
+          footerLeft: 'Prepared by: Chef Raju',
+          btnText: 'MARK READY',
+          btnStyle: 'bg-crimson-600 hover:bg-crimson-700 text-white'
+        },
+        {
+          kotId: 'KOT #1049',
+          subHeader: 'ONLINE PRE-BOOK · PICKUP LOCKBOX #3',
+          elapsed: '4M 02S ELAPSED',
+          elapsedStyle: 'bg-amber-50 text-amber-800 border-amber-200',
+          cardBorder: 'border-[#e6dddd]',
+          isSeatRunner: false,
+          items: [
+            { label: '1x Gujarati Special Combo', state: 'PACKED', stateColor: 'text-ink-500 font-semibold' },
+            { label: '1x Warm Choco Brownie', state: 'DRIZZLED', stateColor: 'text-ink-400' }
+          ],
+          footerLeft: 'Ready on Station Shelf',
+          btnText: 'HANDOVER DONE',
+          btnStyle: 'bg-[#ebe4e4] hover:bg-crimson-600 hover:text-white text-ink-800'
+        },
+        {
+          kotId: 'KOT #1050',
+          subHeader: 'AUDI 3 · RECLINER B-04',
+          elapsed: '1M 10S ELAPSED',
+          elapsedStyle: 'bg-crimson-50 text-crimson-700 border-crimson-100',
+          cardBorder: 'border-t-4 border-t-crimson-600 border-[#e6dddd]',
+          isSeatRunner: true,
+          items: [
+            { label: '1x Mexican Nachos (Hot Salsa)', state: 'HEATING QUESO', stateColor: 'text-crimson-600 font-bold' },
+            { label: '1x Paneer Tikka Puff', state: 'TOASTING', stateColor: 'text-ink-400' }
+          ],
+          footerLeft: 'In-Seat Runner Alert',
+          btnText: 'DISPATCH RUNNER',
+          btnStyle: 'bg-crimson-600 hover:bg-crimson-700 text-white'
+        }
+      ],
+
+      // Customer Order Ledger (For Navbar "Data & Sales Ledger" tab & Active Orders)
+      orderHistory: [
+        {
+          orderId: 'CLP-8841',
+          kotId: 'KOT #1050',
+          date: '2026-11-07',
+          time: '19:41:05 IST',
+          customerName: 'Aarav Desai',
+          seatOrLocation: 'Audi 3 · Recliner B-04',
+          source: 'Online App',
+          paymentMode: 'UPI Online',
+          items: [
+            { name: 'Loaded Mexican Nachos', qty: 1, price: 180 },
+            { name: 'Paneer Tikka Puff', qty: 1, price: 120 }
+          ],
+          subtotal: 300,
+          cgst: 7.5,
+          sgst: 7.5,
+          totalWithGst: 315
+        },
+        {
+          orderId: 'CLP-8840',
+          kotId: 'KOT #1049',
+          date: '2026-11-07',
+          time: '19:38:22 IST',
+          customerName: 'Priya Patel (App Pre-Book)',
+          seatOrLocation: 'Pickup Lockbox #3 · Audi 2',
+          source: 'Online App',
+          paymentMode: 'UPI Online',
+          items: [
+            { name: 'Gujarati Special Combo', qty: 1, price: 260 },
+            { name: 'Warm Choco Brownie', qty: 1, price: 140 }
+          ],
+          subtotal: 400,
+          cgst: 10.0,
+          sgst: 10.0,
+          totalWithGst: 420
+        },
+        {
+          orderId: 'CLP-8839',
+          kotId: 'KOT #1048',
+          date: '2026-11-07',
+          time: '19:35:49 IST',
+          customerName: 'Ramesh Chaudhary',
+          seatOrLocation: 'Counter Pickup · Token #48',
+          source: 'Counter POS',
+          paymentMode: 'Cash',
+          items: [
+            { name: 'Blockbuster Combo 1', qty: 1, price: 380 },
+            { name: 'Fountain Coca-Cola', qty: 1, price: 100 }
+          ],
+          subtotal: 480,
+          cgst: 12.0,
+          sgst: 12.0,
+          totalWithGst: 504
+        },
+        {
+          orderId: 'CLP-8838',
+          kotId: 'KOT #1047',
+          date: '2026-11-07',
+          time: '19:24:10 IST',
+          customerName: 'Neha Thakkar',
+          seatOrLocation: 'Audi 1 · Seat E-11, E-12',
+          source: 'Online App',
+          paymentMode: 'Card POS',
+          items: [
+            { name: 'Stree 2 Couple Feast + 2 VIP Cokes', qty: 1, price: 490 }
+          ],
+          subtotal: 490,
+          cgst: 12.25,
+          sgst: 12.25,
+          totalWithGst: 514.5
+        }
+      ],
+
+      // Live Notifications (Low Stock <= 2 & Online App Orders)
+      notifications: [
+        {
+          id: 'n1',
+          type: 'low_stock',
+          title: '⚠️ Low Stock Alert: Only 2 Left!',
+          message: 'Stree 2 Couple Feast + 2 VIP Cokes has only 2 units left. Restock immediately.',
+          time: '19:40 IST',
+          productId: 'p10'
+        },
+        {
+          id: 'n2',
+          type: 'app_order',
+          title: '📲 Online App Order #CLP-8841',
+          message: 'Aarav Desai (Audi 3 · B-04) ordered Mexican Nachos + Puff (₹315 Paid via UPI).',
+          time: '19:41 IST',
+          orderId: 'CLP-8841'
+        }
+      ],
+
+      lastPrintedOrder: null
+    };
+
+    // =========================================================================
+    // 2. CURRENCY & NOTIFICATION HELPERS
+    // =========================================================================
+    function formatINR(val, decimals = 0) {
+      const n = Number(val) || 0;
+      return '₹' + n.toLocaleString('en-IN', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    function pushToast(title, message, variant = 'crimson', actionLabel = null, actionFn = null) {
+      const stack = document.getElementById('toastStack');
+      const el = document.createElement('div');
+      const borderMap = {
+        crimson: 'border-l-4 border-l-crimson-600',
+        emerald: 'border-l-4 border-l-emerald-600',
+        amber: 'border-l-4 border-l-amber-500'
+      };
+      el.className = `pointer-events-auto bg-white/95 backdrop-blur-md ${borderMap[variant] || borderMap.crimson} border border-[#e5dada] rounded-xl p-3.5 shadow-2xl flex items-start justify-between gap-3 transition-all duration-300`;
+      el.innerHTML = `
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-bold text-ink-900">${title}</div>
+          <div class="text-[11px] text-ink-500 mt-0.5 leading-snug">${message}</div>
+          ${actionLabel ? `<button class="mt-2 px-2.5 py-1 rounded bg-crimson-600 text-white font-mono text-[10px] font-bold uppercase">${actionLabel}</button>` : ''}
+        </div>
+        <button class="text-ink-400 hover:text-ink-800 text-xs font-bold">✕</button>
+      `;
+
+      const buttons = el.querySelectorAll('button');
+      if (actionLabel && actionFn) {
+        buttons[0].onclick = () => { actionFn(); el.remove(); };
+        buttons[1].onclick = () => el.remove();
+      } else {
+        buttons[0].onclick = () => el.remove();
+      }
+
+      stack.appendChild(el);
+      setTimeout(() => {
+        if (el.parentNode) {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(6px)';
+          setTimeout(() => el.remove(), 250);
+        }
+      }, 5200);
+    }
+
+    // =========================================================================
+    // 3. COLLAPSIBLE SIDEBAR & TOP NAVBAR ROUTING
+    // =========================================================================
+    function toggleSidebar(show) {
+      const sb = document.getElementById('appSidebar');
+      const bd = document.getElementById('sidebarBackdrop');
+      if (show) {
+        sb.classList.remove('-translate-x-full');
+        bd.classList.remove('hidden');
+        renderSidebarLinks();
+      } else {
+        sb.classList.add('-translate-x-full');
+        bd.classList.add('hidden');
+      }
+    }
+
+    function renderSidebarLinks() {
+      const primary = [
+        { id: 'pos', label: 'POS Food Billing', icon: 'calculator', badge: 'LIVE' },
+        { id: 'catalog', label: 'Menu Catalog & Restock', icon: 'package-plus', badge: getLowStockProducts().length + ' Low' },
+        { id: 'orders', label: 'Active Orders (App + POS)', icon: 'shopping-bag', badge: state.orderHistory.length },
+        { id: 'kds', label: 'Kitchen KDS Stream', icon: 'flame', badge: state.kdsOrders.length }
+      ];
+      const secondary = [
+        { id: 'data', label: 'Data & Sales Ledger (GST)', icon: 'bar-chart-3', badge: '5% GST' },
+        { id: 'offers', label: 'Movie + Food Offers', icon: 'sparkles', badge: 'HOT' }
+      ];
+
+      const renderList = (arr, targetId) => {
+        document.getElementById(targetId).innerHTML = arr.map(item => {
+          const active = state.activeTab === item.id;
+          return `
+            <button onclick="switchTab('${item.id}'); toggleSidebar(false);" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition ${
+              active ? 'bg-crimson-600 text-white font-semibold shadow-crimson' : 'text-ink-700 hover:bg-[#f6f0f0]'
+            }">
+              <span class="flex items-center gap-2.5">
+                <i data-lucide="${item.icon}" class="w-4 h-4 ${active ? 'text-white' : 'text-ink-500'}"></i>
+                <span>${item.label}</span>
+              </span>
+              <span class="px-1.5 py-0.5 rounded font-mono text-[9.5px] font-bold ${
+                active ? 'bg-white/20 text-white' : 'bg-crimson-50 text-crimson-700'
+              }">${item.badge}</span>
+            </button>
+          `;
+        }).join('');
+      };
+
+      renderList(primary, 'sidebarNavPrimary');
+      renderList(secondary, 'sidebarNavSecondary');
+      document.getElementById('sidebarLowStockCount').textContent = getLowStockProducts().length;
+      document.getElementById('sidebarOnlineCount').textContent = state.onlineAppOrdersCount;
+      lucide.createIcons();
+    }
+
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      const tabs = ['pos', 'catalog', 'orders', 'kds', 'data', 'offers'];
+      tabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`tab-${t}`);
+        if (view) view.classList.toggle('hidden', t !== tabId);
+        if (btn) {
+          if (t === tabId) {
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-crimson-600 text-white shadow-xs flex items-center gap-1 shrink-0';
+          } else if (t === 'data') {
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-crimson-700 bg-crimson-50 hover:bg-crimson-100 border border-crimson-200 transition flex items-center gap-1 shrink-0';
+          } else {
+            btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-ink-700 hover:bg-white transition flex items-center gap-1 shrink-0';
+          }
+        }
+      });
+
+      if (tabId === 'pos') {
+        renderPosProductGrid();
+        renderCartPanel();
+        renderKdsStream();
+      } else if (tabId === 'catalog') {
+        renderCatalogRestockView();
+      } else if (tabId === 'orders') {
+        renderActiveOrdersView();
+      } else if (tabId === 'kds') {
+        renderKdsStream();
+      } else if (tabId === 'data') {
+        renderDataTab();
+      } else if (tabId === 'offers') {
+        renderOffersTab();
+      }
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 4. INTERACTIVE 3D CONCESSION SHOWCASE CANVAS (ROTATABLE & ZOOMABLE)
+    // =========================================================================
+    let showcaseAngle = 0.4;
+    let showcaseZoom = 1.0;
+    let isDragging3D = false;
+    let lastMouseX = 0;
+    let autoSpin3D = true;
+    let selectedShowcaseItemIdx = 0;
+
+    const showcaseItems = [
+      { name: 'Blockbuster Combo 1', price: 380, productId: 'p1' },
+      { name: 'Tub Butter Popcorn', price: 220, productId: 'p3' },
+      { name: 'Fountain Coca-Cola', price: 100, productId: 'p7' },
+      { name: 'Loaded Mexican Nachos', price: 180, productId: 'p4' }
+    ];
+
+    function init3DConcessionCanvas() {
+      const canvas = document.getElementById('concession3DCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width * window.devicePixelRatio;
+        canvas.height = rect.height * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      canvas.addEventListener('mousedown', e => {
+        isDragging3D = true;
+        autoSpin3D = false;
+        lastMouseX = e.clientX;
+      });
+      window.addEventListener('mouseup', () => { isDragging3D = false; });
+      window.addEventListener('mousemove', e => {
+        if (!isDragging3D) return;
+        const dx = e.clientX - lastMouseX;
+        lastMouseX = e.clientX;
+        showcaseAngle += dx * 0.012;
+      });
+
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        showcaseZoom = Math.min(1.45, Math.max(0.75, showcaseZoom - e.deltaY * 0.001));
+      }, { passive: false });
+
+      function drawFrame() {
+        const w = canvas.width / window.devicePixelRatio;
+        const h = canvas.height / window.devicePixelRatio;
+        ctx.clearRect(0, 0, w, h);
+
+        if (autoSpin3D) showcaseAngle += 0.006;
+
+        // Subtle warm spotlight on dark stage floor
+        const cx = w * 0.5;
+        const cy = h * 0.64;
+        const grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, 240 * showcaseZoom);
+        grad.addColorStop(0, 'rgba(211, 25, 32, 0.22)');
+        grad.addColorStop(0.55, 'rgba(90, 20, 22, 0.08)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Draw 3D Turntable Rings
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(showcaseZoom, showcaseZoom);
+
+        ctx.beginPath();
+        ctx.ellipse(0, 18, 185, 36, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(223, 35, 42, 0.35)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.ellipse(0, 18, 130, 24, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Compute 3 orbiting 3D Concession Objects: Popcorn Tub, Fountain Cola Cup, Nacho Tray
+        const objects = [
+          { type: 'popcorn', baseAngle: 0, label: 'Tub Butter Popcorn · ₹220' },
+          { type: 'cola', baseAngle: (Math.PI * 2) / 3, label: 'Fountain Coca-Cola · ₹100' },
+          { type: 'nachos', baseAngle: (Math.PI * 4) / 3, label: 'Loaded Mexican Nachos · ₹180' }
+        ].map(obj => {
+          const ang = showcaseAngle + obj.baseAngle;
+          return {
+            ...obj,
+            x: Math.cos(ang) * 115,
+            y: Math.sin(ang) * 22,
+            z: Math.sin(ang)
+          };
+        }).sort((a, b) => a.z - b.z);
+
+        objects.forEach(obj => {
+          const scale = 0.82 + (obj.z + 1) * 0.16;
+          ctx.save();
+          ctx.translate(obj.x, obj.y);
+          ctx.scale(scale, scale);
+
+          if (obj.type === 'popcorn') {
+            // Golden Popcorn Kernels mound
+            const puffs = [[-16,-48],[-6,-54],[6,-53],[16,-47],[-10,-43],[2,-44],[12,-42],[0,-50]];
+            puffs.forEach(([px, py]) => {
+              ctx.beginPath();
+              ctx.arc(px, py, 9, 0, Math.PI * 2);
+              ctx.fillStyle = '#fbbf24';
+              ctx.fill();
+              ctx.strokeStyle = '#d97706';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            });
+            // Striped Cinema Popcorn Bucket
+            ctx.beginPath();
+            ctx.moveTo(-26, -42);
+            ctx.lineTo(26, -42);
+            ctx.lineTo(20, 16);
+            ctx.lineTo(-20, 16);
+            ctx.closePath();
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#d31920';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Red Stripes
+            for (let s = -16; s <= 16; s += 11) {
+              ctx.beginPath();
+              ctx.moveTo(s, -41);
+              ctx.lineTo(s * 0.78, 15);
+              ctx.strokeStyle = '#d31920';
+              ctx.lineWidth = 5;
+              ctx.stroke();
+            }
+
+            // Badge
+            ctx.fillStyle = '#1a1616';
+            ctx.beginPath();
+            ctx.arc(0, -14, 11, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 7px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('CL', 0, -11);
+          } else if (obj.type === 'cola') {
+            // Straw
+            ctx.beginPath();
+            ctx.moveTo(4, -46);
+            ctx.lineTo(12, -68);
+            ctx.lineTo(20, -66);
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3.5;
+            ctx.stroke();
+
+            // Cup Body
+            ctx.beginPath();
+            ctx.moveTo(-20, -42);
+            ctx.lineTo(20, -42);
+            ctx.lineTo(15, 16);
+            ctx.lineTo(-15, 16);
+            ctx.closePath();
+            ctx.fillStyle = '#b91c1c';
+            ctx.fill();
+            ctx.strokeStyle = '#fca5a5';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Plastic Dome Lid
+            ctx.beginPath();
+            ctx.ellipse(0, -42, 20, 6, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            ctx.fill();
+          } else if (obj.type === 'nachos') {
+            // Nacho Tray
+            ctx.beginPath();
+            ctx.roundRect(-30, -14, 60, 26, 6);
+            ctx.fillStyle = '#272222';
+            ctx.fill();
+            ctx.strokeStyle = '#524747';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // Tortilla Chips & Queso
+            const chips = [[-18,-12],[-4,-18],[10,-14],[-8,-8],[6,-10]];
+            chips.forEach(([cxp, cyp]) => {
+              ctx.beginPath();
+              ctx.moveTo(cxp, cyp - 12);
+              ctx.lineTo(cxp - 10, cyp + 4);
+              ctx.lineTo(cxp + 10, cyp + 4);
+              ctx.closePath();
+              ctx.fillStyle = '#f59e0b';
+              ctx.fill();
+            });
+          }
+
+          ctx.restore();
+        });
+
+        ctx.restore();
+        requestAnimationFrame(drawFrame);
+      }
+      requestAnimationFrame(drawFrame);
+    }
+
+    function set3DShowcaseMode(mode) {
+      if (mode === 'spin') {
+        autoSpin3D = !autoSpin3D;
+        showShowcaseToast('360° Turntable Rotation ' + (autoSpin3D ? 'Enabled' : 'Paused'));
+      } else if (mode === 'inspect') {
+        selectedShowcaseItemIdx = (selectedShowcaseItemIdx + 1) % showcaseItems.length;
+        const item = showcaseItems[selectedShowcaseItemIdx];
+        document.getElementById('showcaseSelectedLabel').textContent = `Focused: ${item.name} (₹${item.price})`;
+        showShowcaseToast(`Inspecting ${item.name} • Freshness & Batch Verified`);
+      } else {
+        showcaseZoom = 1.0;
+        autoSpin3D = true;
+      }
+    }
+
+    function quickAddShowcaseItem() {
+      const item = showcaseItems[selectedShowcaseItemIdx];
+      addToCart(item.productId);
+    }
+
+    function showShowcaseToast(msg) {
+      pushToast('3D Concession Showcase', msg, 'crimson');
+    }
+
+    // =========================================================================
+    // 5. POS PRODUCT GRID, SEARCH & CATEGORY FILTERS
+    // =========================================================================
+    const categories = ['ALL', 'COMBOS', 'POPCORN', 'NACHOS', 'PUFFS', 'DRINKS', 'OFFERS'];
+
+    function renderCategoryPills() {
+      const bar = document.getElementById('categoryFilterBar');
+      if (!bar) return;
+      bar.innerHTML = categories.map(cat => {
+        const active = state.selectedCategory === cat;
+        return `
+          <button
+            onclick="selectCategory('${cat}')"
+            class="px-3 py-1.5 rounded-lg font-mono text-[10px] font-bold uppercase tracking-wider transition shrink-0 ${
+              active
+                ? 'bg-crimson-600 text-white shadow-xs'
+                : 'bg-white hover:bg-[#faf5f5] text-ink-600 border border-[#e6dddd]'
+            }"
+          >
+            ${cat === 'OFFERS' ? 'OFFERS 🔥' : cat}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(cat) {
+      state.selectedCategory = cat;
+      renderCategoryPills();
+      renderPosProductGrid();
+    }
+
+    function renderPosProductGrid() {
+      renderCategoryPills();
+      const grid = document.getElementById('posProductGrid');
+      if (!grid) return;
+
+      const query = (document.getElementById('posSearchInput')?.value || '').trim().toLowerCase();
+
+      const filtered = state.products.filter(p => {
+        const matchesCat =
+          state.selectedCategory === 'ALL' ||
+          p.category === state.selectedCategory ||
+          (state.selectedCategory === 'OFFERS' && p.isOffer);
+        const matchesQuery =
+          !query ||
+          p.name.toLowerCase().includes(query) ||
+          p.subtitle.toLowerCase().includes(query) ||
+          p.category.toLowerCase().includes(query);
+        return matchesCat && matchesQuery;
+      });
+
+      grid.innerHTML = filtered.map(p => {
+        const isLow = p.stock <= 2;
+        const isOut = p.stock <= 0;
+
+        const badgeColor =
+          p.badge === 'COMBO' || p.badge === '20% OFF' || p.badge === '15% OFF'
+            ? 'bg-crimson-600 text-white'
+            : 'bg-ink-900/85 text-white';
+
+        return `
+          <div class="bg-white rounded-2xl border ${isLow ? 'border-crimson-400 ring-1 ring-crimson-200' : 'border-[#eae2e2]'} shadow-card hover:shadow-card-hover transition overflow-hidden flex flex-col justify-between group">
+            <div>
+              <!-- Food Photo Header -->
+              <div class="relative h-36 w-full bg-[#241e1e] overflow-hidden">
+                <img
+                  src="${p.image}"
+                  alt="${p.name}"
+                  onerror="this.src='https://placehold.co/600x400/2a1e1e/ffffff?text=${encodeURIComponent(p.name)}'"
+                  class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+                ${p.badge ? `
+                  <span class="absolute top-2.5 right-2.5 px-2.5 py-0.5 rounded-full ${badgeColor} font-mono text-[9px] font-bold uppercase tracking-wider shadow">
+                    ${p.badge}
+                  </span>
+                ` : ''}
+                ${isLow ? `
+                  <button onclick="openSingleProductRestockModal('${p.id}')" class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-crimson-600 text-white font-mono text-[9px] font-bold uppercase shadow animate-pulse">
+                    ⚠️ ONLY ${p.stock} LEFT • RESTOCK
+                  </button>
+                ` : ''}
+              </div>
+
+              <!-- Title & Subtitle -->
+              <div class="p-4 pb-2">
+                <h3 class="font-bold text-[13.5px] text-ink-900 leading-snug">${p.name}</h3>
+                <p class="text-[11px] text-ink-400 mt-0.5 truncate">${p.subtitle}</p>
+              </div>
+            </div>
+
+            <!-- Price, Stock Indicator & + ADD Button -->
+            <div class="px-4 pb-4 pt-2 flex items-end justify-between gap-2">
+              <div>
+                <div class="font-serif font-bold text-xl text-crimson-600 tabular-nums leading-none">
+                  ${formatINR(p.price)}
+                </div>
+                <div class="text-[9.5px] font-mono ${isLow ? 'text-crimson-600 font-bold' : 'text-ink-400'} mt-1">
+                  ${p.stock <= 2 ? `${p.stock} left [RESTOCK NOW]` : `${p.stock} in stock · ${p.statusNote}`}
+                </div>
+              </div>
+
+              <div class="flex items-center gap-1">
+                ${isLow ? `
+                  <button onclick="openSingleProductRestockModal('${p.id}')" title="Quick Restock" class="p-2 rounded-lg bg-crimson-50 hover:bg-crimson-100 text-crimson-700 border border-crimson-200 transition">
+                    <i data-lucide="package-plus" class="w-3.5 h-3.5"></i>
+                  </button>
+                ` : ''}
+                <button
+                  ${isOut ? 'disabled' : ''}
+                  onclick="addToCart('${p.id}')"
+                  class="px-3.5 py-2 rounded-lg font-mono text-[10.5px] font-bold uppercase tracking-wider transition ${
+                    isOut
+                      ? 'bg-[#e5dddd] text-ink-400 cursor-not-allowed'
+                      : 'bg-crimson-600 hover:bg-crimson-700 active:scale-95 text-white shadow-xs'
+                  }"
+                >
+                  ${isOut ? 'OUT' : '+ ADD'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateLowStockAlertsUI();
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 6. CART #CLP-8842 ENGINE & 5% GST CALCULATION
+    // =========================================================================
+    function addToCart(productId) {
+      const product = state.products.find(p => p.id === productId);
+      if (!product) return;
+
+      if (product.stock <= 0) {
+        pushToast('Out of Stock!', `${product.name} has 0 units left. Click to restock now.`, 'crimson', 'Restock Now', () => openSingleProductRestockModal(product.id));
+        return;
+      }
+
+      const existing = state.cart.find(c => c.productId === productId && !c.isUpsell);
+      const currentCartQty = existing ? existing.qty : 0;
+
+      if (currentCartQty + 1 > product.stock) {
+        pushToast('Stock Limit Reached', `Only ${product.stock} units of ${product.name} available in stock.`, 'amber', 'Restock', () => openSingleProductRestockModal(product.id));
+        return;
+      }
+
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        state.cart.push({
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          qty: 1,
+          isUpsell: false
+        });
+      }
+
+      renderCartPanel();
+    }
+
+    function changeCartQty(idx, delta) {
+      const item = state.cart[idx];
+      if (!item) return;
+
+      if (!item.isUpsell && delta > 0) {
+        const prod = state.products.find(p => p.id === item.productId);
+        if (prod && item.qty + delta > prod.stock) {
+          pushToast('Insufficient Stock', `Only ${prod.stock} units of ${prod.name} available.`, 'amber', 'Restock', () => openSingleProductRestockModal(prod.id));
+          return;
+        }
+      }
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        state.cart.splice(idx, 1);
+      }
+      renderCartPanel();
+    }
+
+    function clearCart() {
+      state.cart = [];
+      renderCartPanel();
+    }
+
+    function setOrderDeliveryMode(mode) {
+      state.deliveryMode = mode;
+      const btnCounter = document.getElementById('btnModeCounter');
+      const btnSeat = document.getElementById('btnModeSeat');
+      const seatInput = document.getElementById('cartSeatOrPhone');
+
+      if (mode === 'Counter Pickup') {
+        btnCounter.className = 'py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition bg-white text-ink-900 shadow-xs';
+        btnSeat.className = 'py-2 rounded-lg text-xs font-medium text-ink-500 flex items-center justify-center gap-1.5 transition hover:text-ink-900';
+        if (seatInput.value.includes('Audi')) seatInput.value = 'Token #42 · Foyer';
+      } else {
+        btnSeat.className = 'py-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition bg-white text-ink-900 shadow-xs';
+        btnCounter.className = 'py-2 rounded-lg text-xs font-medium text-ink-500 flex items-center justify-center gap-1.5 transition hover:text-ink-900';
+        if (seatInput.value.includes('Token')) seatInput.value = 'Audi 1 · Recliner E-12';
+      }
+    }
+
+    function setPaymentMethod(method) {
+      state.paymentMethod = method;
+      const upi = document.getElementById('payBtnUpi');
+      const card = document.getElementById('payBtnCard');
+      const cash = document.getElementById('payBtnCash');
+
+      const inactiveClass = 'p-2.5 rounded-xl bg-[#faf7f7] hover:bg-crimson-50/40 border border-[#e6dddd] flex flex-col items-center justify-center gap-1 transition';
+      const activeClass = 'p-2.5 rounded-xl bg-white border-2 border-crimson-600 flex flex-col items-center justify-center gap-1 shadow-xs transition';
+
+      upi.className = method === 'UPI Online' ? activeClass : inactiveClass;
+      card.className = method === 'Card POS' ? activeClass : inactiveClass;
+      cash.className = method === 'Cash' ? activeClass : inactiveClass;
+    }
+
+    function getCartTotals() {
+      const subtotal = state.cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const cgst = +(subtotal * 0.025).toFixed(2);
+      const sgst = +(subtotal * 0.025).toFixed(2);
+      const grandTotal = +(subtotal + cgst + sgst).toFixed(2);
+      const regularCount = state.cart.filter(i => !i.isUpsell).reduce((s, i) => s + i.qty, 0);
+      const upsellCount = state.cart.filter(i => i.isUpsell).reduce((s, i) => s + i.qty, 0);
+      return { subtotal, cgst, sgst, grandTotal, regularCount, upsellCount };
+    }
+
+    function renderCartPanel() {
+      const container = document.getElementById('cartItemsContainer');
+      if (!container) return;
+
+      document.getElementById('cartTokenHeading').textContent = `Cart #CLP-${state.nextTokenNumber}`;
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="py-8 text-center text-xs text-ink-400">
+            Cart is empty. Click <strong class="text-crimson-600">+ ADD</strong> on any item to build order.
+          </div>
+        `;
+      } else {
+        container.innerHTML = state.cart.map((item, idx) => {
+          if (item.isUpsell) {
+            return `
+              <div class="py-3 flex items-center justify-between gap-2">
+                <div>
+                  <div class="font-semibold text-xs text-ink-900">${item.name}</div>
+                  <div class="text-[10px] font-medium text-crimson-600">Promo Upsell</div>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2 py-0.5 rounded bg-[#f4eeee] border border-[#e5dada] text-[9.5px] font-mono text-ink-500">Complimentary</span>
+                  <span class="font-mono font-bold text-xs text-ink-900 w-10 text-right">${formatINR(item.price * item.qty)}</span>
+                  <button onclick="changeCartQty(${idx}, -1)" title="Remove Upsell" class="text-ink-400 hover:text-crimson-600 text-xs">✕</button>
+                </div>
+              </div>
+            `;
+          }
+
+          return `
+            <div class="py-3 flex items-center justify-between gap-2">
+              <div class="min-w-0 flex-1">
+                <div class="font-semibold text-xs text-ink-900 truncate">${item.name}</div>
+                <div class="text-[10px] font-mono text-ink-400">${formatINR(item.price, 2)} each</div>
+              </div>
+
+              <div class="flex items-center gap-3 shrink-0">
+                <!-- - / qty / + Pill -->
+                <div class="inline-flex items-center bg-[#f4efef] border border-[#e5dddd] rounded-lg px-1 py-0.5 font-mono text-xs">
+                  <button onclick="changeCartQty(${idx}, -1)" class="w-5 h-5 flex items-center justify-center text-ink-600 hover:text-crimson-600 font-bold">-</button>
+                  <span class="w-6 text-center font-bold text-ink-900 tabular-nums">${item.qty}</span>
+                  <button onclick="changeCartQty(${idx}, 1)" class="w-5 h-5 flex items-center justify-center text-ink-600 hover:text-crimson-600 font-bold">+</button>
+                </div>
+
+                <div class="font-mono font-bold text-xs text-ink-900 w-12 text-right tabular-nums">
+                  ${formatINR(item.price * item.qty)}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const { subtotal, cgst, sgst, grandTotal, regularCount, upsellCount } = getCartTotals();
+
+      document.getElementById('cartSubtotalText').textContent = formatINR(subtotal, 2);
+      document.getElementById('cartCgstText').textContent = formatINR(cgst, 2);
+      document.getElementById('cartSgstText').textContent = formatINR(sgst, 2);
+      document.getElementById('cartGrandTotalText').textContent = formatINR(grandTotal, 2);
+      document.getElementById('cartItemCountLabel').textContent =
+        `${regularCount} item${regularCount !== 1 ? 's' : ''}` + (upsellCount ? ` + ${upsellCount} upsell` : '');
+
+      updateCashChange();
+    }
+
+    function updateCashChange() {
+      const { grandTotal } = getCartTotals();
+      const inputEl = document.getElementById('cashTenderedInput');
+      const tendered = Number(inputEl?.value) || 0;
+      const change = Math.max(0, +(tendered - grandTotal).toFixed(2));
+      document.getElementById('cashChangeReturnText').textContent = `Change Return: ${formatINR(change, 2)}`;
+      document.getElementById('payBtnCashLabel').textContent = `Cash ₹${tendered || Math.ceil(grandTotal)}`;
+    }
+
+    // =========================================================================
+    // 7. TENDER & PRINT KOT -> DEDUCT STOCK, CHECK <=2 LOW STOCK, LOG IN DATA, PRINT 80MM THERMAL & QR
+    // =========================================================================
+    function tenderAndPrintKot() {
+      if (state.cart.length === 0) {
+        pushToast('Cart is Empty', 'Add at least one food or beverage item before billing.', 'crimson');
+        return;
+      }
+
+      const { subtotal, cgst, sgst, grandTotal } = getCartTotals();
+      const tokenStr = `CLP-${state.nextTokenNumber}`;
+      const kotStr = `KOT #${state.nextKotNumber}`;
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 10);
+      const timeStr = now.toTimeString().slice(0, 8) + ' IST';
+      const customerName = (document.getElementById('cartCustomerName')?.value || 'Walk-in Guest').trim();
+      const seatOrLocation = (document.getElementById('cartSeatOrPhone')?.value || state.deliveryMode).trim();
+
+      // 1. Deduct stock & increment soldCount for each cart item
+      const lowStockTriggered = [];
+      state.cart.forEach(c => {
+        if (!c.isUpsell) {
+          const prod = state.products.find(p => p.id === c.productId);
+          if (prod) {
+            prod.stock = Math.max(0, prod.stock - c.qty);
+            prod.soldCount += c.qty;
+            if (prod.stock <= 2) {
+              lowStockTriggered.push(prod);
+            }
+          }
+        }
+      });
+
+      // 2. Update Shift KPIs (Cash vs Online & Orders Billed)
+      state.ordersBilledTotal += 1;
+      state.counterOrdersCount += 1;
+      if (state.paymentMethod === 'Cash') {
+        state.shiftCashHandled += Math.round(grandTotal);
+      } else {
+        state.shiftOnlineHandled += Math.round(grandTotal);
+      }
+
+      // 3. Create Order Record for Data & Sales Ledger Tab
+      const newOrderRecord = {
+        orderId: tokenStr,
+        kotId: kotStr,
+        date: dateStr,
+        time: timeStr,
+        customerName,
+        seatOrLocation: `${state.deliveryMode} · ${seatOrLocation}`,
+        source: 'Counter POS',
+        paymentMode: state.paymentMethod,
+        items: state.cart.map(i => ({ name: i.name, qty: i.qty, price: i.price })),
+        subtotal,
+        cgst,
+        sgst,
+        totalWithGst: grandTotal
+      };
+      state.orderHistory.unshift(newOrderRecord);
+      state.lastPrintedOrder = newOrderRecord;
+
+      // 4. Push to Active Kitchen KDS Stream
+      state.kdsOrders.unshift({
+        kotId: kotStr,
+        subHeader: `${state.deliveryMode.toUpperCase()} · ${seatOrLocation.toUpperCase()}`,
+        elapsed: 'JUST NOW',
+        elapsedStyle: 'bg-crimson-50 text-crimson-700 border-crimson-100',
+        cardBorder: state.deliveryMode === 'Audi In-Seat' ? 'border-t-4 border-t-crimson-600 border-[#e6dddd]' : 'border-[#e6dddd]',
+        isSeatRunner: state.deliveryMode === 'Audi In-Seat',
+        items: state.cart.map(i => ({
+          label: `${i.qty}x ${i.name}`,
+          state: 'PREPARING',
+          stateColor: 'text-crimson-600 font-bold'
+        })),
+        footerLeft: `Customer: ${customerName}`,
+        btnText: state.deliveryMode === 'Audi In-Seat' ? 'DISPATCH RUNNER' : 'MARK READY',
+        btnStyle: 'bg-crimson-600 hover:bg-crimson-700 text-white'
+      });
+
+      // 5. Check Low Stock (<= 2 left) and trigger notifications immediately!
+      lowStockTriggered.forEach(prod => {
+        state.notifications.unshift({
+          id: 'low-' + Date.now() + '-' + prod.id,
+          type: 'low_stock',
+          title: `⚠️ Stock Alert: Only ${prod.stock} Left!`,
+          message: `${prod.name} is down to ${prod.stock} units left. Click to restock now.`,
+          time: timeStr,
+          productId: prod.id
+        });
+        pushToast(
+          `⚠️ Low Stock Alert (${prod.stock} Left!)`,
+          `"${prod.name}" has only ${prod.stock} units left! Restock immediately.`,
+          'crimson',
+          'Restock Now',
+          () => openSingleProductRestockModal(prod.id)
+        );
+      });
+
+      // 6. Advance Token & KOT numbers, reset cart
+      state.nextTokenNumber += 1;
+      state.nextKotNumber += 1;
+      state.cart = [];
+
+      // 7. Refresh UI & Open 80mm POS Thermal Print + QR Modal
+      updateStationKpiBar();
+      renderPosProductGrid();
+      renderCartPanel();
+      renderKdsStream();
+      updateLowStockAlertsUI();
+      openReceiptModal(newOrderRecord);
+    }
+
+    function updateStationKpiBar() {
+      document.getElementById('kpiShiftCash').textContent = formatINR(state.shiftCashHandled);
+      document.getElementById('kpiShiftCashSub').textContent = `Online UPI/Card: ${formatINR(state.shiftOnlineHandled)}`;
+      document.getElementById('kpiOrdersBilled').textContent = state.ordersBilledTotal;
+      document.getElementById('kpiOrdersSplitSub').textContent = `${state.counterOrdersCount} POS · ${state.onlineAppOrdersCount} App`;
+      document.getElementById('navActiveOrdersBadge').textContent = state.kdsOrders.length;
+    }
+
+    // =========================================================================
+    // 8. 80MM POS THERMAL RECEIPT + SCANNABLE QR & CUSTOMER DIGITAL INVOICE
+    // =========================================================================
+    function openReceiptModal(order) {
+      state.lastPrintedOrder = order;
+      const modal = document.getElementById('receiptModalOverlay');
+      document.getElementById('receiptModalTitle').textContent = `80mm Thermal Receipt & QR • #${order.orderId}`;
+      document.getElementById('receiptRightTimestamp').textContent = `${order.date} · ${order.time}`;
+
+      // Build QR payload containing verified invoice details
+      const qrText = `CITY LITE CINEMA PALANPUR | GSTIN:24AAAPC1234H1ZV | INV:${order.orderId} | CUST:${order.customerName} | SUB:INR ${order.subtotal} | CGST2.5%:INR ${order.cgst} | SGST2.5%:INR ${order.sgst} | TOTAL:INR ${order.totalWithGst} | MODE:${order.paymentMode}`;
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(qrText)}`;
+
+      // Populate 80mm Thermal Print Slip
+      document.getElementById('thermalPrintArea').innerHTML = `
+        <div class="text-center border-b border-dashed border-black pb-2.5">
+          <div class="font-bold text-sm tracking-tight">CITY LITE CINEMA &amp; F&amp;B</div>
+          <div class="text-[10px]">Concessions Foyer · Station #02</div>
+          <div class="text-[9.5px]">Highway Crossroad, Palanpur, GJ 385001</div>
+          <div class="text-[9.5px] font-bold mt-0.5">GSTIN: 24AAAPC1234H1ZV</div>
+          <div class="text-[9px]">FSSAI Lic: 10724000012345 · SAC: 996331</div>
+        </div>
+
+        <div class="py-2 border-b border-dashed border-black text-[10px] space-y-0.5">
+          <div class="flex justify-between"><span>TAX INVOICE:</span><strong>#${order.orderId}</strong></div>
+          <div class="flex justify-between"><span>KOT TOKEN:</span><strong>${order.kotId}</strong></div>
+          <div class="flex justify-between"><span>DATE/TIME:</span><span>${order.date} ${order.time}</span></div>
+          <div class="flex justify-between"><span>CUSTOMER:</span><span>${order.customerName}</span></div>
+          <div class="flex justify-between"><span>DELIVERY:</span><span>${order.seatOrLocation}</span></div>
+          <div class="flex justify-between"><span>ORDER SOURCE:</span><strong>${order.source}</strong></div>
+          <div class="flex justify-between"><span>CASHIER:</span><span>Sunita Mehta (Op #02)</span></div>
+        </div>
+
+        <div class="py-2 border-b border-dashed border-black">
+          <div class="flex justify-between font-bold text-[10px] mb-1">
+            <span>ITEM</span>
+            <span>QTY x RATE = AMT</span>
+          </div>
+          <div class="space-y-1 text-[10px]">
+            ${order.items.map(i => `
+              <div class="flex justify-between">
+                <span class="truncate pr-2">${i.name}</span>
+                <span class="shrink-0">${i.qty} x ${i.price} = ₹${(i.qty * i.price).toFixed(2)}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="py-2 border-b border-dashed border-black text-[10px] space-y-0.5">
+          <div class="flex justify-between"><span>Items Taxable Subtotal:</span><span>₹${order.subtotal.toFixed(2)}</span></div>
+          <div class="flex justify-between"><span>CGST @ 2.5% (F&amp;B):</span><span>₹${order.cgst.toFixed(2)}</span></div>
+          <div class="flex justify-between"><span>SGST @ 2.5% (F&amp;B):</span><span>₹${order.sgst.toFixed(2)}</span></div>
+          <div class="flex justify-between font-bold text-xs pt-1 border-t border-dotted border-black">
+            <span>GRAND TOTAL (Incl. GST):</span>
+            <span>₹${order.totalWithGst.toFixed(2)}</span>
+          </div>
+          <div class="flex justify-between pt-0.5"><span>PAYMENT RECEIVED (${order.paymentMode}):</span><strong>PAID</strong></div>
+        </div>
+
+        <div class="pt-3 text-center space-y-1.5">
+          <div class="text-[9.5px] font-bold uppercase">SCAN QR TO VIEW &amp; DOWNLOAD E-INVOICE</div>
+          <img src="${qrUrl}" alt="Invoice QR Code" class="w-28 h-28 mx-auto border border-black p-1 rounded" />
+          <div class="text-[8.5px]">Thank You for Visiting City Lite Cinema!</div>
+        </div>
+      `;
+
+      // Populate Customer Digital Invoice Phone Preview
+      document.getElementById('customerDigitalInvoiceContent').innerHTML = `
+        <div class="p-3 rounded-xl bg-[#faf7f7] border border-[#ece2e2] space-y-1.5 font-mono text-[11px]">
+          <div class="flex justify-between"><span>Merchant:</span><strong>City Lite Cinema Palanpur</strong></div>
+          <div class="flex justify-between"><span>GSTIN:</span><span>24AAAPC1234H1ZV</span></div>
+          <div class="flex justify-between"><span>Invoice / Token:</span><strong class="text-crimson-600">#${order.orderId} (${order.kotId})</strong></div>
+          <div class="flex justify-between"><span>Customer:</span><span>${order.customerName} (${order.seatOrLocation})</span></div>
+          <div class="flex justify-between"><span>Subtotal + 5% GST:</span><span>₹${order.subtotal.toFixed(2)} + ₹${(order.cgst + order.sgst).toFixed(2)} GST</span></div>
+          <div class="flex justify-between text-xs font-bold text-emerald-700 pt-1 border-t border-[#e5dada]">
+            <span>Verified Paid (${order.paymentMode}):</span>
+            <span>₹${order.totalWithGst.toFixed(2)}</span>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeReceiptModal() {
+      const modal = document.getElementById('receiptModalOverlay');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function triggerRealThermalPrint() {
+      window.print();
+    }
+
+    function toggleCustomerScannedView() {
+      const box = document.getElementById('customerPhonePreviewBox');
+      box.classList.toggle('ring-4');
+      box.classList.toggle('ring-emerald-300');
+      pushToast('QR Code Scanned by Customer', 'Digital GST e-Invoice displayed on customer mobile screen. Ready to download.', 'emerald');
+    }
+
+    function downloadCustomerInvoiceHtml() {
+      const order = state.lastPrintedOrder || state.orderHistory[0];
+      if (!order) return;
+
+      const htmlDoc = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>City Lite GST Invoice #${order.orderId}</title>
+  <style>
+    body { font-family: monospace; background: #f4f1f1; padding: 30px; }
+    .card { max-width: 420px; margin: 0 auto; background: #fff; padding: 24px; border: 1px solid #ddd; border-radius: 12px; }
+    h2 { margin: 0 0 4px 0; color: #d31920; }
+    .row { display: flex; justify-content: space-between; margin: 6px 0; }
+    hr { border: none; border-top: 1px dashed #888; margin: 12px 0; }
+  </style>
+<style id="royalRoleAuthDesign">
+#clAuthGate{position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:16px;background:rgba(8,6,11,.94);backdrop-filter:blur(12px);font-family:Arial,Helvetica,sans-serif;color:#f7f4fa}#clAuthGate *{box-sizing:border-box}#clAuthGate .auth-shell{width:min(920px,100%);max-height:calc(100dvh - 32px);min-height:min(580px,calc(100dvh - 32px));display:grid;grid-template-columns:.82fr 1.18fr;overflow:hidden;border:1px solid rgba(205,187,220,.2);border-radius:25px;background:#110e16;box-shadow:0 28px 100px #0009}#clAuthGate .auth-brand{position:relative;isolation:isolate;overflow:hidden;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px;text-align:center;background:radial-gradient(circle at 50% 52%,#30203d,#17101f 72%)}#clAuthGate .auth-brand:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.3;background-image:radial-gradient(#9f8aad .8px,transparent .8px);background-size:16px 16px;mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}#clAuthGate .brand-mark{width:82px;height:82px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#ffc258,#e58b13);color:#251529;font-size:42px;font-weight:900;transform:rotate(-7deg);box-shadow:0 15px 45px #f0a02b55}#clAuthGate .brand-copy{display:grid;gap:8px}#clAuthGate .brand-copy span{color:#c7b8d2;font-size:12px;letter-spacing:2px}#clAuthGate .brand-copy strong{font-size:26px;letter-spacing:1px;color:#fff}#clAuthGate .brand-copy small{color:#9b8aa6;font-size:11px;margin-top:4px}#clAuthGate .brand-orbit{position:absolute;width:350px;height:210px;border:1px solid #e8a63b45;border-radius:50%;transform:rotate(-22deg);pointer-events:none}#clAuthGate .auth-content{position:relative;display:flex;flex-direction:column;justify-content:center;overflow:auto;max-height:calc(100dvh - 34px);padding:42px clamp(26px,5vw,56px) 24px}#clAuthGate .auth-close{position:absolute;right:18px;top:16px;width:38px;height:38px;border:1px solid #ffffff22;border-radius:50%;background:transparent;color:#aaa0b3;font-size:22px;cursor:pointer}#clAuthGate .auth-close:hover{color:#fff;border-color:#eda32c}#clAuthGate .eyebrow{color:#eda32c;font-size:9px;font-weight:800;letter-spacing:2px}#clAuthGate h1{font-size:clamp(26px,3vw,34px);letter-spacing:-1px;margin:10px 0 6px;color:#f8f6fa}#clAuthGate .intro{font-size:12px;line-height:1.65;color:#a99eb0;margin:0 0 20px}#clAuthGate .auth-tabs{display:grid;grid-template-columns:1fr 1fr;padding:5px;border:1px solid #ffffff18;border-radius:12px;background:#18141f;margin-bottom:18px}#clAuthGate .auth-tabs button{height:39px;border:0;border-radius:8px;background:transparent;color:#968a9e;font-size:11px;font-weight:700;cursor:pointer}#clAuthGate .auth-tabs button.active{background:#33233f;color:#fff;box-shadow:0 2px 9px #0005}#clAuthGate form{display:grid;gap:11px}#clAuthGate .field{display:grid;gap:6px}#clAuthGate .field[hidden]{display:none!important}#clAuthGate label{color:#aaa0b2;font-size:10px;font-weight:700}#clAuthGate input{width:100%;height:48px;border:1px solid #ffffff20;border-radius:10px;padding:0 14px;background:#19151f;color:#f8f6fa;font-size:12px;outline:none}#clAuthGate input::placeholder{color:#685e70}#clAuthGate input:focus{border-color:#eda32c;box-shadow:0 0 0 3px #eda32c25}#clAuthGate .branch-field select{height:43px;width:100%;border:1px solid #ffffff20;border-radius:10px;background:#19151f;color:#f8f6fa;padding:0 12px;font-size:11px}#clAuthGate .error{min-height:0;color:#ff8585;font-size:10px}#clAuthGate .error:not(:empty){min-height:15px}#clAuthGate .submit{height:50px;border:0;border-radius:11px;background:linear-gradient(100deg,#ffc258,#e58b13);color:#26172b;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 24px #e59a2633}#clAuthGate .submit:hover{filter:brightness(1.07);transform:translateY(-1px)}#clAuthGate .secure{display:flex;justify-content:center;gap:7px;color:#817488;font-size:9px;margin-top:1px}#clAuthGate .secure span{color:#65c895}#clAuthGate .role-access{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff16}#clAuthGate .role-label{display:block;margin:0 0 8px;color:#817488;font-size:8px;font-weight:800;letter-spacing:1px}#clAuthGate .roles{display:flex;flex-wrap:wrap;gap:6px}#clAuthGate .role-chip{border:1px solid #ffffff1e;border-radius:999px;background:#19151f;color:#a99eb0;padding:7px 9px;font-size:9px;font-weight:700;cursor:pointer}#clAuthGate .role-chip:hover,#clAuthGate .role-chip.active{border-color:#eda32c;color:#ffc258;background:#eda32c14}#clAuthGate .guest{display:block;margin:12px auto 0;border:0;background:transparent;color:#93879b;font-size:10px;text-decoration:underline;cursor:pointer}@media(max-width:680px){#clAuthGate .auth-shell{grid-template-columns:1fr;min-height:0;max-height:calc(100dvh - 24px);overflow:auto;border-radius:20px}#clAuthGate .auth-brand{min-height:112px;flex-direction:row;justify-content:flex-start;gap:15px;padding:16px 20px;text-align:left}#clAuthGate .brand-mark{width:54px;height:54px;border-radius:16px;font-size:28px}#clAuthGate .brand-copy{gap:5px}#clAuthGate .brand-copy strong{font-size:18px}#clAuthGate .brand-copy span{font-size:8px}#clAuthGate .brand-copy small{font-size:9px}#clAuthGate .brand-orbit{width:220px;height:120px;left:50%;top:0}#clAuthGate .auth-content{max-height:none;overflow:visible;padding:25px 21px 20px}#clAuthGate .auth-close{right:12px;top:12px;width:33px;height:33px}}
+</style></head>
+<body>
+  <div class="card">
+    <h2>CITY LITE CINEMA & CONCESSIONS</h2>
+    <div>Station #02 Concessions Foyer · Palanpur</div>
+    <div><strong>GSTIN:</strong> 24AAAPC1234H1ZV | <strong>FSSAI:</strong> 10724000012345</div>
+    <hr/>
+    <div class="row"><span>Invoice No:</span><strong>#${order.orderId} (${order.kotId})</strong></div>
+    <div class="row"><span>Date & Time:</span><span>${order.date} ${order.time}</span></div>
+    <div class="row"><span>Customer:</span><span>${order.customerName}</span></div>
+    <div class="row"><span>Location:</span><span>${order.seatOrLocation}</span></div>
+    <div class="row"><span>Source / Payment:</span><span>${order.source} · ${order.paymentMode}</span></div>
+    <hr/>
+    ${order.items.map(i => `<div class="row"><span>${i.qty}x ${i.name}</span><span>INR ${(i.qty * i.price).toFixed(2)}</span></div>`).join('')}
+    <hr/>
+    <div class="row"><span>Taxable Subtotal:</span><span>INR ${order.subtotal.toFixed(2)}</span></div>
+    <div class="row"><span>CGST (2.5%):</span><span>INR ${order.cgst.toFixed(2)}</span></div>
+    <div class="row"><span>SGST (2.5%):</span><span>INR ${order.sgst.toFixed(2)}</span></div>
+    <div class="row" style="font-size:16px;font-weight:bold;color:#d31920;"><span>NET TOTAL (Incl. GST):</span><span>INR ${order.totalWithGst.toFixed(2)}</span></div>
+    <hr/>
+    <div style="text-align:center;margin-top:12px;">Verified Digital Customer Tax Invoice · City Lite ERP</div>
+  </div>
+</body>
+</html>`;
+
+      const blob = new Blob([htmlDoc], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `CityLite_Invoice_${order.orderId}.html`;
+      a.click();
+      pushToast('Customer Invoice Downloaded', `CityLite_Invoice_${order.orderId}.html saved to device.`, 'emerald');
+    }
+
+    // =========================================================================
+    // 9. SIMULATE LIVE ONLINE CUSTOMER APP ORDER (WITH NOTIFICATION & GST SYNC)
+    // =========================================================================
+    const sampleAppCustomers = [
+      { name: 'Vikram Solanki', seat: 'Audi 1 · Seat G-14 (Stree 2)', pay: 'UPI Online' },
+      { name: 'Kavita Joshi', seat: 'Audi 3 · VIP Recliner A-06', pay: 'UPI Online' },
+      { name: 'Harshil Mevada', seat: 'Audi 2 · Seat D-09', pay: 'Card POS' },
+      { name: 'Meera Prajapati', seat: 'Pickup Lockbox #2 · Foyer', pay: 'UPI Online' }
+    ];
+
+    function simulateIncomingAppOrder() {
+      const cust = sampleAppCustomers[Math.floor(Math.random() * sampleAppCustomers.length)];
+      const availableProds = state.products.filter(p => p.stock > 0);
+      if (availableProds.length === 0) return;
+
+      const pA = availableProds[Math.floor(Math.random() * availableProds.length)];
+      const pB = availableProds[Math.floor(Math.random() * availableProds.length)];
+      const items = pA.id === pB.id
+        ? [{ prod: pA, qty: 1 }]
+        : [{ prod: pA, qty: 1 }, { prod: pB, qty: 1 }];
+
+      let subtotal = 0;
+      items.forEach(({ prod, qty }) => {
+        prod.stock = Math.max(0, prod.stock - qty);
+        prod.soldCount += qty;
+        subtotal += prod.price * qty;
+      });
+
+      const cgst = +(subtotal * 0.025).toFixed(2);
+      const sgst = +(subtotal * 0.025).toFixed(2);
+      const totalWithGst = +(subtotal + cgst + sgst).toFixed(2);
+
+      const tokenStr = `CLP-${state.nextTokenNumber++}`;
+      const kotStr = `KOT #${state.nextKotNumber++}`;
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 10);
+      const timeStr = now.toTimeString().slice(0, 8) + ' IST';
+
+      const appOrder = {
+        orderId: tokenStr,
+        kotId: kotStr,
+        date: dateStr,
+        time: timeStr,
+        customerName: `${cust.name} (Mobile App)`,
+        seatOrLocation: cust.seat,
+        source: 'Online App',
+        paymentMode: cust.pay,
+        items: items.map(x => ({ name: x.prod.name, qty: x.qty, price: x.prod.price })),
+        subtotal,
+        cgst,
+        sgst,
+        totalWithGst
+      };
+
+      state.orderHistory.unshift(appOrder);
+      state.ordersBilledTotal += 1;
+      state.onlineAppOrdersCount += 1;
+      state.shiftOnlineHandled += Math.round(totalWithGst);
+
+      // Add to Kitchen KDS Stream
+      state.kdsOrders.unshift({
+        kotId: kotStr,
+        subHeader: `📲 ONLINE APP · ${cust.seat.toUpperCase()}`,
+        elapsed: 'NEW APP ORDER',
+        elapsedStyle: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+        cardBorder: 'border-t-4 border-t-emerald-600 border-[#e6dddd]',
+        isSeatRunner: true,
+        items: items.map(x => ({
+          label: `${x.qty}x ${x.prod.name}`,
+          state: 'APP PAID',
+          stateColor: 'text-emerald-700 font-bold'
+        })),
+        footerLeft: `App Customer: ${cust.name}`,
+        btnText: 'DISPATCH RUNNER',
+        btnStyle: 'bg-crimson-600 hover:bg-crimson-700 text-white'
+      });
+
+      // Add Notification
+      state.notifications.unshift({
+        id: 'app-' + Date.now(),
+        type: 'app_order',
+        title: `📲 New Mobile App Order #${tokenStr}`,
+        message: `${cust.name} (${cust.seat}) ordered ${items.map(i => i.prod.name).join(' + ')} • ${formatINR(totalWithGst, 2)} Paid (${cust.pay})`,
+        time: timeStr,
+        orderId: tokenStr
+      });
+
+      // Check if any item hit <= 2 stock
+      items.forEach(({ prod }) => {
+        if (prod.stock <= 2) {
+          state.notifications.unshift({
+            id: 'low-' + Date.now() + prod.id,
+            type: 'low_stock',
+            title: `⚠️ Low Stock Alert: ${prod.stock} Left!`,
+            message: `${prod.name} has only ${prod.stock} units remaining after App Order.`,
+            time: timeStr,
+            productId: prod.id
+          });
+        }
+      });
+
+      updateStationKpiBar();
+      renderPosProductGrid();
+      renderKdsStream();
+      updateLowStockAlertsUI();
+      if (state.activeTab === 'data') renderDataTab();
+      if (state.activeTab === 'orders') renderActiveOrdersView();
+
+      pushToast(
+        `📲 Online App Order #${tokenStr}`,
+        `${cust.name} (${cust.seat}) paid ${formatINR(totalWithGst, 2)} incl. 5% GST via ${cust.pay}. Sent to KDS!`,
+        'emerald',
+        'View Bill / QR',
+        () => openReceiptModal(appOrder)
+      );
+    }
+
+    // =========================================================================
+    // 10. LOW STOCK (<= 2 LEFT) DETECTION & EASY PHOTO/PRICE RESTOCK ENGINE
+    // =========================================================================
+    function getLowStockProducts() {
+      return state.products.filter(p => p.stock <= 2);
+    }
+
+    function updateLowStockAlertsUI() {
+      const lowList = getLowStockProducts();
+      const banner = document.getElementById('criticalLowStockBanner');
+      const bannerText = document.getElementById('criticalLowStockText');
+      const navBadge = document.getElementById('navRestockBadge');
+      const notifBadge = document.getElementById('notifCountBadge');
+
+      if (navBadge) {
+        navBadge.textContent = `${lowList.length} Low`;
+        navBadge.className = lowList.length > 0
+          ? 'px-1.5 py-0.2 rounded-full bg-crimson-600 text-white font-mono text-[9.5px] font-bold animate-pulse'
+          : 'px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-700 font-mono text-[9.5px] font-bold';
+      }
+
+      if (notifBadge) {
+        notifBadge.textContent = state.notifications.length;
+        notifBadge.classList.toggle('hidden', state.notifications.length === 0);
+      }
+
+      if (lowList.length > 0) {
+        banner.classList.remove('hidden');
+        bannerText.innerHTML = `<strong>${lowList.length} Product(s) at &le; 2 Units Left:</strong> ${lowList.map(p => `${p.name} (${p.stock} left)`).join(' · ')} — Click to restock immediately!`;
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function triggerLowStockDemo() {
+      const target = state.products[2]; // Tub Butter Popcorn
+      target.stock = 2;
+      state.notifications.unshift({
+        id: 'low-demo-' + Date.now(),
+        type: 'low_stock',
+        title: `⚠️ Stock Alert: Only 2 Left!`,
+        message: `${target.name} dropped to 2 units left. Restock required at Station #02.`,
+        time: new Date().toTimeString().slice(0, 5) + ' IST',
+        productId: target.id
+      });
+      renderPosProductGrid();
+      updateLowStockAlertsUI();
+      pushToast(
+        `⚠️ Only 2 Left: ${target.name}`,
+        `Stock reached critical threshold (2 left). Click below to open Easy Restock with photo & price.`,
+        'crimson',
+        'Restock Now',
+        () => openSingleProductRestockModal(target.id)
+      );
+    }
+
+    function openSingleProductRestockModal(productId) {
+      const prod = state.products.find(p => p.id === productId);
+      if (!prod) return;
+
+      document.getElementById('restockModalSub').textContent = 'SINGLE PRODUCT QUICK RESTOCK';
+      document.getElementById('restockModalTitle').textContent = `Restock: ${prod.name}`;
+
+      document.getElementById('restockModalBody').innerHTML = `
+        <div class="flex flex-col sm:flex-row items-center gap-5 p-4 rounded-2xl bg-[#faf6f6] border border-[#ece2e2]">
+          <img src="${prod.image}" alt="${prod.name}" class="w-28 h-28 rounded-xl object-cover border border-[#e0d4d4] shrink-0" />
+          <div class="space-y-1.5 flex-1">
+            <span class="px-2 py-0.5 rounded bg-crimson-100 text-crimson-700 font-mono text-[9.5px] font-bold uppercase">${prod.category}</span>
+            <h4 class="font-serif font-bold text-xl text-ink-900">${prod.name}</h4>
+            <p class="text-xs text-ink-500">${prod.subtitle}</p>
+            <div class="flex items-center gap-4 pt-1 font-mono text-xs">
+              <span>Selling Price: <strong class="text-crimson-600">${formatINR(prod.price)}</strong></span>
+              <span>Current Stock: <strong class="${prod.stock <= 2 ? 'text-crimson-600' : 'text-emerald-700'}">${prod.stock} units</strong></span>
+              <span>Total Sold: <strong>${prod.soldCount} units</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label class="block text-[10px] font-mono font-bold uppercase text-ink-500 mb-1">Add Stock Quantity</label>
+            <input id="singleRestockQtyInput" type="number" value="25" min="1" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#dfd5d5] font-mono text-sm font-bold text-ink-900" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono font-bold uppercase text-ink-500 mb-1">Update Selling Price (₹)</label>
+            <input id="singleRestockPriceInput" type="number" value="${prod.price}" min="10" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#dfd5d5] font-mono text-sm font-bold text-ink-900" />
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-[#eee6e6]">
+          <div class="flex gap-2">
+            <button onclick="applySingleRestock('${prod.id}', 10)" class="px-3.5 py-2 rounded-xl bg-[#f3eded] hover:bg-emerald-50 hover:text-emerald-700 font-mono text-xs font-bold">+10 Quick</button>
+            <button onclick="applySingleRestock('${prod.id}', 25)" class="px-3.5 py-2 rounded-xl bg-[#f3eded] hover:bg-emerald-50 hover:text-emerald-700 font-mono text-xs font-bold">+25 Batch</button>
+            <button onclick="applySingleRestock('${prod.id}', 50)" class="px-3.5 py-2 rounded-xl bg-[#f3eded] hover:bg-emerald-50 hover:text-emerald-700 font-mono text-xs font-bold">+50 Full</button>
+          </div>
+          <button onclick="applySingleRestock('${prod.id}', null)" class="px-5 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson">
+            ✓ Confirm Restock &amp; Save
+          </button>
+        </div>
+      `;
+
+      const overlay = document.getElementById('restockModalOverlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function applySingleRestock(productId, presetQty) {
+      const prod = state.products.find(p => p.id === productId);
+      if (!prod) return;
+
+      const addQty = presetQty !== null ? presetQty : (Number(document.getElementById('singleRestockQtyInput')?.value) || 20);
+      const newPrice = Number(document.getElementById('singleRestockPriceInput')?.value) || prod.price;
+
+      prod.stock += addQty;
+      prod.price = newPrice;
+      prod.statusNote = `${prod.stock} in stock · Restocked`;
+
+      closeRestockModal();
+      renderPosProductGrid();
+      if (state.activeTab === 'catalog') renderCatalogRestockView();
+      if (state.activeTab === 'data') renderDataTab();
+      pushToast('Inventory Restocked!', `${prod.name} restocked by +${addQty} units (Now ${prod.stock} in stock at ₹${prod.price}).`, 'emerald');
+    }
+
+    function openEasyRestockModal() {
+      document.getElementById('restockModalSub').textContent = 'STATION #02 EASY RESTOCK CENTER';
+      document.getElementById('restockModalTitle').textContent = 'Visual Product Restock & Price Editor';
+
+      document.getElementById('restockModalBody').innerHTML = `
+        <div class="flex items-center justify-between pb-3 border-b border-[#eee6e6]">
+          <span class="text-xs text-ink-500">Click <strong>+15</strong> or <strong>+30</strong> on any product below to replenish stock immediately.</span>
+          <button onclick="openAddNewProductModal()" class="px-3.5 py-1.5 rounded-lg bg-crimson-600 text-white font-mono text-[10.5px] font-bold">+ Add New Product</button>
+        </div>
+        <div class="space-y-2.5">
+          ${state.products.map(p => `
+            <div class="p-3 rounded-xl ${p.stock <= 2 ? 'bg-crimson-50/70 border border-crimson-300' : 'bg-[#faf7f7] border border-[#ece2e2]'} flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <img src="${p.image}" alt="${p.name}" class="w-12 h-12 rounded-lg object-cover border border-[#e2d8d8]" />
+                <div>
+                  <div class="font-bold text-xs text-ink-900">${p.name} <span class="font-mono text-crimson-600">(${formatINR(p.price)})</span></div>
+                  <div class="text-[10.5px] font-mono ${p.stock <= 2 ? 'text-crimson-600 font-bold' : 'text-ink-500'}">
+                    Stock Left: ${p.stock} units · Sold: ${p.soldCount} units
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 font-mono text-[10.5px]">
+                <button onclick="quickBumpStock('${p.id}', 15)" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-emerald-600 hover:text-white border border-[#dcd2d2] font-bold transition">+15 Stock</button>
+                <button onclick="quickBumpStock('${p.id}', 30)" class="px-2.5 py-1.5 rounded-lg bg-crimson-600 hover:bg-crimson-700 text-white font-bold transition">+30 Stock</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      const overlay = document.getElementById('restockModalOverlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function quickBumpStock(productId, qty) {
+      const prod = state.products.find(p => p.id === productId);
+      if (!prod) return;
+      prod.stock += qty;
+      prod.statusNote = `${prod.stock} in stock`;
+      openEasyRestockModal();
+      renderPosProductGrid();
+      if (state.activeTab === 'catalog') renderCatalogRestockView();
+      if (state.activeTab === 'data') renderDataTab();
+      pushToast('Stock Added', `+${qty} units added to ${prod.name} (Total: ${prod.stock}).`, 'emerald');
+    }
+
+    function closeRestockModal() {
+      const overlay = document.getElementById('restockModalOverlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
+
+    // Add New Real Product or Movie+Offer with Photo & Price
+    function openAddNewProductModal(defaultIsOffer = false) {
+      document.getElementById('restockModalSub').textContent = 'CREATE NEW CATALOG ITEM';
+      document.getElementById('restockModalTitle').textContent = defaultIsOffer ? 'Create New Movie + Food Offer Bundle' : 'Add New Product with Photo & Price';
+
+      document.getElementById('restockModalBody').innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Product / Offer Name *</label>
+            <input id="newProdName" type="text" placeholder="e.g. Pushpa 2 Mega Popcorn + 2 Coke" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5]" />
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Subtitle / Description *</label>
+            <input id="newProdSub" type="text" placeholder="e.g. Jumbo Caramel Tub + 2 Large Coke" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5]" />
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Category *</label>
+            <select id="newProdCat" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5]">
+              <option value="COMBOS" ${defaultIsOffer ? 'selected' : ''}>COMBOS</option>
+              <option value="OFFERS" ${defaultIsOffer ? 'selected' : ''}>OFFERS</option>
+              <option value="POPCORN">POPCORN</option>
+              <option value="NACHOS">NACHOS</option>
+              <option value="PUFFS">PUFFS</option>
+              <option value="DRINKS">DRINKS</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Selling Price (₹) *</label>
+            <input id="newProdPrice" type="number" value="320" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5] font-mono font-bold" />
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Initial Stock Quantity *</label>
+            <input id="newProdStock" type="number" value="25" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5] font-mono font-bold" />
+          </div>
+          <div>
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Offer Badge (Optional, e.g. 20% OFF / MOVIE OFFER)</label>
+            <input id="newProdBadge" type="text" value="${defaultIsOffer ? '25% OFF' : 'NEW'}" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5] font-mono" />
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-mono text-[10px] uppercase text-ink-500 mb-1">Food Photo URL (or leave default cinema food photo)</label>
+            <input id="newProdImg" type="text" value="https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=600&q=80" class="w-full px-3.5 py-2 rounded-xl border border-[#dfd5d5] font-mono text-[11px]" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-4 border-t border-[#eee6e6]">
+          <button onclick="closeRestockModal()" class="px-4 py-2 rounded-xl border border-[#dfd5d5] font-mono text-xs">Cancel</button>
+          <button onclick="saveNewProduct()" class="px-5 py-2 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold uppercase">Save &amp; Add to Counter</button>
+        </div>
+      `;
+
+      const overlay = document.getElementById('restockModalOverlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function saveNewProduct() {
+      const name = (document.getElementById('newProdName')?.value || '').trim();
+      const subtitle = (document.getElementById('newProdSub')?.value || 'Fresh Cinema Batch').trim();
+      const category = document.getElementById('newProdCat')?.value || 'COMBOS';
+      const price = Number(document.getElementById('newProdPrice')?.value) || 250;
+      const stock = Number(document.getElementById('newProdStock')?.value) || 20;
+      const badge = (document.getElementById('newProdBadge')?.value || '').trim() || null;
+      const image = (document.getElementById('newProdImg')?.value || '').trim();
+
+      if (!name) {
+        pushToast('Enter Product Name', 'Please enter a valid food or combo name.', 'crimson');
+        return;
+      }
+
+      const newProd = {
+        id: 'p-' + Date.now(),
+        name,
+        subtitle,
+        category,
+        price,
+        stock,
+        soldCount: 0,
+        badge,
+        statusNote: `${stock} in stock`,
+        isOffer: category === 'OFFERS' || (badge && badge.includes('OFF')),
+        offerTag: badge ? `${badge} • SPECIAL DEAL` : null,
+        image: image || 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=600&q=80'
+      };
+
+      state.products.unshift(newProd);
+      closeRestockModal();
+      renderPosProductGrid();
+      if (state.activeTab === 'catalog') renderCatalogRestockView();
+      if (state.activeTab === 'offers') renderOffersTab();
+      if (state.activeTab === 'data') renderDataTab();
+      pushToast('New Product Added!', `${name} (₹${price}) is now live on the POS Counter.`, 'emerald');
+    }
+
+    function removeProductFromCatalog(productId) {
+      const idx = state.products.findIndex(p => p.id === productId);
+      if (idx === -1) return;
+      const removed = state.products.splice(idx, 1)[0];
+      renderPosProductGrid();
+      renderCatalogRestockView();
+      if (state.activeTab === 'data') renderDataTab();
+      if (state.activeTab === 'offers') renderOffersTab();
+      pushToast('Product Removed', `${removed.name} removed from Menu Catalog.`, 'crimson');
+    }
+
+    function restockAllLowItems() {
+      state.products.forEach(p => {
+        if (p.stock <= 5) {
+          p.stock += 25;
+          p.statusNote = `${p.stock} in stock · Replenished`;
+        }
+      });
+      renderPosProductGrid();
+      renderCatalogRestockView();
+      updateLowStockAlertsUI();
+      pushToast('All Low Stock Items Replenished!', '+25 units added to all low-inventory items.', 'emerald');
+    }
+
+    // =========================================================================
+    // 11. RENDER KITCHEN KDS STREAM (BOTTOM OF POS + KDS TAB)
+    // =========================================================================
+    function renderKdsStream() {
+      const grid = document.getElementById('kdsCardsGrid');
+      const fullGrid = document.getElementById('fullKdsGrid');
+      const countBadge = document.getElementById('kdsCountBadge');
+
+      if (countBadge) {
+        countBadge.textContent = `${state.kdsOrders.length} ORDERS IN PREPARATION`;
+      }
+
+      const html = state.kdsOrders.slice(0, 6).map((kot, idx) => `
+        <div class="bg-white rounded-2xl p-4 sm:p-5 border ${kot.cardBorder} shadow-2xs flex flex-col justify-between space-y-4">
+          <div>
+            <!-- KOT Header -->
+            <div class="flex items-start justify-between gap-2 pb-3 border-b border-[#f1e9e9]">
+              <div>
+                <h4 class="font-serif font-bold text-base text-ink-900">${kot.kotId}</h4>
+                <div class="text-[9.5px] font-mono uppercase tracking-wider ${kot.isSeatRunner ? 'text-crimson-600 font-bold' : 'text-ink-400'} mt-0.5 flex items-center gap-1">
+                  ${kot.isSeatRunner ? '<i data-lucide="armchair" class="w-3 h-3"></i>' : ''}
+                  <span>${kot.subHeader}</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded border font-mono text-[9px] font-bold uppercase ${kot.elapsedStyle}">
+                ${kot.elapsed}
+              </span>
+            </div>
+
+            <!-- KOT Items -->
+            <div class="py-3 space-y-2 text-xs">
+              ${kot.items.map(item => `
+                <div class="flex items-center justify-between">
+                  <span class="font-medium text-ink-800">${item.label}</span>
+                  <span class="font-mono text-[9.5px] uppercase ${item.stateColor}">${item.state}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- KOT Footer & Action CTA -->
+          <div class="pt-3 border-t border-[#f1e9e9] flex items-center justify-between gap-2">
+            <span class="text-[10px] font-mono text-ink-400">${kot.footerLeft}</span>
+            <button onclick="completeKdsCard(${idx})" class="px-3.5 py-1.5 rounded-lg font-mono text-[10px] font-bold uppercase tracking-wider transition ${kot.btnStyle}">
+              ${kot.btnText}
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      if (grid) grid.innerHTML = html;
+      if (fullGrid) fullGrid.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    function completeKdsCard(idx) {
+      const finished = state.kdsOrders.splice(idx, 1)[0];
+      if (!finished) return;
+      renderKdsStream();
+      updateStationKpiBar();
+      pushToast(`${finished.kotId} Dispatched`, `${finished.subHeader} completed and handed over.`, 'emerald');
+    }
+
+    // =========================================================================
+    // 12. RENDER TAB 2: MENU CATALOG & EASY PHOTO/PRICE RESTOCK VIEW
+    // =========================================================================
+    function renderCatalogRestockView() {
+      const grid = document.getElementById('catalogRestockGrid');
+      if (!grid) return;
+
+      grid.innerHTML = state.products.map(p => {
+        const isLow = p.stock <= 2;
+        return `
+          <div class="bg-white rounded-2xl border ${isLow ? 'border-crimson-500 ring-2 ring-crimson-100' : 'border-[#eae2e2]'} shadow-card overflow-hidden flex flex-col justify-between">
+            <div>
+              <div class="relative h-40 bg-[#221c1c]">
+                <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" />
+                <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-black/75 text-white font-mono text-[9.5px] font-bold uppercase">${p.category}</span>
+                <button onclick="removeProductFromCatalog('${p.id}')" title="Delete Product" class="absolute top-3 right-3 w-7 h-7 rounded-lg bg-white/90 hover:bg-crimson-600 hover:text-white text-ink-700 flex items-center justify-center shadow">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+              <div class="p-4 space-y-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <h4 class="font-bold text-sm text-ink-900">${p.name}</h4>
+                    <p class="text-xs text-ink-400">${p.subtitle}</p>
+                  </div>
+                  <div class="font-serif font-bold text-xl text-crimson-600">${formatINR(p.price)}</div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-[#faf7f7] border border-[#eee6e6] grid grid-cols-3 gap-2 font-mono text-[11px] text-center">
+                  <div>
+                    <div class="text-[9px] text-ink-400">SOLD</div>
+                    <div class="font-bold text-ink-900">${p.soldCount}</div>
+                  </div>
+                  <div>
+                    <div class="text-[9px] text-ink-400">STOCK LEFT</div>
+                    <div class="font-bold ${isLow ? 'text-crimson-600 animate-pulse' : 'text-emerald-700'}">${p.stock}</div>
+                  </div>
+                  <div>
+                    <div class="text-[9px] text-ink-400">REVENUE</div>
+                    <div class="font-bold text-ink-900">${formatINR(p.soldCount * p.price)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="px-4 pb-4 flex items-center gap-2">
+              <button onclick="quickBumpStock('${p.id}', 10)" class="flex-1 py-2 rounded-xl bg-[#f4efef] hover:bg-emerald-600 hover:text-white font-mono text-[10.5px] font-bold transition">+10 Restock</button>
+              <button onclick="openSingleProductRestockModal('${p.id}')" class="flex-1 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-[10.5px] font-bold transition">Edit / Restock</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    // =========================================================================
+    // 13. RENDER TAB 3: ACTIVE ORDERS (COUNTER POS + ONLINE APP)
+    // =========================================================================
+    function renderActiveOrdersView() {
+      const container = document.getElementById('activeOrdersListContainer');
+      if (!container) return;
+
+      container.innerHTML = state.orderHistory.map((ord, idx) => `
+        <div class="bg-white rounded-2xl p-5 border border-[#eae2e2] shadow-card flex flex-col justify-between space-y-3">
+          <div class="flex items-start justify-between gap-2 border-b border-[#f2ecec] pb-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-serif font-bold text-lg text-ink-900">#${ord.orderId}</span>
+                <span class="px-2 py-0.5 rounded font-mono text-[9.5px] font-bold ${
+                  ord.source === 'Online App' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-crimson-50 text-crimson-700 border border-crimson-100'
+                }">${ord.source}</span>
+                <span class="px-2 py-0.5 rounded bg-[#f4eeee] text-ink-700 font-mono text-[9.5px] font-bold">${ord.paymentMode}</span>
+              </div>
+              <div class="text-xs font-bold text-ink-800 mt-1">${ord.customerName} · <span class="font-mono text-crimson-600">${ord.seatOrLocation}</span></div>
+            </div>
+            <div class="text-right font-mono text-[10.5px] text-ink-400">
+              <div>${ord.date}</div>
+              <div>${ord.time}</div>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-xs font-mono">
+            ${ord.items.map(i => `<div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>${formatINR(i.qty * i.price, 2)}</span></div>`).join('')}
+          </div>
+
+          <div class="pt-3 border-t border-[#f2ecec] flex items-center justify-between">
+            <div class="font-mono text-xs">
+              <span class="text-ink-400">Subtotal ₹${ord.subtotal} + 5% GST = </span>
+              <strong class="text-sm text-crimson-600">${formatINR(ord.totalWithGst, 2)}</strong>
+            </div>
+            <button onclick="openReceiptByIndex(${idx})" class="px-3.5 py-1.5 rounded-xl bg-ink-900 hover:bg-crimson-600 text-white font-mono text-[10px] font-bold uppercase transition">
+              🖨️ Thermal Bill &amp; QR
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openReceiptByIndex(idx) {
+      const ord = state.orderHistory[idx];
+      if (ord) openReceiptModal(ord);
+    }
+
+    // =========================================================================
+    // 14. RENDER TAB 5: DATA & SALES LEDGER (COMPLETE ANALYTICS ENGINE)
+    // =========================================================================
+    function renderDataTab() {
+      // 1. Compute Overall Summary Metrics
+      const totalUnitsSold = state.products.reduce((s, p) => s + p.soldCount, 0);
+      const totalBaseSales = state.products.reduce((s, p) => s + p.soldCount * p.price, 0);
+      const totalGstCollected = +(totalBaseSales * 0.05).toFixed(2);
+      const totalGrossWithGst = +(totalBaseSales + totalGstCollected).toFixed(2);
+      const totalStockRemaining = state.products.reduce((s, p) => s + p.stock, 0);
+
+      // Payment Split from logged orders + shift baseline
+      const cashOrdersSum = state.orderHistory.filter(o => o.paymentMode === 'Cash').reduce((s, o) => s + o.totalWithGst, 0);
+      const onlineOrdersSum = state.orderHistory.filter(o => o.paymentMode !== 'Cash').reduce((s, o) => s + o.totalWithGst, 0);
+
+      document.getElementById('dataSummaryCards').innerHTML = `
+        <div class="bg-white rounded-2xl p-5 border border-[#eae2e2] shadow-card space-y-1">
+          <div class="text-[9.5px] font-mono font-bold uppercase text-ink-400">TOTAL GROSS SALES (WITH 5% GST)</div>
+          <div class="font-serif font-bold text-2xl text-crimson-600 tabular-nums">${formatINR(totalGrossWithGst, 2)}</div>
+          <div class="text-[11px] font-mono text-ink-500">Base: ${formatINR(totalBaseSales)} + GST: ${formatINR(totalGstCollected, 2)}</div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-[#eae2e2] shadow-card space-y-1">
+          <div class="text-[9.5px] font-mono font-bold uppercase text-ink-400">PAYMENT SPLIT (CASH VS ONLINE)</div>
+          <div class="font-serif font-bold text-xl text-ink-900 tabular-nums">Cash: ${formatINR(state.shiftCashHandled)}</div>
+          <div class="text-[11px] font-mono text-emerald-700 font-bold">Online UPI/Card: ${formatINR(state.shiftOnlineHandled)}</div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-[#eae2e2] shadow-card space-y-1">
+          <div class="text-[9.5px] font-mono font-bold uppercase text-ink-400">ORDER SOURCE (COUNTER VS APP)</div>
+          <div class="font-serif font-bold text-xl text-ink-900 tabular-nums">${state.counterOrdersCount} Counter POS</div>
+          <div class="text-[11px] font-mono text-crimson-600 font-bold">📲 ${state.onlineAppOrdersCount} Online Customer App</div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-[#eae2e2] shadow-card space-y-1">
+          <div class="text-[9.5px] font-mono font-bold uppercase text-ink-400">TOTAL UNITS SOLD &amp; STOCK LEFT</div>
+          <div class="font-serif font-bold text-2xl text-ink-900 tabular-nums">${totalUnitsSold} Sold</div>
+          <div class="text-[11px] font-mono ${getLowStockProducts().length > 0 ? 'text-crimson-600 font-bold' : 'text-ink-500'}">
+            ${totalStockRemaining} Units in Stock (${getLowStockProducts().length} Low &le;2)
+          </div>
+        </div>
+      `;
+
+      // 2. Category-wise Breakdown Table
+      const catList = ['COMBOS', 'POPCORN', 'NACHOS', 'PUFFS', 'DRINKS', 'OFFERS'];
+      document.getElementById('categoryAnalyticsBody').innerHTML = catList.map(cat => {
+        const items = state.products.filter(p => p.category === cat);
+        const sold = items.reduce((s, p) => s + p.soldCount, 0);
+        const stockLeft = items.reduce((s, p) => s + p.stock, 0);
+        const baseRev = items.reduce((s, p) => s + p.soldCount * p.price, 0);
+        const grossWithGst = baseRev * 1.05;
+        const hasLow = items.some(p => p.stock <= 2);
+
+        return `
+          <tr class="hover:bg-[#fcf8f8]">
+            <td class="py-3 font-bold text-ink-900">${cat}</td>
+            <td class="py-3 text-ink-500">${items.length} items</td>
+            <td class="py-3 font-bold text-ink-900">${sold} units</td>
+            <td class="py-3 ${hasLow ? 'text-crimson-600 font-bold' : 'text-emerald-700'}">${stockLeft} left ${hasLow ? '⚠️' : ''}</td>
+            <td class="py-3 text-right font-bold text-ink-900">${formatINR(grossWithGst, 2)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // 3. Most Sold vs Least Sold Products & Offers
+      const sortedBySales = [...state.products].sort((a, b) => b.soldCount - a.soldCount);
+      const mostSold = sortedBySales[0];
+      const leastSold = sortedBySales[sortedBySales.length - 1];
+      const offerProducts = sortedBySales.filter(p => p.isOffer);
+      const topOffer = offerProducts[0];
+
+      document.getElementById('mostLeastSoldContainer').innerHTML = `
+        <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-mono font-bold uppercase text-emerald-700">🏆 MOST SOLD PRODUCT OVERALL</span>
+            <div class="font-bold text-sm text-ink-900 mt-0.5">${mostSold.name}</div>
+            <div class="text-[11px] font-mono text-ink-500">${mostSold.soldCount} units sold · Stock left: ${mostSold.stock}</div>
+          </div>
+          <div class="font-serif font-bold text-lg text-emerald-700">${formatINR(mostSold.soldCount * mostSold.price * 1.05)}</div>
+        </div>
+
+        ${topOffer ? `
+          <div class="p-3.5 rounded-xl bg-crimson-50/70 border border-crimson-200 flex items-center justify-between">
+            <div>
+              <span class="text-[9px] font-mono font-bold uppercase text-crimson-700">🔥 MOST SOLD MOVIE + OFFER DEAL</span>
+              <div class="font-bold text-sm text-ink-900 mt-0.5">${topOffer.name}</div>
+              <div class="text-[11px] font-mono text-ink-500">${topOffer.soldCount} bundles sold · ${topOffer.badge || 'OFFER'}</div>
+            </div>
+            <div class="font-serif font-bold text-lg text-crimson-600">${formatINR(topOffer.soldCount * topOffer.price * 1.05)}</div>
+          </div>
+        ` : ''}
+
+        <div class="p-3.5 rounded-xl bg-[#faf7f7] border border-[#e6dddd] flex items-center justify-between">
+          <div>
+            <span class="text-[9px] font-mono font-bold uppercase text-ink-400">📉 LEAST SOLD PRODUCT (NEEDS PROMO)</span>
+            <div class="font-bold text-sm text-ink-900 mt-0.5">${leastSold.name}</div>
+            <div class="text-[11px] font-mono text-ink-500">Only ${leastSold.soldCount} units sold · Stock left: ${leastSold.stock}</div>
+          </div>
+          <div class="font-serif font-bold text-base text-ink-600">${formatINR(leastSold.soldCount * leastSold.price * 1.05)}</div>
+        </div>
+      `;
+
+      // 4. Product-by-Product Table
+      document.getElementById('productAnalyticsTableBody').innerHTML = sortedBySales.map(p => {
+        const baseRev = p.soldCount * p.price;
+        const gst = baseRev * 0.05;
+        const total = baseRev + gst;
+        return `
+          <tr class="hover:bg-[#fcf8f8] font-mono text-[11px]">
+            <td class="py-3 font-sans font-bold text-ink-900 flex items-center gap-2.5">
+              <img src="${p.image}" class="w-8 h-8 rounded object-cover" />
+              <span>${p.name}</span>
+            </td>
+            <td class="py-3">${p.category}</td>
+            <td class="py-3">${formatINR(p.price)}</td>
+            <td class="py-3 font-bold text-ink-900">${p.soldCount}</td>
+            <td class="py-3 ${p.stock <= 2 ? 'text-crimson-600 font-bold' : 'text-emerald-700'}">${p.stock} left</td>
+            <td class="py-3">${formatINR(gst, 2)}</td>
+            <td class="py-3 text-right font-bold text-ink-900">${formatINR(total, 2)}</td>
+            <td class="py-3 text-right">
+              <button onclick="openSingleProductRestockModal('${p.id}')" class="px-2.5 py-1 rounded bg-crimson-50 hover:bg-crimson-600 hover:text-white text-crimson-700 font-bold text-[10px] transition">Restock</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // 5. Customer Order History Table (Filtered by Source & Payment Mode)
+      const srcFilter = document.getElementById('filterOrderSource')?.value || 'ALL';
+      const payFilter = document.getElementById('filterPaymentType')?.value || 'ALL';
+
+      const filteredOrders = state.orderHistory.filter(o => {
+        const matchSrc = srcFilter === 'ALL' || o.source === srcFilter;
+        const matchPay = payFilter === 'ALL' || o.paymentMode === payFilter;
+        return matchSrc && matchPay;
+      });
+
+      document.getElementById('customerOrderHistoryBody').innerHTML = filteredOrders.map((o, idx) => `
+        <tr class="hover:bg-[#fcf8f8] text-[11px]">
+          <td class="py-3 font-mono font-bold text-crimson-600">#${o.orderId}<div class="text-[9.5px] text-ink-400">${o.kotId}</div></td>
+          <td class="py-3 font-mono">${o.date}<div class="text-[10px] text-ink-400">${o.time}</div></td>
+          <td class="py-3 font-bold text-ink-900">${o.customerName}<div class="text-[10px] font-mono text-ink-500">${o.seatOrLocation}</div></td>
+          <td class="py-3 font-mono">
+            <span class="px-2 py-0.5 rounded text-[9.5px] font-bold ${o.source === 'Online App' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-[#f4eeee] text-ink-800'}">${o.source}</span>
+          </td>
+          <td class="py-3 text-ink-700">${o.items.map(i => `${i.qty}x ${i.name}`).join(', ')}</td>
+          <td class="py-3 font-mono font-bold">${o.paymentMode}</td>
+          <td class="py-3 font-mono text-ink-500">₹${o.subtotal.toFixed(2)} + ₹${(o.cgst + o.sgst).toFixed(2)}</td>
+          <td class="py-3 text-right font-mono font-bold text-ink-900">${formatINR(o.totalWithGst, 2)}</td>
+          <td class="py-3 text-right">
+            <button onclick="openReceiptModal(state.orderHistory[${state.orderHistory.indexOf(o)}])" class="px-2.5 py-1 rounded bg-ink-900 hover:bg-crimson-600 text-white font-mono text-[10px] font-bold">
+              QR / Print
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function exportDataLedgerCsv() {
+      const rows = [
+        ['Order ID', 'KOT', 'Date', 'Time', 'Customer', 'Location', 'Source', 'Payment Mode', 'Subtotal', 'CGST 2.5%', 'SGST 2.5%', 'Total With GST'],
+        ...state.orderHistory.map(o => [
+          o.orderId, o.kotId, o.date, o.time, `"${o.customerName}"`, `"${o.seatOrLocation}"`, o.source, o.paymentMode, o.subtotal, o.cgst, o.sgst, o.totalWithGst
+        ])
+      ];
+      const csv = 'data:text/csv;charset=utf-8,' + rows.map(r => r.join(',')).join('\n');
+      const a = document.createElement('a');
+      a.href = encodeURI(csv);
+      a.download = 'CityLite_FnB_Data_Ledger_GST.csv';
+      a.click();
+      pushToast('Data Ledger Exported', 'CityLite_FnB_Data_Ledger_GST.csv downloaded.', 'emerald');
+    }
+
+    // =========================================================================
+    // 15. RENDER TAB 6: MOVIE + FOOD OFFERS & MOST/LEAST SOLD OFFER ANALYTICS
+    // =========================================================================
+    function renderOffersTab() {
+      const offers = state.products.filter(p => p.isOffer || p.category === 'OFFERS' || p.category === 'COMBOS');
+      const sorted = [...offers].sort((a, b) => b.soldCount - a.soldCount);
+      const best = sorted[0];
+      const least = sorted[sorted.length - 1];
+
+      document.getElementById('offersAnalyticsBanner').innerHTML = `
+        <div class="bg-white rounded-2xl p-5 border-l-4 border-l-emerald-600 border border-[#eae2e2] shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase text-emerald-700">🏆 MOST SOLD MOVIE + FOOD OFFER</span>
+            <h3 class="font-serif font-bold text-xl text-ink-900 mt-1">${best ? best.name : '-'}</h3>
+            <p class="text-xs text-ink-500">${best ? `${best.soldCount} bundles sold · ${best.offerTag || best.badge}` : ''}</p>
+          </div>
+          <div class="text-right font-mono">
+            <div class="text-xs text-ink-400">Gross w/ GST</div>
+            <div class="font-serif font-bold text-2xl text-emerald-700">${best ? formatINR(best.soldCount * best.price * 1.05) : '₹0'}</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border-l-4 border-l-amber-500 border border-[#eae2e2] shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase text-amber-700">📊 LEAST SOLD OFFER (PROMOTE ON SCREEN)</span>
+            <h3 class="font-serif font-bold text-xl text-ink-900 mt-1">${least ? least.name : '-'}</h3>
+            <p class="text-xs text-ink-500">${least ? `${least.soldCount} bundles sold · Stock left: ${least.stock}` : ''}</p>
+          </div>
+          <div class="text-right font-mono">
+            <div class="text-xs text-ink-400">Gross w/ GST</div>
+            <div class="font-serif font-bold text-2xl text-ink-800">${least ? formatINR(least.soldCount * least.price * 1.05) : '₹0'}</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('offersCardsGrid').innerHTML = sorted.map(p => `
+        <div class="bg-white rounded-2xl border border-[#eae2e2] shadow-card overflow-hidden flex flex-col justify-between">
+          <div>
+            <div class="relative h-40">
+              <img src="${p.image}" class="w-full h-full object-cover" />
+              <span class="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-crimson-600 text-white font-mono text-[10px] font-bold uppercase shadow">${p.badge || 'OFFER'}</span>
+            </div>
+            <div class="p-4 space-y-1.5">
+              <div class="text-[9.5px] font-mono font-bold text-crimson-600 uppercase">${p.offerTag || 'MOVIE + CONCESSION BUNDLE'}</div>
+              <h4 class="font-bold text-base text-ink-900">${p.name}</h4>
+              <p class="text-xs text-ink-500">${p.subtitle}</p>
+            </div>
+          </div>
+          <div class="p-4 pt-2 border-t border-[#f3ecec] flex items-center justify-between">
+            <div>
+              <div class="font-serif font-bold text-xl text-crimson-600">${formatINR(p.price)}</div>
+              <div class="text-[10px] font-mono text-ink-400">Sold: <strong>${p.soldCount}</strong> · Left: <strong>${p.stock}</strong></div>
+            </div>
+            <button onclick="addToCart('${p.id}'); switchTab('pos');" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase">
+              + Bill Offer
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // 16. NOTIFICATION BELL DRAWER & SHIFT HANDOVER MODAL
+    // =========================================================================
+    function toggleNotificationDrawer() {
+      const dd = document.getElementById('notifDropdown');
+      dd.classList.toggle('hidden');
+      renderNotificationsList();
+    }
+
+    function renderNotificationsList() {
+      const container = document.getElementById('notifListContainer');
+      if (!container) return;
+
+      if (state.notifications.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-ink-400">No new alerts.</div>`;
+        return;
+      }
+
+      container.innerHTML = state.notifications.map(n => `
+        <div class="p-3.5 hover:bg-[#faf6f6] transition flex items-start justify-between gap-2">
+          <div class="space-y-1">
+            <div class="text-xs font-bold ${n.type === 'low_stock' ? 'text-crimson-600' : 'text-emerald-700'}">${n.title}</div>
+            <div class="text-[11px] text-ink-600 leading-snug">${n.message}</div>
+            <div class="text-[9.5px] font-mono text-ink-400">${n.time}</div>
+          </div>
+          ${n.productId ? `
+            <button onclick="openSingleProductRestockModal('${n.productId}'); toggleNotificationDrawer();" class="px-2.5 py-1 rounded bg-crimson-600 text-white font-mono text-[9.5px] font-bold shrink-0">
+              Restock
+            </button>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    function clearNotifications() {
+      state.notifications = [];
+      renderNotificationsList();
+      updateLowStockAlertsUI();
+    }
+
+    function openShiftSummaryModal() {
+      document.getElementById('restockModalSub').textContent = 'STATION #02 SHIFT AUDIT';
+      document.getElementById('restockModalTitle').textContent = 'Cashier Shift Handover — Sunita Mehta (Op #02)';
+      document.getElementById('restockModalBody').innerHTML = `
+        <div class="grid grid-cols-2 gap-4 font-mono text-xs">
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2]">
+            <div class="text-[10px] text-ink-400">PHYSICAL CASH IN DRAWER</div>
+            <div class="text-xl font-bold text-ink-900 mt-1">${formatINR(state.shiftCashHandled)}</div>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2]">
+            <div class="text-[10px] text-ink-400">ONLINE UPI &amp; CARD SETTLED</div>
+            <div class="text-xl font-bold text-emerald-700 mt-1">${formatINR(state.shiftOnlineHandled)}</div>
+          </div>
+        </div>
+      `;
+      const overlay = document.getElementById('restockModalOverlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    // Keyboard Shortcut [F2] to focus search bar
+    window.addEventListener('keydown', e => {
+      if (e.key === 'F2') {
+        e.preventDefault();
+        switchTab('pos');
+        document.getElementById('posSearchInput')?.focus();
+      }
+    });
+
+    // Initialize Application
+    window.onload = function () {
+      init3DConcessionCanvas();
+      renderPosProductGrid();
+      renderCartPanel();
+      renderKdsStream();
+      updateStationKpiBar();
+      updateLowStockAlertsUI();
+      lucide.createIcons();
+    };
+  </script>
+<script id="royalRoleAuth">
+(()=>{
+ const files={SUPER_ADMIN:'city_lite_cinema_erp_multi_counter_role_login.html',BRANCH_MANAGER:'city_lite_cinema_erp_multi_counter_role_login.html',COUNTER_STAFF:'city_lite_f_b_counter_pos_role_login.html',ENTRY_STAFF:'city_lite_cinema_erp_command_center_role_login.html'};
+ const labels={SUPER_ADMIN:'Super Admin',BRANCH_MANAGER:'Branch Manager',COUNTER_STAFF:'Counter Staff',ENTRY_STAFF:'Entry Staff'};
+ const current=location.pathname.split(/[\\/]/).pop();
+ const defaultRole=current===files.COUNTER_STAFF?'COUNTER_STAFF':current===files.ENTRY_STAFF?'ENTRY_STAFF':'SUPER_ADMIN';
+ const gate=document.createElement('section');gate.id='clAuthGate';document.body.appendChild(gate);
+ function normalizeRole(value){const valueKey=String(value||'').toUpperCase().replace(/[\s-]+/g,'_');const aliases={ADMIN:'SUPER_ADMIN',SUPERADMIN:'SUPER_ADMIN',OWNER:'SUPER_ADMIN',MANAGER:'BRANCH_MANAGER',BRANCHMANAGER:'BRANCH_MANAGER',CASHIER:'COUNTER_STAFF',COUNTER:'COUNTER_STAFF',TICKETING:'ENTRY_STAFF',ENTRY:'ENTRY_STAFF',GATE_STAFF:'ENTRY_STAFF'};return aliases[valueKey]||valueKey}
+ function showApp(session){gate.remove();document.body.style.overflow='';try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}}
+ function readStore(key){try{const value=window.localStorage.getItem(key);if(value!==null)return value}catch(_){}try{const data=JSON.parse(window.name||'{}');return data[key]??null}catch(_){return null}}
+ function writeStore(key,value){try{window.localStorage.setItem(key,String(value));return}catch(_){}try{const data=JSON.parse(window.name||'{}');data[key]=String(value);window.name=JSON.stringify(data)}catch(_){}} const incoming=location.hash.startsWith('#cl-session=')?location.hash.slice(12):'';
+ if(incoming){try{const session=JSON.parse(decodeURIComponent(incoming)),sessionRole=normalizeRole(session.role);if(files[sessionRole]===current){try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}showApp({...session,role:sessionRole});return}}catch(_){}}
+ try{const saved=JSON.parse(readStore('cityLiteSession')||'null');if(saved&&files[normalizeRole(saved.role)]===current){showApp({...saved,role:normalizeRole(saved.role)});return}}catch(_){}
+ let mode='signin',role=defaultRole;
+ function render(){gate.innerHTML=`<div class="auth-shell"><aside class="auth-brand"><div class="brand-mark">R</div><div class="brand-copy"><span>YOUR NIGHT.</span><strong>YOUR STORY.</strong><small>One cinema account. The right workspace.</small></div><div class="brand-orbit" aria-hidden="true"></div></aside><main class="auth-content"><button class="auth-close" type="button" id="authClose" aria-label="Close sign in">×</button><div><span class="eyebrow" id="authEyebrow">${mode==='signin'?'WELCOME BACK':'JOIN ROYAL CINEMA'}</span><h1 id="authTitle">${mode==='signin'?'Sign in to continue':'Create your account'}</h1><p class="intro" id="authIntro">${mode==='signin'?'Access your Royal Cinema workspace.':'Create an account for your assigned cinema role.'}</p></div><div class="auth-tabs" role="tablist"><button id="signInTab" class="${mode==='signin'?'active':''}" type="button" role="tab" aria-selected="${mode==='signin'}">Sign in</button><button id="registerTab" class="${mode==='register'?'active':''}" type="button" role="tab" aria-selected="${mode==='register'}">Create account</button></div><form id="authForm"><div class="field" id="nameField" ${mode==='register'?'':'hidden'}><label for="authName">Full name</label><input id="authName" name="name" autocomplete="name" placeholder="Your full name" ${mode==='register'?'required minlength="2"':''}></div><div class="field branch-field" id="branchField" ${role==='BRANCH_MANAGER'?'':'hidden'}><label for="authBranch">Assigned branch</label><select id="authBranch"><option value="branch_pal">Palanpur</option><option value="branch_ahm">Ahmedabad</option><option value="branch_meh">Mehsana</option><option value="branch_sur">Surat</option></select></div><div class="field"><label for="authEmail">Email address</label><input id="authEmail" name="email" type="email" autocomplete="username" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" name="password" type="password" autocomplete="${mode==='signin'?'current-password':'new-password'}" placeholder="${mode==='register'?'Minimum 8 characters':'Your password'}" required ${mode==='register'?'minlength="8"':''}></div><div class="field" id="confirmField" ${mode==='register'?'':'hidden'}><label for="authConfirm">Confirm password</label><input id="authConfirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again" ${mode==='register'?'required':''}></div><div class="error" id="authError" role="alert" aria-live="polite"></div><button class="submit" type="submit"><span id="submitLabel">${mode==='signin'?'Sign in securely':'Create my account'}</span><span aria-hidden="true">→</span></button><div class="secure"><span aria-hidden="true">♙</span> Secure role-based access</div></form><div class="role-access"><span class="role-label">STAFF ACCESS · CHOOSE YOUR ROLE</span><div class="roles">${Object.entries(labels).map(([key,label])=>`<button type="button" class="role-chip ${role===key?'active':''}" data-role="${key}">${label}</button>`).join('')}</div></div><button type="button" class="guest" id="guestButton">Continue browsing as guest</button></main></div>`;
+ gate.querySelector('#signInTab').onclick=()=>setMode('signin');gate.querySelector('#registerTab').onclick=()=>setMode('register');gate.querySelector('#authClose').onclick=()=>{gate.remove();document.body.style.overflow=''};gate.querySelector('#guestButton').onclick=()=>{gate.remove();document.body.style.overflow=''};
+ gate.querySelectorAll('[data-role]').forEach(button=>button.onclick=()=>{role=button.dataset.role;render()});gate.querySelector('#authForm').onsubmit=submit;document.body.style.overflow='hidden';
+ }
+ function setMode(next){mode=next;render()}
+ function showError(message){const error=gate.querySelector('#authError');if(error)error.textContent=message||''}
+ function selectedBranch(){return role==='BRANCH_MANAGER'?gate.querySelector('#authBranch').value:''}
+ function navigate(user){const returned=normalizeRole(user.role||role);if(!files[returned]){showError('Your account does not have a supported cinema role.');return}const session={name:user.name||user.fullName||'',email:user.email||'',role:returned,branchId:user.branchId||selectedBranch()};try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}if(files[returned]!==current){location.href=files[returned]+'#cl-session='+encodeURIComponent(JSON.stringify(session));return}showApp(session)}
+ async function submit(event){event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const email=gate.querySelector('#authEmail').value.trim().toLowerCase(),password=gate.querySelector('#authPassword').value,branchId=selectedBranch();
+ if(mode==='register'){
+  const name=gate.querySelector('#authName').value.trim(),confirm=gate.querySelector('#authConfirm').value;if(password.length<8){showError('Use at least 8 characters for your password.');return}if(password!==confirm){showError('Passwords do not match.');return}
+  const account={name,email,password,role,branchId};
+  if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),key=email+'|'+role;if(users[key]){showError('This email is already registered for the selected role.');return}users[key]=account;writeStore('cityLiteUsers',JSON.stringify(users));navigate(account)}catch(_){showError('Could not save this demo account in the browser.')}return}
+  try{const response=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(account)}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Account registration was not accepted.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema registration service. Please retry when it is online.')}return;
+ }
+ if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),user=users[email+'|'+role];if(!user||user.password!==password){showError('Email or password is incorrect for the selected role. Register first or choose the account role.');return}navigate({...user,branchId:user.branchId||branchId})}catch(_){showError('Browser storage is unavailable.')}return}
+ try{const response=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,role,branchId})}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Email, password, or role is incorrect.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema login service. Please retry when it is online.')}
+ }
+ render();
+})();
+</script></body>
+</html>
+
+

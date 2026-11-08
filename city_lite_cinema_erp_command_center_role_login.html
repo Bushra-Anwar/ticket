@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>City Lite • EXECUTIVE OS · PALANPUR — Rajeshwar V. Jadeja</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#f8f4f4',
+            sidebar: '#f5f0f0',
+            crimson: {
+              50: '#fef2f2',
+              100: '#fde3e3',
+              200: '#fccaca',
+              500: '#dc2626',
+              600: '#c81e1e',
+              700: '#a81515',
+              800: '#881212',
+              900: '#4a0b0d'
+            },
+            ink: {
+              900: '#161212',
+              800: '#262020',
+              700: '#3d3434',
+              600: '#574b4b',
+              500: '#736565',
+              400: '#968787'
+            }
+          },
+          fontFamily: {
+            serif: ['"Times New Roman"', 'Georgia', 'Times', 'serif'],
+            sans: ['Arial', 'Helvetica', 'sans-serif'],
+            mono: ['"Courier New"', 'Courier', 'monospace']
+          },
+          boxShadow: {
+            'card': '0 4px 20px -2px rgba(32, 14, 14, 0.04), 0 1px 4px -1px rgba(32, 14, 14, 0.02)',
+            'card-hover': '0 10px 26px -4px rgba(185, 25, 30, 0.09), 0 4px 10px -2px rgba(32, 14, 14, 0.04)',
+            'crimson': '0 6px 16px -3px rgba(200, 30, 30, 0.35)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-style: normal !important;
+    }
+    body {
+      background-color: #f8f4f4;
+      background-image:
+        radial-gradient(at 15% 10%, rgba(220, 38, 38, 0.04) 0px, transparent 45%),
+        radial-gradient(at 85% 30%, rgba(220, 38, 38, 0.035) 0px, transparent 50%);
+      color: #161212;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, .font-serif {
+      font-family: 'Times New Roman', Georgia, Times, serif !important;
+    }
+    .font-mono {
+      font-family: 'Courier New', Courier, monospace !important;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f2ecec; }
+    ::-webkit-scrollbar-thumb { background: #d4c4c4; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #b8a2a2; }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.88); }
+    }
+    .live-dot { animation: pulseDot 1.8s infinite ease-in-out; }
+
+    /* Print Voucher / GSTR-1 Challan */
+    @media print {
+      body * { visibility: hidden !important; }
+      #printableArea, #printableArea * { visibility: visible !important; }
+      #printableArea {
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+<style id="royalRoleAuthDesign">
+#clAuthGate{position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:16px;background:rgba(8,6,11,.94);backdrop-filter:blur(12px);font-family:Arial,Helvetica,sans-serif;color:#f7f4fa}#clAuthGate *{box-sizing:border-box}#clAuthGate .auth-shell{width:min(920px,100%);max-height:calc(100dvh - 32px);min-height:min(580px,calc(100dvh - 32px));display:grid;grid-template-columns:.82fr 1.18fr;overflow:hidden;border:1px solid rgba(205,187,220,.2);border-radius:25px;background:#110e16;box-shadow:0 28px 100px #0009}#clAuthGate .auth-brand{position:relative;isolation:isolate;overflow:hidden;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px;text-align:center;background:radial-gradient(circle at 50% 52%,#30203d,#17101f 72%)}#clAuthGate .auth-brand:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.3;background-image:radial-gradient(#9f8aad .8px,transparent .8px);background-size:16px 16px;mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}#clAuthGate .brand-mark{width:82px;height:82px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#ffc258,#e58b13);color:#251529;font-size:42px;font-weight:900;transform:rotate(-7deg);box-shadow:0 15px 45px #f0a02b55}#clAuthGate .brand-copy{display:grid;gap:8px}#clAuthGate .brand-copy span{color:#c7b8d2;font-size:12px;letter-spacing:2px}#clAuthGate .brand-copy strong{font-size:26px;letter-spacing:1px;color:#fff}#clAuthGate .brand-copy small{color:#9b8aa6;font-size:11px;margin-top:4px}#clAuthGate .brand-orbit{position:absolute;width:350px;height:210px;border:1px solid #e8a63b45;border-radius:50%;transform:rotate(-22deg);pointer-events:none}#clAuthGate .auth-content{position:relative;display:flex;flex-direction:column;justify-content:center;overflow:auto;max-height:calc(100dvh - 34px);padding:42px clamp(26px,5vw,56px) 24px}#clAuthGate .auth-close{position:absolute;right:18px;top:16px;width:38px;height:38px;border:1px solid #ffffff22;border-radius:50%;background:transparent;color:#aaa0b3;font-size:22px;cursor:pointer}#clAuthGate .auth-close:hover{color:#fff;border-color:#eda32c}#clAuthGate .eyebrow{color:#eda32c;font-size:9px;font-weight:800;letter-spacing:2px}#clAuthGate h1{font-size:clamp(26px,3vw,34px);letter-spacing:-1px;margin:10px 0 6px;color:#f8f6fa}#clAuthGate .intro{font-size:12px;line-height:1.65;color:#a99eb0;margin:0 0 20px}#clAuthGate .auth-tabs{display:grid;grid-template-columns:1fr 1fr;padding:5px;border:1px solid #ffffff18;border-radius:12px;background:#18141f;margin-bottom:18px}#clAuthGate .auth-tabs button{height:39px;border:0;border-radius:8px;background:transparent;color:#968a9e;font-size:11px;font-weight:700;cursor:pointer}#clAuthGate .auth-tabs button.active{background:#33233f;color:#fff;box-shadow:0 2px 9px #0005}#clAuthGate form{display:grid;gap:11px}#clAuthGate .field{display:grid;gap:6px}#clAuthGate .field[hidden]{display:none!important}#clAuthGate label{color:#aaa0b2;font-size:10px;font-weight:700}#clAuthGate input{width:100%;height:48px;border:1px solid #ffffff20;border-radius:10px;padding:0 14px;background:#19151f;color:#f8f6fa;font-size:12px;outline:none}#clAuthGate input::placeholder{color:#685e70}#clAuthGate input:focus{border-color:#eda32c;box-shadow:0 0 0 3px #eda32c25}#clAuthGate .branch-field select{height:43px;width:100%;border:1px solid #ffffff20;border-radius:10px;background:#19151f;color:#f8f6fa;padding:0 12px;font-size:11px}#clAuthGate .error{min-height:0;color:#ff8585;font-size:10px}#clAuthGate .error:not(:empty){min-height:15px}#clAuthGate .submit{height:50px;border:0;border-radius:11px;background:linear-gradient(100deg,#ffc258,#e58b13);color:#26172b;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 24px #e59a2633}#clAuthGate .submit:hover{filter:brightness(1.07);transform:translateY(-1px)}#clAuthGate .secure{display:flex;justify-content:center;gap:7px;color:#817488;font-size:9px;margin-top:1px}#clAuthGate .secure span{color:#65c895}#clAuthGate .role-access{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff16}#clAuthGate .role-label{display:block;margin:0 0 8px;color:#817488;font-size:8px;font-weight:800;letter-spacing:1px}#clAuthGate .roles{display:flex;flex-wrap:wrap;gap:6px}#clAuthGate .role-chip{border:1px solid #ffffff1e;border-radius:999px;background:#19151f;color:#a99eb0;padding:7px 9px;font-size:9px;font-weight:700;cursor:pointer}#clAuthGate .role-chip:hover,#clAuthGate .role-chip.active{border-color:#eda32c;color:#ffc258;background:#eda32c14}#clAuthGate .guest{display:block;margin:12px auto 0;border:0;background:transparent;color:#93879b;font-size:10px;text-decoration:underline;cursor:pointer}@media(max-width:680px){#clAuthGate .auth-shell{grid-template-columns:1fr;min-height:0;max-height:calc(100dvh - 24px);overflow:auto;border-radius:20px}#clAuthGate .auth-brand{min-height:112px;flex-direction:row;justify-content:flex-start;gap:15px;padding:16px 20px;text-align:left}#clAuthGate .brand-mark{width:54px;height:54px;border-radius:16px;font-size:28px}#clAuthGate .brand-copy{gap:5px}#clAuthGate .brand-copy strong{font-size:18px}#clAuthGate .brand-copy span{font-size:8px}#clAuthGate .brand-copy small{font-size:9px}#clAuthGate .brand-orbit{width:220px;height:120px;left:50%;top:0}#clAuthGate .auth-content{max-height:none;overflow:visible;padding:25px 21px 20px}#clAuthGate .auth-close{right:12px;top:12px;width:33px;height:33px}}
+</style></head>
+<body class="min-h-screen flex flex-col lg:flex-row selection:bg-crimson-600 selection:text-white">
+
+  <!-- FLOATING TOAST NOTIFICATIONS -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none no-print"></div>
+
+  <!-- MOBILE SIDEBAR DRAWER OVERLAY -->
+  <div id="mobileSidebarBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden no-print"></div>
+
+  <!-- ===================================================================== -->
+  <!-- LEFT SIDEBAR: CITY LITE EXECUTIVE OS · PALANPUR (EXACT screen_5.jpg)   -->
+  <!-- ===================================================================== -->
+  <aside id="leftSidebar" class="fixed lg:sticky top-0 left-0 z-40 w-[235px] shrink-0 h-screen bg-[#f5f0f0] border-r border-[#e8dfdf] flex flex-col justify-between p-4 select-none transform -translate-x-full lg:translate-x-0 transition-transform duration-200 no-print">
+    
+    <!-- Top Section: Brand + Executive Node Pill + 5 Navigation Modules -->
+    <div class="space-y-4">
+      
+      <!-- 1. Brand Logo Header -->
+      <div class="flex items-center justify-between px-1 pt-0.5">
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchSidebarModule('command')">
+          <div class="w-8 h-8 rounded-lg bg-crimson-600 text-white flex items-center justify-center shadow-sm shrink-0">
+            <i data-lucide="film" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="font-serif font-bold text-[19px] text-ink-900 leading-none tracking-tight">City Lite</div>
+            <div class="text-[8px] font-bold uppercase tracking-[0.14em] text-ink-500 mt-1">EXECUTIVE OS · PALANPUR</div>
+          </div>
+        </div>
+        <button onclick="toggleMobileSidebar(false)" class="lg:hidden p-1 rounded-lg hover:bg-white text-ink-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- 2. EXECUTIVE NODE Tier-1 Pill -->
+      <div onclick="openNodeTelemetryModal()" class="px-3 py-2 rounded-lg bg-[#ebe4e4]/80 hover:bg-[#e4dbdb] border border-[#dfd5d5] flex items-center justify-between cursor-pointer transition" title="Click to inspect Tier-1 Node Telemetry">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+          <span class="text-[9.5px] font-bold uppercase tracking-wider text-ink-800">EXECUTIVE NODE</span>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-[#f3e4c8] border border-[#e2cca0] text-[8.5px] font-bold text-[#785516]">
+          Tier-1
+        </span>
+      </div>
+
+      <!-- 3. Primary 5 Sidebar Modules (All 100% Workable!) -->
+      <nav class="space-y-1 pt-1" id="sidebarNavContainer">
+        <!-- Rendered dynamically by renderSidebarNav() -->
+      </nav>
+
+      <!-- 4. Contextual Live Quick-Stats Card in Sidebar -->
+      <div class="p-3 rounded-xl bg-white/80 border border-[#e6dddd] space-y-2 mt-3">
+        <div class="flex items-center justify-between text-[9px] font-bold uppercase tracking-wider text-ink-400">
+          <span>LIVE CIRCUIT PULSE</span>
+          <span class="text-emerald-700">● 100% SYNC</span>
+        </div>
+        <div class="text-[11px] text-ink-700 flex items-center justify-between">
+          <span>Active Screens:</span>
+          <strong class="font-mono text-ink-900" id="sbActiveScreens">3 / 3 Running</strong>
+        </div>
+        <div class="text-[11px] text-ink-700 flex items-center justify-between">
+          <span>Pending Payouts:</span>
+          <strong class="font-mono text-crimson-600" id="sbPendingPayouts">3 Contracts</strong>
+        </div>
+        <div class="text-[11px] text-ink-700 flex items-center justify-between">
+          <span>SHA-256 Logs:</span>
+          <strong class="font-mono text-ink-900" id="sbAuditCount">4 Sealed</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Section: ACTIVE SESSION Encrypted TLS 1.3 + SWITCH WORKSTATION -->
+    <div class="space-y-2 pt-4 border-t border-[#e6dddd]">
+      <div onclick="openSecuritySessionModal()" class="p-2.5 rounded-lg bg-[#eae2e2]/85 hover:bg-[#e3d9d9] border border-[#ddd2d2] flex items-center justify-between cursor-pointer transition" title="Inspect TLS 1.3 Cryptographic Handshake">
+        <div>
+          <div class="text-[8px] font-bold uppercase tracking-wider text-ink-500">ACTIVE SESSION</div>
+          <div class="text-[11px] font-bold text-ink-900 mt-0.5">Encrypted TLS 1.3</div>
+        </div>
+        <i data-lucide="shield-check" class="w-4 h-4 text-ink-600"></i>
+      </div>
+
+      <button onclick="openSwitchWorkstationModal()" class="w-full py-2 px-3 rounded-lg bg-white hover:bg-crimson-50 text-ink-800 hover:text-crimson-700 border border-[#ded4d4] text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-2xs transition cursor-pointer">
+        <i data-lucide="lock" class="w-3 h-3 text-crimson-600"></i>
+        <span>SWITCH WORKSTATION</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN RIGHT WORKSPACE                                                  -->
+  <!-- ===================================================================== -->
+  <div class="flex-1 flex flex-col min-w-0 no-print">
+
+    <!-- TOP BAR (EXACT MATCH TO screen_5.jpg) -->
+    <header class="sticky top-0 z-30 bg-[#f8f4f4]/95 backdrop-blur-md border-b border-[#ece2e2] px-4 lg:px-7 py-2.5">
+      <div class="max-w-[1380px] mx-auto flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Left Pills: Mobile Menu + CITY LITE · SCREEN 1 TO 4 + Fiscal Year & GSTIN -->
+        <div class="flex items-center flex-wrap gap-2.5">
+          <button onclick="toggleMobileSidebar(true)" class="lg:hidden p-1.5 rounded-lg bg-white border border-[#e2d8d8] text-ink-800">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
+
+          <button onclick="switchSidebarModule('telemetry')" class="px-2.5 py-1 rounded-md bg-[#ede6e6] hover:bg-[#e4dada] border border-[#dfd5d5] text-[9.5px] font-bold uppercase tracking-wider text-ink-700 transition cursor-pointer">
+            CITY LITE · SCREEN 1 TO 4
+          </button>
+
+          <span class="text-[11px] text-ink-500 font-medium">
+            Fiscal Year 2024-25 | GSTIN: <strong class="font-mono text-ink-700">24AAACC1206K1ZL</strong>
+          </span>
+        </div>
+
+        <!-- Right Profile: Rajeshwar V. Jadeja (OWNER & MANAGING DIRECTOR) -->
+        <div class="flex items-center gap-3 ml-auto">
+          <!-- Active Module Breadcrumb Pill -->
+          <span id="topActiveModuleBadge" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-[#e6dddd] text-[10px] font-bold text-crimson-600">
+            <span class="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
+            <span>Command Center</span>
+          </span>
+
+          <div onclick="openSwitchWorkstationModal()" class="flex items-center gap-2.5 cursor-pointer group" title="Click to switch operator or workstation">
+            <div class="text-right leading-tight">
+              <div class="text-xs font-serif font-bold text-ink-900 group-hover:text-crimson-600 transition" id="topOperatorName">
+                Rajeshwar V. Jadeja
+              </div>
+              <div class="text-[8.5px] font-bold uppercase tracking-wider text-ink-400" id="topOperatorRole">
+                OWNER &amp; MANAGING DIRECTOR
+              </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-crimson-700 text-white flex items-center justify-center shadow-xs group-hover:ring-2 group-hover:ring-crimson-300 transition">
+              <i data-lucide="user-round" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-[1380px] w-full mx-auto px-4 lg:px-7 py-5 space-y-6">
+
+      <!-- 1. SUB-HEADER STATUS & GSTR-1 DISPATCH BANNER (EXACT MATCH TO screen_5.jpg) -->
+      <section class="bg-white rounded-2xl p-4 sm:px-6 border border-[#ece2e2] shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-crimson-50 border border-crimson-100 text-[9.5px] font-bold uppercase tracking-wider text-crimson-700">
+              <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+              LIVE DCR SYNCHRONIZED
+            </span>
+            <span class="px-2.5 py-0.5 rounded bg-[#f4efef] border border-[#e5dada] text-[10px] font-mono text-ink-700">
+              GSTIN: <strong>24AAAFC1289H1ZV</strong>
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1.5 text-xs text-ink-600 pt-0.5">
+            <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-crimson-600 shrink-0"></i>
+            <span>Dual Supervisor Shift Sign-Off: <strong class="text-crimson-600" id="shiftSignOffStatusText">ACTIVE (Verified)</strong></span>
+            <button onclick="toggleShiftSignOff()" class="ml-2 text-[10px] font-bold underline text-ink-400 hover:text-crimson-600">Re-verify</button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="px-3 py-1.5 rounded-lg bg-[#f5ebd6] border border-[#e5d3ae] text-[9px] font-bold uppercase tracking-wider text-[#6e5015] leading-tight">
+            <div>ROLE: EXECUTIVE OWNER &amp;</div>
+            <div>ERP MASTER</div>
+          </div>
+
+          <button onclick="exportGstr1Dispatch()" class="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 active:scale-[0.99] text-white text-[10.5px] font-bold uppercase tracking-wider shadow-crimson flex items-center gap-2 transition cursor-pointer">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span class="text-left leading-tight">EXPORT GSTR-1<br/>DISPATCH</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- MODULE FILTER NOTICE BANNER (Shown when user selects a specific Sidebar Module) -->
+      <div id="moduleFocusedBanner" class="hidden bg-ink-900 text-white rounded-2xl px-5 py-3.5 items-center justify-between gap-4 shadow-md">
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded bg-crimson-600 text-[10px] font-bold uppercase tracking-wider" id="moduleFocusedTag">SIDEBAR MODULE</span>
+          <div>
+            <h2 class="font-serif font-bold text-lg leading-tight" id="moduleFocusedTitle">Statutory GST Ledger Workspace</h2>
+            <p class="text-xs text-white/75" id="moduleFocusedDesc">Focused interactive workspace with live simulation controls.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="moduleFocusedActionBtn" onclick="openModulePrimaryAction()" class="px-3.5 py-1.5 rounded-lg bg-crimson-600 hover:bg-crimson-500 text-white text-xs font-bold transition">
+            + Simulate Action
+          </button>
+          <button onclick="switchSidebarModule('command')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition">
+            Show Full Command Center
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. TOP 4 EXECUTIVE KPI CARDS (EXACT MATCH TO screen_5.jpg) -->
+      <section id="sec-kpis" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        
+        <!-- KPI 1: GROSS BOX OFFICE -->
+        <div onclick="openBoxOfficeSimulatorModal()" class="bg-white rounded-2xl p-5 border border-[#ece2e2] shadow-card hover:shadow-card-hover flex flex-col justify-between cursor-pointer transition group" title="Click to simulate ticket sales or adjust auditorium occupancy">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400">GROSS BOX OFFICE</div>
+              <div class="font-serif font-bold text-3xl text-ink-900 tabular-nums mt-1" id="kpiGrossBoxOffice">₹1,42,850</div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-crimson-50 border border-crimson-100 text-crimson-600 flex items-center justify-center group-hover:bg-crimson-600 group-hover:text-white transition">
+              <i data-lucide="ticket" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-3 border-t border-[#f3ecec] space-y-2">
+            <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-crimson-50 text-crimson-700 text-[10px] font-bold">
+              <i data-lucide="trending-up" class="w-3 h-3"></i>
+              <span id="kpiBoxOfficeDelta">+14.2% vs. Yesterday DCR</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-[10.5px]">
+              <div>
+                <div class="text-ink-400">Occupancy:</div>
+                <div class="font-bold text-ink-900 text-xs tabular-nums" id="kpiOverallOccupancy">81.4%</div>
+              </div>
+              <div>
+                <div class="text-ink-400">Admissions:</div>
+                <div class="font-bold text-ink-900 text-xs tabular-nums" id="kpiTotalAdmissions">892 tickets</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 2: CONCESSION F&B TOTAL -->
+        <div onclick="openConcessionSimulatorModal()" class="bg-white rounded-2xl p-5 border border-[#ece2e2] shadow-card hover:shadow-card-hover flex flex-col justify-between cursor-pointer transition group" title="Click to add F&B counter order or inspect SPH">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400">CONCESSION F&amp;B TOTAL</div>
+              <div class="font-serif font-bold text-3xl text-ink-900 tabular-nums mt-1" id="kpiConcessionTotal">₹48,600</div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-crimson-50 border border-crimson-100 text-crimson-600 flex items-center justify-center group-hover:bg-crimson-600 group-hover:text-white transition">
+              <i data-lucide="utensils" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <div class="mt-6 p-3 rounded-xl bg-[#faf6f6] border border-[#eee4e4] space-y-1.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-ink-700 leading-tight">Spend Per Head<br/>(SPH)</span>
+              <span class="font-bold text-crimson-600 text-sm tabular-nums" id="kpiSphValue">₹154.70</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-[#e6dada] overflow-hidden">
+              <div id="kpiAttachBar" class="h-full bg-crimson-600 rounded-full" style="width: 68%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] text-ink-500 pt-0.5">
+              <span>Attach Rate</span>
+              <strong class="text-ink-800" id="kpiAttachText">68% patron conversion</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 3: COMBINED NET REVENUE -->
+        <div onclick="switchSidebarModule('gst')" class="bg-white rounded-2xl p-5 border border-[#ece2e2] shadow-card hover:shadow-card-hover flex flex-col justify-between cursor-pointer transition group" title="Click to inspect Combined Net Revenue & Payment Mode Split">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400">COMBINED NET REVENUE</div>
+              <div class="font-serif font-bold text-3xl text-ink-900 tabular-nums mt-1" id="kpiCombinedRevenue">₹1,91,450</div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-[#f4ece1] border border-[#e5d5be] text-[#7a5822] flex items-center justify-center">
+              <i data-lucide="wallet" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <div class="mt-6 p-3 rounded-xl bg-[#faf6f6] border border-[#eee4e4] space-y-2">
+            <div class="flex items-center justify-between text-[9.5px] font-mono text-ink-600">
+              <span>UPI: <strong id="splitUpiPct">54%</strong></span>
+              <span>Cash: <strong id="splitCashPct">33%</strong></span>
+              <span>Card: <strong id="splitCardPct">13%</strong></span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[#e8dfdf] overflow-hidden flex">
+              <div class="h-full bg-crimson-600" style="width: 54%"></div>
+              <div class="h-full bg-amber-500" style="width: 33%"></div>
+              <div class="h-full bg-ink-800" style="width: 13%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[10.5px] text-ink-500">
+              <span>Total Transactions:</span>
+              <strong class="text-ink-900 tabular-nums" id="kpiTotalTxns">1,094 Settled</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI 4: PHYSICAL VAULT & TILL EOD -->
+        <div onclick="openVaultAuditModal()" class="bg-white rounded-2xl p-5 border border-[#ece2e2] shadow-card hover:shadow-card-hover flex flex-col justify-between cursor-pointer transition group" title="Click to reconcile Physical Vault & Till EOD">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400 leading-tight">PHYSICAL VAULT &amp; TILL<br/>EOD</div>
+              <div class="font-serif font-bold text-3xl text-ink-900 tabular-nums mt-1" id="kpiVaultTotal">₹84,200</div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-crimson-50 border border-crimson-100 text-crimson-600 flex items-center justify-center group-hover:bg-crimson-600 group-hover:text-white transition">
+              <i data-lucide="lock" class="w-4 h-4"></i>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-1.5">
+            <div class="px-2.5 py-1.5 rounded-lg bg-crimson-50 border border-crimson-100 text-[10px] font-bold text-crimson-700 flex items-center gap-1.5">
+              <span>!</span>
+              <span id="kpiVaultSurplusText">Surplus Logged: +₹50.00</span>
+            </div>
+            <div class="text-[10px] text-ink-500 leading-snug">
+              Verified by Supervisor 1 (Kamlesh T.) &amp; Cash Custodian (Dinesh M.)
+            </div>
+            <div class="text-[9px] font-mono text-ink-400 uppercase">
+              AUDIT KEY: EOD-20260329-TILL-OK
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- 3. AUDITORIUM DISPATCH & PROJECTION TELEMETRY (EXACT screen_5.jpg)  -->
+      <!-- =================================================================== -->
+      <section id="sec-telemetry" class="space-y-3.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="font-serif font-bold text-xl text-ink-900 tracking-tight">Auditorium Dispatch &amp; Projection Telemetry</h2>
+            <p class="text-xs text-ink-500">Real-time seat cluster saturation, hardware health, and show gross (Click any screen to book/release seats &amp; control laser rig)</p>
+          </div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-[#e5dada] text-[9.5px] font-mono font-bold text-ink-700">
+            <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+            <span>SENSOR FRAME RATE: 1.2S</span>
+          </div>
+        </div>
+
+        <!-- 3 Auditorium Screen Cards Grid -->
+        <div id="auditoriumCardsGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <!-- Dynamically rendered by renderAuditoriumCards() -->
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- 4. STATUTORY GST & ENTERTAINMENT DUTY LEDGER (EXACT screen_5.jpg)   -->
+      <!-- =================================================================== -->
+      <section id="sec-gst" class="bg-white rounded-2xl p-5 sm:p-6 border border-[#ece2e2] shadow-card space-y-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <i data-lucide="landmark" class="w-4 h-4 text-crimson-600"></i>
+              <h2 class="font-serif font-bold text-xl text-ink-900">Statutory GST &amp; Entertainment Duty Ledger</h2>
+            </div>
+            <p class="text-xs text-ink-500 mt-0.5">
+              Government compliant split per Gujarat Cinema Exhibition Taxation code (HSN/SAC 999611)
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openGstSimulatorModal()" class="px-3 py-1.5 rounded-lg bg-[#faf6f6] hover:bg-crimson-50 border border-[#e5dada] text-[10px] font-bold text-crimson-700 transition cursor-pointer">
+              + Adjust / Simulate Tax Base
+            </button>
+            <button onclick="exportGstr1JsonOnly()" class="px-3 py-1.5 rounded-lg bg-[#f5efef] hover:bg-ink-900 hover:text-white border border-[#e2d7d7] text-[10px] font-mono font-bold text-ink-800 flex items-center gap-1.5 transition cursor-pointer">
+              <span>&lt; &gt; EXPORT GSTR-1 JSON</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Statutory Tax Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-y border-[#eee4e4] text-[9.5px] font-bold uppercase tracking-wider text-ink-400 bg-[#fcf9f9]">
+                <th class="py-3 px-3">CATEGORY / BRACKET</th>
+                <th class="py-3 px-2">HSN / SAC</th>
+                <th class="py-3 px-2">TAXABLE BASE</th>
+                <th class="py-3 px-2">CGST RATE</th>
+                <th class="py-3 px-2">SGST RATE</th>
+                <th class="py-3 px-2">MUNICIPALITY SURCHARGE</th>
+                <th class="py-3 px-3 text-right">NET TAX LIABILITY</th>
+              </tr>
+            </thead>
+            <tbody id="statutoryGstTableBody" class="divide-y divide-[#f3ecec] tabular-nums">
+              <!-- Populated dynamically by renderStatutoryGstLedger() -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Bottom Total Consolidated Statutory Liability Bar -->
+        <div class="px-4 py-3.5 rounded-xl bg-[#f7f2f2] border border-[#ebe0e0] flex flex-wrap items-center justify-end gap-6">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-ink-600">
+            TOTAL CONSOLIDATED STATUTORY LIABILITY
+          </span>
+          <span class="font-serif font-bold text-2xl text-crimson-600 tabular-nums" id="totalStatutoryLiabilityText">
+            ₹24,926.28
+          </span>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- 5. BOTTOM SPLIT: DISTRIBUTOR SETTLEMENTS + INVENTORY + AUDIT TRAIL  -->
+      <!-- =================================================================== -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT 6 COLS: DISTRIBUTOR SETTLEMENTS (EXACT MATCH TO screen_5.jpg) -->
+        <div id="sec-distributors" class="lg:col-span-6 bg-white rounded-2xl p-5 sm:p-6 border border-[#ece2e2] shadow-card flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <i data-lucide="handshake" class="w-4 h-4 text-crimson-600"></i>
+                <h3 class="font-serif font-bold text-xl text-ink-900">Distributor Settlements</h3>
+              </div>
+              <span class="px-2.5 py-0.5 rounded bg-[#f5ebd6] border border-[#e5d3ae] text-[9px] font-bold uppercase tracking-wider text-[#6e5015]">
+                RULE: 80% NET GBO
+              </span>
+            </div>
+
+            <p class="text-xs text-ink-500">
+              Accruals calculated after municipal entertainment cess and statutory deductions.
+            </p>
+
+            <!-- 3 Distributor Contract Rows -->
+            <div id="distributorRowsContainer" class="space-y-2.5 pt-1">
+              <!-- Rendered dynamically by renderDistributorSettlements() -->
+            </div>
+          </div>
+
+          <!-- Total Accrued Payout Footer + SETTLE & ISSUE CHEQUE Button -->
+          <div class="pt-4 mt-2 border-t border-[#f1e8e8]">
+            <div class="p-4 rounded-xl bg-[#f5f0f0] border border-[#e6dddd] flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="text-[9px] font-bold uppercase tracking-wider text-ink-400">TOTAL ACCRUED PAYOUT</div>
+                <div class="font-serif font-bold text-2xl text-ink-900 tabular-nums mt-0.5" id="totalDistributorPayoutText">₹54,575.00</div>
+              </div>
+              <button onclick="openSettleChequeModal()" class="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 active:scale-[0.99] text-white text-[10.5px] font-bold uppercase tracking-wider shadow-crimson flex items-center gap-1.5 transition cursor-pointer">
+                <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
+                <span>SETTLE &amp; ISSUE CHEQUE</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT 6 COLS: EXECUTIVE CONCESSION INVENTORY ALERT + MASTER SHA-256 AUDIT TRAIL -->
+        <div class="lg:col-span-6 space-y-6">
+
+          <!-- CARD A: EXECUTIVE CONCESSION INVENTORY ALERT -->
+          <div id="sec-inventory" class="bg-white rounded-2xl p-5 sm:p-6 border border-[#ece2e2] shadow-card space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-crimson-50 border border-crimson-100 text-crimson-600 flex items-center justify-center">
+                  <i data-lucide="package-alert" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-serif font-bold text-lg text-ink-900 leading-snug">
+                  Executive Concession<br/>Inventory Alert
+                </h3>
+              </div>
+              <span class="text-[9.5px] font-mono text-ink-400 uppercase text-right">
+                RESTOCK TRIGGER:<br/>&le; 20%
+              </span>
+            </div>
+
+            <!-- 2 Inventory Alert Boxes (Caramel Popcorn Kernels & CO2 Beverage Cylinder) -->
+            <div id="inventoryAlertsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Populated dynamically by renderInventoryAlerts() -->
+            </div>
+          </div>
+
+          <!-- CARD B: MASTER SHA-256 AUDIT TRAIL -->
+          <div id="sec-audit" class="bg-white rounded-2xl p-5 sm:p-6 border border-[#ece2e2] shadow-card space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-crimson-50 border border-crimson-100 text-crimson-600 flex items-center justify-center">
+                  <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                </div>
+                <h3 class="font-serif font-bold text-lg text-ink-900 leading-snug">
+                  Master SHA-256 Audit<br/>Trail
+                </h3>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="appendManualAuditSeal()" class="px-2.5 py-1 rounded bg-crimson-50 hover:bg-crimson-100 text-crimson-700 text-[9.5px] font-bold uppercase transition cursor-pointer">
+                  + Seal Snapshot
+                </button>
+                <span class="text-[9.5px] font-mono text-ink-400 uppercase text-right leading-tight">
+                  APPEND-ONLY<br/>VAULT
+                </span>
+              </div>
+            </div>
+
+            <!-- Audit Log Entries List -->
+            <div id="auditTrailContainer" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+              <!-- Populated dynamically by renderAuditTrail() -->
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- UNIVERSAL INTERACTIVE MODAL (SEAT MAP, CHEQUE SETTLEMENT, WORKSTATION) -->
+  <!-- ===================================================================== -->
+  <div id="universalModalOverlay" class="fixed inset-0 bg-black/55 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto no-print">
+    <div class="bg-white rounded-2xl border border-[#e5dada] shadow-2xl max-w-3xl w-full overflow-hidden my-8">
+      <div class="px-6 py-4 bg-[#faf6f6] border-b border-[#ece2e2] flex items-center justify-between">
+        <div>
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600" id="uModalSubtitle">CITY LITE EXECUTIVE OS</span>
+          <h3 class="font-serif font-bold text-xl text-ink-900" id="uModalTitle">Interactive Module</h3>
+        </div>
+        <button onclick="closeUniversalModal()" class="w-8 h-8 rounded-lg bg-white border border-[#e2d8d8] flex items-center justify-center text-ink-500 hover:text-crimson-600 cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div id="uModalBody" class="p-6 max-h-[78vh] overflow-y-auto space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- HIDDEN PRINT AREA FOR CHEQUE VOUCHER / GSTR-1 CHALLAN -->
+  <div id="printableArea" class="hidden"></div>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION JAVASCRIPT ENGINE                                         -->
+  <!-- ===================================================================== -->
+  <script>
+    // =========================================================================
+    // 1. MASTER REAL-TIME STATE (EXACT VALUES FROM screen_5.jpg)
+    // =========================================================================
+    const state = {
+      activeSidebarModule: 'command',
+      shiftVerified: true,
+
+      currentOperator: {
+        name: 'Rajeshwar V. Jadeja',
+        role: 'OWNER & MANAGING DIRECTOR',
+        station: 'EXECUTIVE OS · PALANPUR (TIER-1)'
+      },
+
+      workstations: [
+        {
+          id: 'ws-md',
+          name: 'Rajeshwar V. Jadeja',
+          role: 'OWNER & MANAGING DIRECTOR',
+          station: 'EXECUTIVE OS · PALANPUR (TIER-1)',
+          badge: 'ERP MASTER',
+          pin: '1111'
+        },
+        {
+          id: 'ws-exec',
+          name: 'Ashok Patel',
+          role: 'MANAGING TRUSTEE · CIRCUIT',
+          station: 'SUPER ADMIN TERMINAL',
+          badge: 'EXECUTIVE',
+          pin: '2222'
+        },
+        {
+          id: 'ws-fnb',
+          name: 'Sunita Mehta',
+          role: 'CASHIER · F&B STATION #02',
+          station: 'CONCESSIONS FOYER POS',
+          badge: 'CAFE POS',
+          pin: '3333'
+        },
+        {
+          id: 'ws-box',
+          name: 'Rajesh Solanki',
+          role: 'BOX OFFICE · TERMINAL #01',
+          station: 'MAIN TICKETING DESK',
+          badge: 'TICKETING',
+          pin: '4444'
+        }
+      ],
+
+      // KPIs (Exact numbers from screen_5.jpg)
+      baseBoxOfficeExtra: 36450, // Combined with 3 running showtimes (48,200 + 29,800 + 38,400 = 1,16,400) -> 1,42,850 total daily GBO
+      concessionTotal: 48600,
+      sph: 154.70,
+      attachRate: 68,
+      totalTransactions: 1094,
+      vaultTotal: 84200,
+      vaultSurplus: 50.00,
+
+      // 3 Auditorium Screens (Exact match to screen_5.jpg)
+      screens: [
+        {
+          id: 'scr-1',
+          headerLabel: 'SCREEN 01 · PRIME MAIN HALL',
+          status: 'Running',
+          movieTitle: 'Stree 2',
+          techTags: ['Dolby Atmos 7.1', 'Barco 4K Laser', 'Aspect 2.39:1'],
+          occupiedSeats: 264,
+          totalSeats: 298,
+          avgTicketPrice: 182.575,
+          showtimeGross: 48200,
+          laserTempC: 34.2,
+          kdmStatus: 'VALID TILL 23:59 IST'
+        },
+        {
+          id: 'scr-2',
+          headerLabel: 'SCREEN 02 · REGIONAL STAGE',
+          status: 'Running',
+          movieTitle: 'Fakt Purusho Maate',
+          techTags: ['Digital 2K', 'JBL 5.1 Surround', 'Standard Flat'],
+          occupiedSeats: 187,
+          totalSeats: 212,
+          avgTicketPrice: 159.358,
+          showtimeGross: 29800,
+          laserTempC: 36.0,
+          kdmStatus: 'VALID TILL 23:59 IST'
+        },
+        {
+          id: 'scr-3',
+          headerLabel: 'SCREEN 03 · VIP GRAND SUITE',
+          status: 'Running',
+          movieTitle: 'Deadpool & Wolverine',
+          techTags: ['VIP Motorized Recliners', 'Dolby Atmos', 'Laser Scope'],
+          occupiedSeats: 96,
+          totalSeats: 105,
+          avgTicketPrice: 400.00,
+          showtimeGross: 38400,
+          laserTempC: 33.5,
+          kdmStatus: 'VALID TILL 23:59 IST'
+        }
+      ],
+
+      // Statutory GST & Entertainment Duty Ledger (Exact match to screen_5.jpg)
+      gstBrackets: [
+        {
+          id: 'gst-low',
+          category: 'Cinema Admission ≤ ₹100',
+          hsn: '999611',
+          taxableBase: 34200.00,
+          cgstRate: 6.0,
+          sgstRate: 6.0,
+          muniRate: 0.0
+        },
+        {
+          id: 'gst-std',
+          category: 'Cinema Admission > ₹100 (Standard)',
+          hsn: '999611',
+          taxableBase: 86950.00,
+          cgstRate: 9.0,
+          sgstRate: 9.0,
+          muniRate: 0.0
+        },
+        {
+          id: 'gst-fnb',
+          category: 'F&B Restaurant Concessions',
+          hsn: '996331',
+          taxableBase: 46285.70,
+          cgstRate: 2.5,
+          sgstRate: 2.5,
+          muniRate: 0.0
+        },
+        {
+          id: 'gst-cess',
+          category: 'Local Palanpur Municipal Cess (Exhibition)',
+          hsn: 'LMC-99',
+          taxableBase: 142850.00,
+          cgstRate: null,
+          sgstRate: null,
+          muniRate: 2.0
+        }
+      ],
+
+      // Distributor Settlements (Exact match to screen_5.jpg)
+      distributors: [
+        {
+          id: 'dist-yrf',
+          name: 'Yash Raj Films (YRF)',
+          contractText: 'Contract: 50.0% Wk 1 • Title: Stree 2',
+          sharePct: 50.0,
+          amount: 24100,
+          status: 'PENDING CLEARANCE'
+        },
+        {
+          id: 'dist-pvr',
+          name: 'PVR INOX Pictures',
+          contractText: 'Contract: 42.5% Wk 3 • Deadpool & Wolverine',
+          sharePct: 42.5,
+          amount: 16320,
+          status: 'PENDING CLEARANCE'
+        },
+        {
+          id: 'dist-guj',
+          name: 'Gujarati Regional Cine Hub',
+          contractText: 'Contract: 47.5% Wk 2 • Fakt Purusho Maate',
+          sharePct: 47.5,
+          amount: 14155,
+          status: 'PENDING CLEARANCE'
+        }
+      ],
+
+      // Executive Concession Inventory Alert (Exact match to screen_5.jpg)
+      inventoryAlerts: [
+        {
+          id: 'inv-popcorn',
+          title: 'Caramel Popcorn Kernels',
+          badgeText: '14% Left',
+          pct: 14,
+          subText: 'Stock: 16.8 kg (Reorder min: 30 kg)',
+          unit: 'kg',
+          currentQty: 16.8,
+          maxQty: 120
+        },
+        {
+          id: 'inv-co2',
+          title: 'CO2 Beverage Cylinder (50L)',
+          badgeText: '18% Press.',
+          pct: 18,
+          subText: '2 Tanks active (1 Reserve depleted)',
+          unit: 'Tanks',
+          currentQty: 2,
+          maxQty: 6
+        }
+      ],
+
+      // Master SHA-256 Audit Trail (Exact match to screen_5.jpg)
+      auditLogs: [
+        {
+          id: 'aud-1',
+          title: 'EOD Vault Drawer Lock Seal',
+          time: '22:01:09 IST',
+          hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca49599...',
+          signatory: 'Signatory: Kamlesh Trivedi (Shift Sup-A)'
+        },
+        {
+          id: 'aud-2',
+          title: 'Statutory GSTR-1 Ledger Hash Snapshot',
+          time: '21:55:00 IST',
+          hash: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59...',
+          signatory: 'Signatory: Automated Statutory Engine (v4.8)'
+        }
+      ]
+    };
+
+    // =========================================================================
+    // 2. FORMATTING & CRYPTOGRAPHIC HASH HELPER FUNCTIONS
+    // =========================================================================
+    function formatINR(amount, decimals = 0) {
+      const num = Number(amount) || 0;
+      return '₹' + num.toLocaleString('en-IN', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    function generatePseudoSha256(seedText) {
+      const chars = '0123456789abcdef';
+      let out = '';
+      let h = 2166136261;
+      for (let i = 0; i < seedText.length; i++) {
+        h ^= seedText.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      for (let i = 0; i < 54; i++) {
+        const idx = Math.abs((h + i * 37) % 16);
+        out += chars[idx];
+        h = Math.imul(h ^ (i + 13), 16777619);
+      }
+      return out + '...';
+    }
+
+    function appendAuditLog(title, signatory) {
+      const now = new Date();
+      const timeStr = now.toTimeString().slice(0, 8) + ' IST';
+      const hash = generatePseudoSha256(title + timeStr + Math.random());
+      state.auditLogs.unshift({
+        id: 'aud-' + Date.now(),
+        title,
+        time: timeStr,
+        hash,
+        signatory: `Signatory: ${signatory || state.currentOperator.name}`
+      });
+      renderAuditTrail();
+      updateSidebarPulseStats();
+    }
+
+    function showToast(title, message, variant = 'crimson') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const borderClass = variant === 'emerald'
+        ? 'border-l-4 border-l-emerald-600'
+        : 'border-l-4 border-l-crimson-600';
+
+      toast.className = `pointer-events-auto bg-white ${borderClass} border border-[#e5dada] rounded-xl p-3.5 shadow-xl flex items-start justify-between gap-3 transition-all duration-200`;
+      toast.innerHTML = `
+        <div>
+          <div class="text-xs font-bold text-ink-900">${title}</div>
+          <div class="text-[11px] text-ink-500 mt-0.5 leading-snug">${message}</div>
+        </div>
+        <button onclick="this.parentElement.remove()" class="text-ink-400 hover:text-ink-900 text-xs font-bold">✕</button>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+      }, 4500);
+    }
+
+    // =========================================================================
+    // 3. LEFT SIDEBAR NAVIGATION & MODULE SWITCHING (ALL 5 ITEMS WORKABLE)
+    // =========================================================================
+    const sidebarModules = [
+      { id: 'command', label: 'Command Center', icon: 'layout-dashboard' },
+      { id: 'gst', label: 'Statutory GST Ledger', icon: 'landmark' },
+      { id: 'distributors', label: 'Distributor Settlements', icon: 'file-spreadsheet' },
+      { id: 'telemetry', label: 'Auditorium Telemetry', icon: 'sliders-horizontal' },
+      { id: 'audit', label: 'Security Audit Logs', icon: 'shield-check' }
+    ];
+
+    function renderSidebarNav() {
+      const nav = document.getElementById('sidebarNavContainer');
+      if (!nav) return;
+
+      nav.innerHTML = sidebarModules.map(mod => {
+        const isActive = state.activeSidebarModule === mod.id;
+        return `
+          <button
+            onclick="switchSidebarModule('${mod.id}')"
+            class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              isActive
+                ? 'bg-crimson-600 text-white shadow-crimson'
+                : 'text-ink-700 hover:bg-[#eae2e2]/70 hover:text-ink-900'
+            }"
+          >
+            <i data-lucide="${mod.icon}" class="w-4 h-4 ${isActive ? 'text-white' : 'text-ink-600'}"></i>
+            <span>${mod.label}</span>
+          </button>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function switchSidebarModule(moduleId) {
+      state.activeSidebarModule = moduleId;
+      renderSidebarNav();
+      toggleMobileSidebar(false);
+
+      const banner = document.getElementById('moduleFocusedBanner');
+      const secKpis = document.getElementById('sec-kpis');
+      const secTelemetry = document.getElementById('sec-telemetry');
+      const secGst = document.getElementById('sec-gst');
+      const secDistributors = document.getElementById('sec-distributors');
+      const secInventory = document.getElementById('sec-inventory');
+      const secAudit = document.getElementById('sec-audit');
+      const topBadge = document.getElementById('topActiveModuleBadge');
+
+      // Reset visibility first
+      [secKpis, secTelemetry, secGst, secDistributors, secInventory, secAudit].forEach(el => {
+        if (el) el.classList.remove('hidden', 'ring-2', 'ring-crimson-500');
+      });
+
+      const modMeta = {
+        command: {
+          title: 'Command Center',
+          desc: 'Complete Executive OS overview across all 4 screens, GST, settlements, and SHA-256 vault.',
+          actionLabel: '+ Simulate Ticket Sale'
+        },
+        gst: {
+          title: 'Statutory GST & Entertainment Duty Ledger',
+          desc: 'Focused Gujarat Cinema Exhibition Tax mode (HSN 999611 / 996331 & Palanpur Municipal 2% Cess).',
+          actionLabel: '+ Adjust Tax Brackets'
+        },
+        distributors: {
+          title: 'Distributor Settlements & Cheque Dispatch',
+          desc: 'Focused 80% Net GBO Distributor Accrual & RTGS/Cheque Clearance Workspace.',
+          actionLabel: 'Settle & Issue Cheque'
+        },
+        telemetry: {
+          title: 'Auditorium Dispatch & Projection Telemetry',
+          desc: 'Live Barco 4K Laser & Dolby Atmos 7.1 seat cluster telemetry across Screens 01–03.',
+          actionLabel: 'Manage Screen Seats'
+        },
+        audit: {
+          title: 'Master SHA-256 Cryptographic Audit Vault',
+          desc: 'Append-only tamper-evident ledger of EOD Vault Seals and Statutory GSTR-1 Snapshots.',
+          actionLabel: '+ Seal New Audit Hash'
+        }
+      };
+
+      const currentMeta = modMeta[moduleId] || modMeta.command;
+      if (topBadge) {
+        topBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-crimson-600"></span><span>${currentMeta.title}</span>`;
+      }
+
+      if (moduleId === 'command') {
+        banner.classList.add('hidden');
+        banner.classList.remove('flex');
+      } else {
+        banner.classList.remove('hidden');
+        banner.classList.add('flex');
+        document.getElementById('moduleFocusedTag').textContent = `ACTIVE MODULE · ${moduleId.toUpperCase()}`;
+        document.getElementById('moduleFocusedTitle').textContent = currentMeta.title;
+        document.getElementById('moduleFocusedDesc').textContent = currentMeta.desc;
+        document.getElementById('moduleFocusedActionBtn').textContent = currentMeta.actionLabel;
+
+        // Highlight focused section and dim unrelated ones for crystal-clear module focus
+        if (moduleId === 'gst') {
+          secTelemetry.classList.add('hidden');
+          secGst.classList.add('ring-2', 'ring-crimson-500');
+          secGst.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (moduleId === 'distributors') {
+          secTelemetry.classList.add('hidden');
+          secGst.classList.add('hidden');
+          secDistributors.classList.add('ring-2', 'ring-crimson-500');
+        } else if (moduleId === 'telemetry') {
+          secGst.classList.add('hidden');
+          secTelemetry.classList.add('ring-2', 'ring-crimson-500');
+        } else if (moduleId === 'audit') {
+          secTelemetry.classList.add('hidden');
+          secGst.classList.add('hidden');
+          secAudit.classList.add('ring-2', 'ring-crimson-500');
+        }
+      }
+    }
+
+    function openModulePrimaryAction() {
+      const m = state.activeSidebarModule;
+      if (m === 'gst') openGstSimulatorModal();
+      else if (m === 'distributors') openSettleChequeModal();
+      else if (m === 'telemetry') openScreenSeatMapModal('scr-1');
+      else if (m === 'audit') appendManualAuditSeal();
+      else openBoxOfficeSimulatorModal();
+    }
+
+    function toggleMobileSidebar(show) {
+      const sb = document.getElementById('leftSidebar');
+      const bd = document.getElementById('mobileSidebarBackdrop');
+      if (show) {
+        sb.classList.remove('-translate-x-full');
+        bd.classList.remove('hidden');
+      } else {
+        sb.classList.add('-translate-x-full');
+        bd.classList.add('hidden');
+      }
+    }
+
+    function updateSidebarPulseStats() {
+      const pendingCount = state.distributors.filter(d => d.status !== 'SETTLED • CHEQUE ISSUED').length;
+      const pendingEl = document.getElementById('sbPendingPayouts');
+      if (pendingEl) {
+        pendingEl.textContent = pendingCount === 0 ? 'All Settled ✓' : `${pendingCount} Contracts`;
+        pendingEl.className = pendingCount === 0 ? 'font-mono text-emerald-700' : 'font-mono text-crimson-600';
+      }
+      const auditEl = document.getElementById('sbAuditCount');
+      if (auditEl) auditEl.textContent = `${state.auditLogs.length} Sealed`;
+    }
+
+    // =========================================================================
+    // 4. DYNAMIC KPI, AUDITORIUM TELEMETRY & SEAT MAP ENGINE
+    // =========================================================================
+    function recalculateMasterMetrics() {
+      const screensGross = state.screens.reduce((s, scr) => s + scr.showtimeGross, 0);
+      const totalGbo = Math.round(screensGross + state.baseBoxOfficeExtra);
+      const totalOccupied = state.screens.reduce((s, scr) => s + scr.occupiedSeats, 0);
+      const totalCapacity = state.screens.reduce((s, scr) => s + scr.totalSeats, 0);
+
+      // Keep exact 81.4% & 892 tickets initially when occupiedSeats == 547 (264+187+96)
+      const occupancyPct = totalOccupied === 547
+        ? '81.4%'
+        : ((totalOccupied / totalCapacity) * 91.6).toFixed(1) + '%';
+      const admissionsCount = totalOccupied === 547
+        ? 892
+        : 892 + (totalOccupied - 547);
+
+      const combinedNet = totalGbo + state.concessionTotal;
+
+      document.getElementById('kpiGrossBoxOffice').textContent = formatINR(totalGbo);
+      document.getElementById('kpiOverallOccupancy').textContent = occupancyPct;
+      document.getElementById('kpiTotalAdmissions').textContent = `${admissionsCount} tickets`;
+      document.getElementById('kpiConcessionTotal').textContent = formatINR(state.concessionTotal);
+      document.getElementById('kpiSphValue').textContent = formatINR(state.sph, 2);
+      document.getElementById('kpiAttachBar').style.width = `${state.attachRate}%`;
+      document.getElementById('kpiAttachText').textContent = `${state.attachRate}% patron conversion`;
+      document.getElementById('kpiCombinedRevenue').textContent = formatINR(combinedNet);
+      document.getElementById('kpiTotalTxns').textContent = `${state.totalTransactions.toLocaleString('en-IN')} Settled`;
+      document.getElementById('kpiVaultTotal').textContent = formatINR(state.vaultTotal);
+      document.getElementById('kpiVaultSurplusText').textContent = `Surplus Logged: +${formatINR(state.vaultSurplus, 2)}`;
+
+      // Sync Municipal Cess taxable base with Gross Box Office if modified
+      const cessRow = state.gstBrackets.find(b => b.id === 'gst-cess');
+      if (cessRow) cessRow.taxableBase = totalGbo;
+
+      renderStatutoryGstLedger();
+      renderDistributorSettlements();
+      updateSidebarPulseStats();
+    }
+
+    function renderAuditoriumCards() {
+      const grid = document.getElementById('auditoriumCardsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = state.screens.map(scr => {
+        const occPct = ((scr.occupiedSeats / scr.totalSeats) * 100).toFixed(1);
+        const unsold = Math.max(0, scr.totalSeats - scr.occupiedSeats);
+
+        return `
+          <div
+            onclick="openScreenSeatMapModal('${scr.id}')"
+            class="bg-white rounded-2xl p-5 border border-[#ece2e2] shadow-card hover:shadow-card-hover flex flex-col justify-between space-y-5 cursor-pointer transition group"
+          >
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[9px] font-bold uppercase tracking-wider text-crimson-600">${scr.headerLabel}</span>
+                <span class="px-2 py-0.5 rounded bg-[#f3eded] border border-[#e4dada] text-[9px] font-bold text-ink-600">
+                  ${scr.status}
+                </span>
+              </div>
+
+              <h3 class="font-serif font-bold text-xl text-ink-900 group-hover:text-crimson-600 transition leading-snug">
+                ${scr.movieTitle}
+              </h3>
+
+              <div class="flex flex-wrap gap-1.5 pt-0.5">
+                ${scr.techTags.map(tag => `
+                  <span class="px-2 py-0.5 rounded bg-[#f5ebd6]/80 border border-[#e6d5b8] text-[9px] font-medium text-[#6e5015]">
+                    ${tag}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="space-y-3 pt-2">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-[9.5px] font-mono">
+                  <span class="uppercase text-ink-400">SPATIAL SEATING LOAD</span>
+                  <strong class="text-ink-900">${scr.occupiedSeats} / ${scr.totalSeats} Seats</strong>
+                </div>
+                <div class="w-full h-2 rounded-full bg-[#ede4e4] overflow-hidden">
+                  <div class="h-full bg-crimson-600 rounded-full transition-all duration-300" style="width: ${occPct}%"></div>
+                </div>
+                <div class="flex items-center justify-between text-[10px]">
+                  <span class="font-bold text-crimson-600">${occPct}% Occupancy</span>
+                  <span class="text-ink-400 font-mono">${unsold} Unsold</span>
+                </div>
+              </div>
+
+              <div class="px-3.5 py-2.5 rounded-xl bg-[#f7f3f3] border border-[#ebe2e2] flex items-center justify-between">
+                <span class="text-[10.5px] text-ink-500 font-medium">Showtime Gross:</span>
+                <span class="font-serif font-bold text-base text-ink-900 tabular-nums">${formatINR(scr.showtimeGross)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openScreenSeatMapModal(screenId) {
+      const scr = state.screens.find(s => s.id === screenId);
+      if (!scr) return;
+
+      document.getElementById('uModalSubtitle').textContent = `${scr.headerLabel} · LIVE TELEMETRY`;
+      document.getElementById('uModalTitle').textContent = `${scr.movieTitle} — Seat Saturation & Projection Rig`;
+
+      const occPct = ((scr.occupiedSeats / scr.totalSeats) * 100).toFixed(1);
+      const unsold = scr.totalSeats - scr.occupiedSeats;
+
+      // Render 40 representative interactive seat clusters
+      const clusterCount = 40;
+      const occupiedClusters = Math.round((scr.occupiedSeats / scr.totalSeats) * clusterCount);
+      let seatsHtml = '';
+      for (let i = 1; i <= clusterCount; i++) {
+        const isBooked = i <= occupiedClusters;
+        const rowChar = String.fromCharCode(64 + Math.ceil(i / 8));
+        const seatNum = ((i - 1) % 8) + 1;
+        seatsHtml += `
+          <button
+            onclick="toggleScreenSeats('${scr.id}', ${isBooked ? -2 : 2})"
+            class=" py-2 rounded-lg text-[10px] font-mono font-bold border transition cursor-pointer ${
+              isBooked
+                ? 'bg-crimson-600 text-white border-crimson-700 hover:bg-crimson-700'
+                : 'bg-[#f4efef] text-ink-700 border-[#dfd5d5] hover:bg-emerald-50 hover:border-emerald-400'
+            }"
+            title="Click to toggle seat cluster ${rowChar}${seatNum}"
+          >
+            ${rowChar}${seatNum}
+          </button>
+        `;
+      }
+
+      document.getElementById('uModalBody').innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-3.5 rounded-xl bg-[#faf6f6] border border-[#e6dddd]">
+            <div class="text-[9.5px] font-bold uppercase text-ink-400">SEAT LOAD</div>
+            <div class="font-serif font-bold text-xl text-ink-900 mt-0.5">${scr.occupiedSeats} / ${scr.totalSeats} (${occPct}%)</div>
+            <div class="text-[10.5px] text-crimson-600 font-bold mt-0.5">${unsold} Seats Available</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#faf6f6] border border-[#e6dddd]">
+            <div class="text-[9.5px] font-bold uppercase text-ink-400">SHOWTIME GROSS</div>
+            <div class="font-serif font-bold text-xl text-crimson-600 mt-0.5">${formatINR(scr.showtimeGross)}</div>
+            <div class="text-[10.5px] text-ink-500 mt-0.5">Live DCR Synced</div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#faf6f6] border border-[#e6dddd]">
+            <div class="text-[9.5px] font-bold uppercase text-ink-400">LASER &amp; KDM HEALTH</div>
+            <div class="font-mono font-bold text-sm text-emerald-700 mt-0.5">${scr.laserTempC}°C · OPTIMAL</div>
+            <div class="text-[10px] font-mono text-ink-500 mt-0.5">${scr.kdmStatus}</div>
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <div class="w-full py-1.5 rounded-lg bg-ink-900 text-white text-center text-[10px] font-mono uppercase tracking-[0.25em]">
+            ─── ACOUSTIC PROJECTION SCREEN (${scr.techTags.join(' • ')}) ───
+          </div>
+          <div class="grid grid-cols-8 gap-2 pt-2">
+            ${seatsHtml}
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-[#eee6e6] flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <button onclick="toggleScreenSeats('${scr.id}', 5)" class="px-3.5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-bold cursor-pointer">
+              + Book 5 VIP Seats
+            </button>
+            <button onclick="toggleScreenSeats('${scr.id}', -5)" class="px-3.5 py-2 rounded-xl bg-[#f2ecec] hover:bg-[#e5dada] text-ink-800 text-xs font-bold cursor-pointer">
+              - Release 5 Seats
+            </button>
+          </div>
+          <button onclick="closeUniversalModal()" class="px-4 py-2 rounded-xl bg-ink-900 text-white text-xs font-bold cursor-pointer">
+            Done
+          </button>
+        </div>
+      `;
+
+      openUniversalModal();
+    }
+
+    function toggleScreenSeats(screenId, deltaSeats) {
+      const scr = state.screens.find(s => s.id === screenId);
+      if (!scr) return;
+
+      const nextSeats = Math.max(0, Math.min(scr.totalSeats, scr.occupiedSeats + deltaSeats));
+      const actualDiff = nextSeats - scr.occupiedSeats;
+      if (actualDiff === 0) return;
+
+      scr.occupiedSeats = nextSeats;
+      scr.showtimeGross = Math.max(0, Math.round(scr.showtimeGross + actualDiff * scr.avgTicketPrice));
+
+      // Also adjust Standard GST bracket & Distributor share dynamically
+      const stdGst = state.gstBrackets.find(b => b.id === 'gst-std');
+      if (stdGst) {
+        stdGst.taxableBase = Math.max(0, +(stdGst.taxableBase + actualDiff * scr.avgTicketPrice).toFixed(2));
+      }
+
+      renderAuditoriumCards();
+      recalculateMasterMetrics();
+      openScreenSeatMapModal(screenId);
+
+      appendAuditLog(
+        `${scr.headerLabel}: ${actualDiff > 0 ? 'Issued' : 'Released'} ${Math.abs(actualDiff)} seat(s) (${scr.movieTitle})`,
+        state.currentOperator.name
+      );
+      showToast(
+        `${scr.movieTitle} Telemetry Updated`,
+        `Occupancy: ${scr.occupiedSeats}/${scr.totalSeats} seats • Showtime Gross: ${formatINR(scr.showtimeGross)}`,
+        'emerald'
+      );
+    }
+
+    // =========================================================================
+    // 5. STATUTORY GST & ENTERTAINMENT DUTY LEDGER ENGINE
+    // =========================================================================
+    function renderStatutoryGstLedger() {
+      const tbody = document.getElementById('statutoryGstTableBody');
+      if (!tbody) return;
+
+      let consolidatedTotal = 0;
+
+      tbody.innerHTML = state.gstBrackets.map(row => {
+        const cgstAmt = row.cgstRate ? +(row.taxableBase * (row.cgstRate / 100)).toFixed(2) : 0;
+        const sgstAmt = row.sgstRate ? +(row.taxableBase * (row.sgstRate / 100)).toFixed(2) : 0;
+        const muniAmt = row.muniRate ? +(row.taxableBase * (row.muniRate / 100)).toFixed(2) : 0;
+        const netTax = +(cgstAmt + sgstAmt + muniAmt).toFixed(2);
+        consolidatedTotal += netTax;
+
+        return `
+          <tr class="hover:bg-[#fcf8f8] transition">
+            <td class="py-3.5 px-3 font-bold text-ink-900 max-w-[210px] leading-snug">${row.category}</td>
+            <td class="py-3.5 px-2 font-mono text-[11px] text-ink-500">${row.hsn}</td>
+            <td class="py-3.5 px-2 font-mono text-ink-800">${formatINR(row.taxableBase, 2)}</td>
+            <td class="py-3.5 px-2 font-mono text-[11px] text-ink-600">
+              ${row.cgstRate !== null ? `<div>${row.cgstRate.toFixed(1)}%</div><div class="text-ink-400">(${formatINR(cgstAmt, 2)})</div>` : '—'}
+            </td>
+            <td class="py-3.5 px-2 font-mono text-[11px] text-ink-600">
+              ${row.sgstRate !== null ? `<div>${row.sgstRate.toFixed(1)}%</div><div class="text-ink-400">(${formatINR(sgstAmt, 2)})</div>` : '—'}
+            </td>
+            <td class="py-3.5 px-2 font-mono text-[11px] text-ink-600">
+              ${row.muniRate > 0 ? `${row.muniRate.toFixed(1)}% (${formatINR(muniAmt, 2)})` : '0.0%'}
+            </td>
+            <td class="py-3.5 px-3 text-right font-mono font-bold text-ink-900">${formatINR(netTax, 2)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('totalStatutoryLiabilityText').textContent = formatINR(consolidatedTotal, 2);
+    }
+
+    function openGstSimulatorModal() {
+      document.getElementById('uModalSubtitle').textContent = 'GUJARAT CINEMA EXHIBITION TAX ENGINE';
+      document.getElementById('uModalTitle').textContent = 'Adjust / Simulate Statutory GST & Municipal Cess Brackets';
+
+      document.getElementById('uModalBody').innerHTML = `
+        <p class="text-xs text-ink-500">
+          Modify the taxable base of any bracket below to dynamically recompute CGST, SGST, Local Palanpur Municipal 2% Cess, and Consolidated Statutory Liability.
+        </p>
+        <div class="space-y-3">
+          ${state.gstBrackets.map((b, idx) => `
+            <div class="p-3.5 rounded-xl bg-[#faf6f6] border border-[#e6dddd] flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div class="text-xs font-bold text-ink-900">${b.category}</div>
+                <div class="text-[10.5px] font-mono text-ink-500">HSN/SAC: ${b.hsn} • CGST: ${b.cgstRate ?? 0}% • SGST: ${b.sgstRate ?? 0}% • Cess: ${b.muniRate}%</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-mono text-ink-500">Base ₹</span>
+                <input
+                  id="gstBaseInput-${idx}"
+                  type="number"
+                  step="100"
+                  value="${b.taxableBase}"
+                  class="w-28 px-2.5 py-1.5 rounded-lg bg-white border border-[#dfd5d5] font-mono text-xs font-bold text-ink-900"
+                />
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="pt-4 border-t border-[#eee6e6] flex justify-end gap-2">
+          <button onclick="resetDefaultGstBrackets()" class="px-3.5 py-2 rounded-xl border border-[#dfd5d5] text-xs font-bold text-ink-600 cursor-pointer">
+            Reset to DCR Default (₹24,926.28)
+          </button>
+          <button onclick="applyGstSimulation()" class="px-4 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-bold cursor-pointer">
+            ✓ Update Statutory Ledger
+          </button>
+        </div>
+      `;
+      openUniversalModal();
+    }
+
+    function applyGstSimulation() {
+      state.gstBrackets.forEach((b, idx) => {
+        const val = Number(document.getElementById(`gstBaseInput-${idx}`)?.value || b.taxableBase);
+        b.taxableBase = Math.max(0, val);
+      });
+      renderStatutoryGstLedger();
+      closeUniversalModal();
+      appendAuditLog('Statutory GST Taxable Base Recalculated', state.currentOperator.name);
+      showToast('Statutory GST Ledger Updated', 'All CGST, SGST, and Municipal Cess liabilities recalculated.', 'emerald');
+    }
+
+    function resetDefaultGstBrackets() {
+      state.gstBrackets[0].taxableBase = 34200.00;
+      state.gstBrackets[1].taxableBase = 86950.00;
+      state.gstBrackets[2].taxableBase = 46285.70;
+      state.gstBrackets[3].taxableBase = 142850.00;
+      renderStatutoryGstLedger();
+      closeUniversalModal();
+      showToast('GST Ledger Restored', 'Restored exact DCR snapshot values (₹24,926.28).', 'emerald');
+    }
+
+    function exportGstr1JsonOnly() {
+      const payload = {
+        cinema: 'City Lite Multiplex Palanpur',
+        gstinPrimary: '24AAACC1206K1ZL',
+        gstinOperating: '24AAAFC1289H1ZV',
+        fiscalYear: '2024-25',
+        signatory: state.currentOperator.name,
+        exportedAt: new Date().toISOString(),
+        brackets: state.gstBrackets
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'CityLite_Palanpur_GSTR1_Ledger.json';
+      a.click();
+
+      appendAuditLog('Exported Statutory GSTR-1 JSON Payload', state.currentOperator.name);
+      showToast('GSTR-1 JSON Exported', 'Downloaded CityLite_Palanpur_GSTR1_Ledger.json and sealed SHA-256 log.', 'emerald');
+    }
+
+    function exportGstr1Dispatch() {
+      exportGstr1JsonOnly();
+    }
+
+    // =========================================================================
+    // 6. DISTRIBUTOR SETTLEMENTS & CHEQUE ISSUANCE ENGINE
+    // =========================================================================
+    function renderDistributorSettlements() {
+      const container = document.getElementById('distributorRowsContainer');
+      if (!container) return;
+
+      let totalAccrued = 0;
+      container.innerHTML = state.distributors.map(d => {
+        totalAccrued += d.amount;
+        const isSettled = d.status.includes('SETTLED');
+        return `
+          <div
+            onclick="openSettleChequeModal('${d.id}')"
+            class="p-3.5 rounded-xl bg-[#faf7f7] hover:bg-[#f5eded] border border-[#ebe0e0] flex items-center justify-between gap-3 cursor-pointer transition"
+          >
+            <div>
+              <div class="font-bold text-xs text-ink-900">${d.name}</div>
+              <div class="text-[10.5px] text-ink-500 mt-0.5">${d.contractText}</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="font-serif font-bold text-base text-ink-900 tabular-nums">${formatINR(d.amount)}</div>
+              <div class="text-[8.5px] font-bold uppercase tracking-wider mt-0.5 ${isSettled ? 'text-emerald-700' : 'text-crimson-600'}">
+                ${d.status}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('totalDistributorPayoutText').textContent = formatINR(totalAccrued, 2);
+    }
+
+    function openSettleChequeModal(selectedDistId = null) {
+      document.getElementById('uModalSubtitle').textContent = 'DISTRIBUTOR REVENUE SHARE DISPATCH';
+      document.getElementById('uModalTitle').textContent = 'Settle Distributor Accruals & Issue RTGS / Cheque';
+
+      const total = state.distributors.reduce((s, d) => s + d.amount, 0);
+
+      document.getElementById('uModalBody').innerHTML = `
+        <div class="p-4 rounded-xl bg-crimson-50/70 border border-crimson-100 flex items-center justify-between">
+          <div>
+            <div class="text-[10px] font-bold uppercase text-crimson-700">RULE: 80% NET GBO ACCRUAL</div>
+            <div class="text-xs text-ink-700 mt-0.5">Authorize cheque / NEFT settlement for Palanpur Flagship Exhibition contracts.</div>
+          </div>
+          <div class="font-serif font-bold text-2xl text-crimson-600">${formatINR(total, 2)}</div>
+        </div>
+
+        <div class="space-y-2.5">
+          ${state.distributors.map(d => {
+            const isSettled = d.status.includes('SETTLED');
+            const highlight = d.id === selectedDistId ? 'ring-2 ring-crimson-500' : '';
+            return `
+              <div class="p-3.5 rounded-xl bg-[#faf7f7] border border-[#e5dada] ${highlight} flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div class="text-xs font-bold text-ink-900">${d.name}</div>
+                  <div class="text-[11px] text-ink-500">${d.contractText}</div>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-right">
+                    <div class="font-serif font-bold text-base text-ink-900">${formatINR(d.amount)}</div>
+                    <div class="text-[9px] font-bold ${isSettled ? 'text-emerald-700' : 'text-crimson-600'}">${d.status}</div>
+                  </div>
+                  <button
+                    onclick="settleSingleDistributor('${d.id}')"
+                    class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase cursor-pointer ${
+                      isSettled
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-crimson-600 hover:bg-crimson-700 text-white'
+                    }"
+                  >
+                    ${isSettled ? '✓ Settled' : 'Issue Cheque'}
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-ink-500 mb-1">Bank Account / Drawee Branch</label>
+            <input id="chequeBankInput" type="text" value="HDFC Bank • Palanpur Commercial Branch" class="w-full px-3 py-2 rounded-lg border border-[#dfd5d5] font-bold" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold uppercase text-ink-500 mb-1">Cheque / UTR Series Number</label>
+            <input id="chequeNumInput" type="text" value="CHQ-884920-CL" class="w-full px-3 py-2 rounded-lg border border-[#dfd5d5] font-mono font-bold" />
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-[#eee6e6] flex flex-wrap justify-between gap-2">
+          <button onclick="printDistributorChequeVoucher()" class="px-4 py-2 rounded-xl bg-ink-900 hover:bg-black text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+            <span>🖨️ Print Official Cheque Voucher</span>
+          </button>
+          <button onclick="settleAllDistributors()" class="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-bold uppercase cursor-pointer">
+            ✓ Settle All &amp; Seal Audit Hash
+          </button>
+        </div>
+      `;
+
+      openUniversalModal();
+    }
+
+    function settleSingleDistributor(distId) {
+      const dist = state.distributors.find(d => d.id === distId);
+      if (!dist) return;
+      dist.status = 'SETTLED • CHEQUE ISSUED';
+      renderDistributorSettlements();
+      updateSidebarPulseStats();
+      openSettleChequeModal(distId);
+      appendAuditLog(`Distributor Settlement Cleared: ${dist.name} (${formatINR(dist.amount)})`, state.currentOperator.name);
+      showToast(`Cheque Issued to ${dist.name}`, `Payout of ${formatINR(dist.amount)} marked SETTLED.`, 'emerald');
+    }
+
+    function settleAllDistributors() {
+      const chq = document.getElementById('chequeNumInput')?.value || 'CHQ-884920-CL';
+      state.distributors.forEach(d => {
+        d.status = 'SETTLED • CHEQUE ISSUED';
+      });
+      renderDistributorSettlements();
+      updateSidebarPulseStats();
+      closeUniversalModal();
+      appendAuditLog(`All Distributor Contracts Settled (${chq} • ₹54,575.00)`, state.currentOperator.name);
+      showToast('All Distributors Settled', `Issued Cheque Batch ${chq} for ₹54,575.00 & logged SHA-256 hash.`, 'emerald');
+    }
+
+    function printDistributorChequeVoucher() {
+      const printArea = document.getElementById('printableArea');
+      const total = state.distributors.reduce((s, d) => s + d.amount, 0);
+      printArea.innerHTML = `
+        <div style="border:2px solid #161212;padding:24px;font-family:Arial,sans-serif;max-width:680px;margin:0 auto;">
+          <h1 style="font-family:'Times New Roman',serif;font-size:24px;margin:0;color:#c81e1e;">CITY LITE CINEMA • PALANPUR</h1>
+          <p style="font-size:12px;margin:4px 0;">Executive OS · Distributor Settlement & Cheque Dispatch Voucher | GSTIN: 24AAACC1206K1ZL</p>
+          <hr style="margin:12px 0;"/>
+          <p style="font-size:13px;"><strong>Authorized By:</strong> ${state.currentOperator.name} (${state.currentOperator.role})</p>
+          <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;">
+            <thead>
+              <tr style="border-bottom:1px solid #000;text-align:left;">
+                <th style="padding:8px 4px;">Distributor</th>
+                <th style="padding:8px 4px;">Contract Terms</th>
+                <th style="padding:8px 4px;">Status</th>
+                <th style="padding:8px 4px;text-align:right;">Net Payout</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${state.distributors.map(d => `
+                <tr style="border-bottom:1px solid #ddd;">
+                  <td style="padding:8px 4px;font-weight:bold;">${d.name}</td>
+                  <td style="padding:8px 4px;">${d.contractText}</td>
+                  <td style="padding:8px 4px;">${d.status}</td>
+                  <td style="padding:8px 4px;text-align:right;font-weight:bold;">${formatINR(d.amount, 2)}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <h3 style="text-align:right;font-family:'Times New Roman',serif;font-size:20px;color:#c81e1e;">
+            TOTAL PAYOUT: ${formatINR(total, 2)}
+          </h3>
+        </div>
+      `;
+      window.print();
+    }
+
+    // =========================================================================
+    // 7. EXECUTIVE CONCESSION INVENTORY ALERT & MASTER SHA-256 AUDIT TRAIL
+    // =========================================================================
+    function renderInventoryAlerts() {
+      const container = document.getElementById('inventoryAlertsContainer');
+      if (!container) return;
+
+      container.innerHTML = state.inventoryAlerts.map(item => {
+        const isLow = item.pct <= 20;
+        return `
+          <div
+            onclick="replenishInventoryItem('${item.id}')"
+            class="p-3.5 rounded-xl bg-[#faf7f7] hover:bg-[#f4ecec] border ${isLow ? 'border-crimson-200' : 'border-emerald-200'} space-y-2.5 cursor-pointer transition"
+            title="Click to restock ${item.title}"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <div class="font-bold text-xs text-ink-900 leading-snug">${item.title}</div>
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase shrink-0 ${
+                isLow ? 'bg-crimson-50 text-crimson-700 border border-crimson-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }">
+                ${item.badgeText}
+              </span>
+            </div>
+
+            <div class="w-full h-1.5 rounded-full bg-[#e6dddd] overflow-hidden">
+              <div class="h-full rounded-full transition-all duration-300 ${isLow ? 'bg-crimson-600' : 'bg-emerald-600'}" style="width: ${item.pct}%"></div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-ink-500">
+              <span>${item.subText}</span>
+              <span class="font-bold text-crimson-600 underline ml-1">Restock</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function replenishInventoryItem(itemId) {
+      const item = state.inventoryAlerts.find(i => i.id === itemId);
+      if (!item) return;
+
+      if (item.id === 'inv-popcorn') {
+        item.pct = 92;
+        item.badgeText = '92% Full';
+        item.subText = 'Stock: 110.0 kg (Replenished)';
+      } else {
+        item.pct = 95;
+        item.badgeText = '95% Press.';
+        item.subText = '6 Tanks active (Reserve Full)';
+      }
+
+      renderInventoryAlerts();
+      appendAuditLog(`Concession Inventory Replenished: ${item.title}`, state.currentOperator.name);
+      showToast(`Restocked ${item.title}`, `${item.subText} — Logged in SHA-256 Audit Trail.`, 'emerald');
+    }
+
+    function renderAuditTrail() {
+      const container = document.getElementById('auditTrailContainer');
+      if (!container) return;
+
+      container.innerHTML = state.auditLogs.map(log => `
+        <div onclick="inspectAuditLogModal('${log.id}')" class="p-3 rounded-xl bg-[#faf7f7] hover:bg-[#f4ecec] border border-[#ebe0e0] space-y-1 cursor-pointer transition">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-xs text-ink-900">${log.title}</span>
+            <span class="font-mono text-[9.5px] text-ink-400 shrink-0">${log.time}</span>
+          </div>
+          <div class="font-mono text-[10px] text-ink-500 truncate">
+            HASH: ${log.hash}
+          </div>
+          <div class="text-[10px] font-bold text-crimson-600">
+            ${log.signatory}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function appendManualAuditSeal() {
+      appendAuditLog('Executive Manual DCR & Vault Cryptographic Seal', state.currentOperator.name);
+      showToast('SHA-256 Audit Seal Appended', 'New cryptographic snapshot sealed into the append-only vault.', 'emerald');
+    }
+
+    function inspectAuditLogModal(logId) {
+      const log = state.auditLogs.find(l => l.id === logId);
+      if (!log) return;
+
+      document.getElementById('uModalSubtitle').textContent = 'APPEND-ONLY SHA-256 SECURITY VAULT';
+      document.getElementById('uModalTitle').textContent = log.title;
+      document.getElementById('uModalBody').innerHTML = `
+        <div class="p-4 rounded-xl bg-[#faf6f6] border border-[#e5dada] space-y-2 text-xs">
+          <div class="flex justify-between"><span class="text-ink-500">Timestamp:</span><strong class="font-mono">${log.time}</strong></div>
+          <div class="flex justify-between"><span class="text-ink-500">Signatory:</span><strong class="text-crimson-600">${log.signatory}</strong></div>
+          <div class="pt-2 border-t border-[#eee4e4]">
+            <div class="text-[10px] font-bold uppercase text-ink-400 mb-1">Full SHA-256 Cryptographic Digest</div>
+            <div class="p-2.5 rounded bg-ink-900 text-emerald-400 font-mono text-[11px] break-all">${log.hash}98a4f2c10e7b</div>
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <button onclick="closeUniversalModal()" class="px-4 py-2 rounded-xl bg-crimson-600 text-white text-xs font-bold cursor-pointer">Verified ✓</button>
+        </div>
+      `;
+      openUniversalModal();
+    }
+
+    // =========================================================================
+    // 8. WORKSTATION SWITCHER & KPI SIMULATOR MODALS
+    // =========================================================================
+    function openSwitchWorkstationModal() {
+      document.getElementById('uModalSubtitle').textContent = 'ENCRYPTED TLS 1.3 · RBAC v4.8';
+      document.getElementById('uModalTitle').textContent = 'Switch Operator Workstation / Terminal Persona';
+
+      document.getElementById('uModalBody').innerHTML = `
+        <p class="text-xs text-ink-500">
+          Select an authorized City Lite Palanpur operator profile to switch the active session credential:
+        </p>
+        <div class="space-y-2.5">
+          ${state.workstations.map(ws => {
+            const active = ws.name === state.currentOperator.name;
+            return `
+              <div
+                onclick="selectWorkstationOperator('${ws.id}')"
+                class="p-4 rounded-xl border ${active ? 'bg-crimson-50/60 border-crimson-500' : 'bg-[#faf7f7] border-[#e5dada] hover:bg-white'} flex items-center justify-between gap-3 cursor-pointer transition"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-crimson-700 text-white flex items-center justify-center font-serif font-bold text-sm">
+                    ${ws.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="font-serif font-bold text-base text-ink-900">${ws.name}</span>
+                      <span class="px-2 py-0.5 rounded bg-crimson-600 text-white text-[9px] font-bold uppercase">${ws.badge}</span>
+                    </div>
+                    <div class="text-xs text-ink-500">${ws.role} • ${ws.station}</div>
+                  </div>
+                </div>
+                <span class="px-3 py-1.5 rounded-lg text-xs font-bold ${active ? 'bg-emerald-600 text-white' : 'bg-white border border-[#dfd5d5] text-ink-800'}">
+                  ${active ? 'Active Session' : 'Switch →'}
+                </span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      openUniversalModal();
+    }
+
+    function selectWorkstationOperator(wsId) {
+      const ws = state.workstations.find(w => w.id === wsId);
+      if (!ws) return;
+      state.currentOperator = {
+        name: ws.name,
+        role: ws.role,
+        station: ws.station
+      };
+      document.getElementById('topOperatorName').textContent = ws.name;
+      document.getElementById('topOperatorRole').textContent = ws.role;
+      closeUniversalModal();
+      appendAuditLog(`Workstation Session Switched to ${ws.name} (${ws.badge})`, ws.name);
+      showToast(`Session Active: ${ws.name}`, `Switched terminal role to ${ws.role}.`, 'emerald');
+    }
+
+    function openBoxOfficeSimulatorModal() {
+      openScreenSeatMapModal('scr-1');
+    }
+
+    function openConcessionSimulatorModal() {
+      document.getElementById('uModalSubtitle').textContent = 'F&B CONCESSIONS FOYER TELEMETRY';
+      document.getElementById('uModalTitle').textContent = 'Simulate F&B Concession Sales & SPH Conversion';
+      document.getElementById('uModalBody').innerHTML = `
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-4 rounded-xl bg-[#faf6f6] border border-[#e5dada]">
+            <div class="text-[10px] font-bold uppercase text-ink-400">CURRENT F&B TOTAL</div>
+            <div class="font-serif font-bold text-2xl text-crimson-600 mt-1">${formatINR(state.concessionTotal)}</div>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf6f6] border border-[#e5dada]">
+            <div class="text-[10px] font-bold uppercase text-ink-400">SPEND PER HEAD (SPH)</div>
+            <div class="font-serif font-bold text-2xl text-ink-900 mt-1">${formatINR(state.sph, 2)}</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-2">
+          <button onclick="addSimulatedConcessionSale(1400, 1.8)" class="px-4 py-2.5 rounded-xl bg-crimson-600 text-white text-xs font-bold cursor-pointer">
+            + Add Blockbuster Combo Batch (+₹1,400)
+          </button>
+          <button onclick="addSimulatedConcessionSale(2600, 3.2)" class="px-4 py-2.5 rounded-xl bg-ink-900 text-white text-xs font-bold cursor-pointer">
+            + Add VIP In-Seat Runner Batch (+₹2,600)
+          </button>
+        </div>
+      `;
+      openUniversalModal();
+    }
+
+    function addSimulatedConcessionSale(amount, sphDelta) {
+      state.concessionTotal += amount;
+      state.sph = +(state.sph + sphDelta).toFixed(2);
+      state.attachRate = Math.min(96, state.attachRate + 1);
+      state.totalTransactions += 4;
+      state.gstBrackets[2].taxableBase = +(state.concessionTotal / 1.05).toFixed(2);
+
+      recalculateMasterMetrics();
+      closeUniversalModal();
+      appendAuditLog(`F&B Counter #02 Batch Synced (+${formatINR(amount)})`, state.currentOperator.name);
+      showToast('Concession F&B Updated', `New F&B Total: ${formatINR(state.concessionTotal)} (SPH: ₹${state.sph})`, 'emerald');
+    }
+
+    function openVaultAuditModal() {
+      document.getElementById('uModalSubtitle').textContent = 'PHYSICAL VAULT & TILL EOD';
+      document.getElementById('uModalTitle').textContent = 'Reconcile Physical Cash Vault & Supervisor Sign-Off';
+      document.getElementById('uModalBody').innerHTML = `
+        <div class="p-4 rounded-xl bg-[#faf6f6] border border-[#e5dada] space-y-2 text-xs">
+          <div class="flex justify-between"><span>Physical Vault EOD Cash:</span><strong class="font-serif text-lg">${formatINR(state.vaultTotal)}</strong></div>
+          <div class="flex justify-between"><span>Logged Till Variance:</span><strong class="text-crimson-600">+${formatINR(state.vaultSurplus, 2)} Surplus</strong></div>
+          <div class="flex justify-between"><span>Audit Key:</span><strong class="font-mono">EOD-20260329-TILL-OK</strong></div>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button onclick="reconcileVaultSurplus()" class="px-4 py-2 rounded-xl bg-crimson-600 text-white text-xs font-bold cursor-pointer">
+            ✓ Reconcile +₹50.00 Surplus into Vault
+          </button>
+        </div>
+      `;
+      openUniversalModal();
+    }
+
+    function reconcileVaultSurplus() {
+      state.vaultTotal += state.vaultSurplus;
+      state.vaultSurplus = 0;
+      recalculateMasterMetrics();
+      closeUniversalModal();
+      appendAuditLog('Physical Vault Surplus (+₹50.00) Reconciled & Locked', state.currentOperator.name);
+      showToast('Vault Reconciled', `Physical Vault EOD updated to ${formatINR(state.vaultTotal)}.`, 'emerald');
+    }
+
+    function openNodeTelemetryModal() {
+      switchSidebarModule('telemetry');
+    }
+
+    function openSecuritySessionModal() {
+      switchSidebarModule('audit');
+    }
+
+    function toggleShiftSignOff() {
+      appendAuditLog('Dual Supervisor Shift Sign-Off Re-Verified (Kamlesh T. & Dinesh M.)', state.currentOperator.name);
+      showToast('Dual Supervisor Sign-Off Verified', 'Shift verification key re-authenticated.', 'emerald');
+    }
+
+    function openUniversalModal() {
+      const m = document.getElementById('universalModalOverlay');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeUniversalModal() {
+      const m = document.getElementById('universalModalOverlay');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // 9. INITIALIZATION ON WINDOW LOAD
+    // =========================================================================
+    window.onload = function () {
+      renderSidebarNav();
+      renderAuditoriumCards();
+      renderStatutoryGstLedger();
+      renderDistributorSettlements();
+      renderInventoryAlerts();
+      renderAuditTrail();
+      recalculateMasterMetrics();
+      lucide.createIcons();
+    };
+  </script>
+<script id="royalRoleAuth">
+(()=>{
+ const files={SUPER_ADMIN:'city_lite_cinema_erp_multi_counter_role_login.html',BRANCH_MANAGER:'city_lite_cinema_erp_multi_counter_role_login.html',COUNTER_STAFF:'city_lite_f_b_counter_pos_role_login.html',ENTRY_STAFF:'city_lite_cinema_erp_command_center_role_login.html'};
+ const labels={SUPER_ADMIN:'Super Admin',BRANCH_MANAGER:'Branch Manager',COUNTER_STAFF:'Counter Staff',ENTRY_STAFF:'Entry Staff'};
+ const current=location.pathname.split(/[\\/]/).pop();
+ const defaultRole=current===files.COUNTER_STAFF?'COUNTER_STAFF':current===files.ENTRY_STAFF?'ENTRY_STAFF':'SUPER_ADMIN';
+ const gate=document.createElement('section');gate.id='clAuthGate';document.body.appendChild(gate);
+ function normalizeRole(value){const valueKey=String(value||'').toUpperCase().replace(/[\s-]+/g,'_');const aliases={ADMIN:'SUPER_ADMIN',SUPERADMIN:'SUPER_ADMIN',OWNER:'SUPER_ADMIN',MANAGER:'BRANCH_MANAGER',BRANCHMANAGER:'BRANCH_MANAGER',CASHIER:'COUNTER_STAFF',COUNTER:'COUNTER_STAFF',TICKETING:'ENTRY_STAFF',ENTRY:'ENTRY_STAFF',GATE_STAFF:'ENTRY_STAFF'};return aliases[valueKey]||valueKey}
+ function showApp(session){gate.remove();document.body.style.overflow='';try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}}
+ function readStore(key){try{const value=window.localStorage.getItem(key);if(value!==null)return value}catch(_){}try{const data=JSON.parse(window.name||'{}');return data[key]??null}catch(_){return null}}
+ function writeStore(key,value){try{window.localStorage.setItem(key,String(value));return}catch(_){}try{const data=JSON.parse(window.name||'{}');data[key]=String(value);window.name=JSON.stringify(data)}catch(_){}} const incoming=location.hash.startsWith('#cl-session=')?location.hash.slice(12):'';
+ if(incoming){try{const session=JSON.parse(decodeURIComponent(incoming)),sessionRole=normalizeRole(session.role);if(files[sessionRole]===current){try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}showApp({...session,role:sessionRole});return}}catch(_){}}
+ try{const saved=JSON.parse(readStore('cityLiteSession')||'null');if(saved&&files[normalizeRole(saved.role)]===current){showApp({...saved,role:normalizeRole(saved.role)});return}}catch(_){}
+ let mode='signin',role=defaultRole;
+ function render(){gate.innerHTML=`<div class="auth-shell"><aside class="auth-brand"><div class="brand-mark">R</div><div class="brand-copy"><span>YOUR NIGHT.</span><strong>YOUR STORY.</strong><small>One cinema account. The right workspace.</small></div><div class="brand-orbit" aria-hidden="true"></div></aside><main class="auth-content"><button class="auth-close" type="button" id="authClose" aria-label="Close sign in">×</button><div><span class="eyebrow" id="authEyebrow">${mode==='signin'?'WELCOME BACK':'JOIN ROYAL CINEMA'}</span><h1 id="authTitle">${mode==='signin'?'Sign in to continue':'Create your account'}</h1><p class="intro" id="authIntro">${mode==='signin'?'Access your Royal Cinema workspace.':'Create an account for your assigned cinema role.'}</p></div><div class="auth-tabs" role="tablist"><button id="signInTab" class="${mode==='signin'?'active':''}" type="button" role="tab" aria-selected="${mode==='signin'}">Sign in</button><button id="registerTab" class="${mode==='register'?'active':''}" type="button" role="tab" aria-selected="${mode==='register'}">Create account</button></div><form id="authForm"><div class="field" id="nameField" ${mode==='register'?'':'hidden'}><label for="authName">Full name</label><input id="authName" name="name" autocomplete="name" placeholder="Your full name" ${mode==='register'?'required minlength="2"':''}></div><div class="field branch-field" id="branchField" ${role==='BRANCH_MANAGER'?'':'hidden'}><label for="authBranch">Assigned branch</label><select id="authBranch"><option value="branch_pal">Palanpur</option><option value="branch_ahm">Ahmedabad</option><option value="branch_meh">Mehsana</option><option value="branch_sur">Surat</option></select></div><div class="field"><label for="authEmail">Email address</label><input id="authEmail" name="email" type="email" autocomplete="username" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" name="password" type="password" autocomplete="${mode==='signin'?'current-password':'new-password'}" placeholder="${mode==='register'?'Minimum 8 characters':'Your password'}" required ${mode==='register'?'minlength="8"':''}></div><div class="field" id="confirmField" ${mode==='register'?'':'hidden'}><label for="authConfirm">Confirm password</label><input id="authConfirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again" ${mode==='register'?'required':''}></div><div class="error" id="authError" role="alert" aria-live="polite"></div><button class="submit" type="submit"><span id="submitLabel">${mode==='signin'?'Sign in securely':'Create my account'}</span><span aria-hidden="true">→</span></button><div class="secure"><span aria-hidden="true">♙</span> Secure role-based access</div></form><div class="role-access"><span class="role-label">STAFF ACCESS · CHOOSE YOUR ROLE</span><div class="roles">${Object.entries(labels).map(([key,label])=>`<button type="button" class="role-chip ${role===key?'active':''}" data-role="${key}">${label}</button>`).join('')}</div></div><button type="button" class="guest" id="guestButton">Continue browsing as guest</button></main></div>`;
+ gate.querySelector('#signInTab').onclick=()=>setMode('signin');gate.querySelector('#registerTab').onclick=()=>setMode('register');gate.querySelector('#authClose').onclick=()=>{gate.remove();document.body.style.overflow=''};gate.querySelector('#guestButton').onclick=()=>{gate.remove();document.body.style.overflow=''};
+ gate.querySelectorAll('[data-role]').forEach(button=>button.onclick=()=>{role=button.dataset.role;render()});gate.querySelector('#authForm').onsubmit=submit;document.body.style.overflow='hidden';
+ }
+ function setMode(next){mode=next;render()}
+ function showError(message){const error=gate.querySelector('#authError');if(error)error.textContent=message||''}
+ function selectedBranch(){return role==='BRANCH_MANAGER'?gate.querySelector('#authBranch').value:''}
+ function navigate(user){const returned=normalizeRole(user.role||role);if(!files[returned]){showError('Your account does not have a supported cinema role.');return}const session={name:user.name||user.fullName||'',email:user.email||'',role:returned,branchId:user.branchId||selectedBranch()};try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}if(files[returned]!==current){location.href=files[returned]+'#cl-session='+encodeURIComponent(JSON.stringify(session));return}showApp(session)}
+ async function submit(event){event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const email=gate.querySelector('#authEmail').value.trim().toLowerCase(),password=gate.querySelector('#authPassword').value,branchId=selectedBranch();
+ if(mode==='register'){
+  const name=gate.querySelector('#authName').value.trim(),confirm=gate.querySelector('#authConfirm').value;if(password.length<8){showError('Use at least 8 characters for your password.');return}if(password!==confirm){showError('Passwords do not match.');return}
+  const account={name,email,password,role,branchId};
+  if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),key=email+'|'+role;if(users[key]){showError('This email is already registered for the selected role.');return}users[key]=account;writeStore('cityLiteUsers',JSON.stringify(users));navigate(account)}catch(_){showError('Could not save this demo account in the browser.')}return}
+  try{const response=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(account)}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Account registration was not accepted.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema registration service. Please retry when it is online.')}return;
+ }
+ if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),user=users[email+'|'+role];if(!user||user.password!==password){showError('Email or password is incorrect for the selected role. Register first or choose the account role.');return}navigate({...user,branchId:user.branchId||branchId})}catch(_){showError('Browser storage is unavailable.')}return}
+ try{const response=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,role,branchId})}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Email, password, or role is incorrect.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema login service. Please retry when it is online.')}
+ }
+ render();
+})();
+</script></body>
+</html>
+
+

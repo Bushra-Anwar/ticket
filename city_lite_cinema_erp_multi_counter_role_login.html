@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CITY LITE • Cinema Palanpur ERP — Owner Command Center</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Playfair Display (Authoritative Serif), Plus Jakarta Sans (Clean UI), JetBrains Mono (Tabular/Financial) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#f5f2f2',
+            crimson: {
+              50: '#fef2f2',
+              100: '#fde3e3',
+              500: '#e11d24',
+              600: '#d31920',
+              700: '#b51218',
+              800: '#8f1116',
+              900: '#4a0b0d'
+            },
+            emeraldCustom: '#168a45',
+            ink: {
+              900: '#1c1818',
+              700: '#3d3535',
+              500: '#6e6464',
+              400: '#948989'
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            'card': '0 10px 30px -5px rgba(45, 20, 20, 0.05), 0 4px 12px -2px rgba(45, 20, 20, 0.03)',
+            'card-hover': '0 18px 38px -6px rgba(180, 25, 30, 0.09), 0 6px 16px -3px rgba(45, 20, 20, 0.05)',
+            'sidebar': '6px 0 32px -4px rgba(40, 15, 15, 0.07)',
+            'crimson-btn': '0 6px 16px -2px rgba(217, 35, 35, 0.38)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #f4f1f1;
+      background-image: 
+        radial-gradient(at 28% 12%, rgba(228, 175, 175, 0.28) 0px, transparent 48%),
+        radial-gradient(at 88% 36%, rgba(225, 165, 165, 0.22) 0px, transparent 45%),
+        radial-gradient(at 50% 78%, rgba(220, 185, 185, 0.2) 0px, transparent 55%);
+      color: #1c1818;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Hero & Card Radial Warmth */
+    .hero-surface {
+      background: linear-gradient(125deg, #ffffff 0%, #fcf5f5 52%, #f8e8e8 100%);
+      border: 1px solid #ede2e2;
+    }
+    .screen-card-warm {
+      background: linear-gradient(180deg, #ffffff 0%, #fdfafa 68%, #faefef 100%);
+      border: 1px solid #ece2e2;
+    }
+    .screen-card-neutral {
+      background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 70%, #f5f3f3 100%);
+      border: 1px solid #eae6e6;
+    }
+    .footer-laser-banner {
+      background: linear-gradient(90deg, #ffffff 0%, #fdfbfb 52%, #595354 78%, #363233 100%);
+      border: 1px solid #eae2e2;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f2eded;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d5c7c7;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b59e9e;
+    }
+
+    /* Tabular figures for crisp financial alignment */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Seat Grid transitions */
+    .seat-btn {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .seat-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.06);
+    }
+
+    /* Pulse indicator */
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.92); }
+    }
+    .live-dot {
+      animation: subtlePulse 2s infinite ease-in-out;
+    }
+  </style>
+<style id="royalRoleAuthDesign">
+#clAuthGate{position:fixed;inset:0;z-index:999999;display:grid;place-items:center;padding:16px;background:rgba(8,6,11,.94);backdrop-filter:blur(12px);font-family:Arial,Helvetica,sans-serif;color:#f7f4fa}#clAuthGate *{box-sizing:border-box}#clAuthGate .auth-shell{width:min(920px,100%);max-height:calc(100dvh - 32px);min-height:min(580px,calc(100dvh - 32px));display:grid;grid-template-columns:.82fr 1.18fr;overflow:hidden;border:1px solid rgba(205,187,220,.2);border-radius:25px;background:#110e16;box-shadow:0 28px 100px #0009}#clAuthGate .auth-brand{position:relative;isolation:isolate;overflow:hidden;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px;text-align:center;background:radial-gradient(circle at 50% 52%,#30203d,#17101f 72%)}#clAuthGate .auth-brand:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.3;background-image:radial-gradient(#9f8aad .8px,transparent .8px);background-size:16px 16px;mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}#clAuthGate .brand-mark{width:82px;height:82px;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#ffc258,#e58b13);color:#251529;font-size:42px;font-weight:900;transform:rotate(-7deg);box-shadow:0 15px 45px #f0a02b55}#clAuthGate .brand-copy{display:grid;gap:8px}#clAuthGate .brand-copy span{color:#c7b8d2;font-size:12px;letter-spacing:2px}#clAuthGate .brand-copy strong{font-size:26px;letter-spacing:1px;color:#fff}#clAuthGate .brand-copy small{color:#9b8aa6;font-size:11px;margin-top:4px}#clAuthGate .brand-orbit{position:absolute;width:350px;height:210px;border:1px solid #e8a63b45;border-radius:50%;transform:rotate(-22deg);pointer-events:none}#clAuthGate .auth-content{position:relative;display:flex;flex-direction:column;justify-content:center;overflow:auto;max-height:calc(100dvh - 34px);padding:42px clamp(26px,5vw,56px) 24px}#clAuthGate .auth-close{position:absolute;right:18px;top:16px;width:38px;height:38px;border:1px solid #ffffff22;border-radius:50%;background:transparent;color:#aaa0b3;font-size:22px;cursor:pointer}#clAuthGate .auth-close:hover{color:#fff;border-color:#eda32c}#clAuthGate .eyebrow{color:#eda32c;font-size:9px;font-weight:800;letter-spacing:2px}#clAuthGate h1{font-size:clamp(26px,3vw,34px);letter-spacing:-1px;margin:10px 0 6px;color:#f8f6fa}#clAuthGate .intro{font-size:12px;line-height:1.65;color:#a99eb0;margin:0 0 20px}#clAuthGate .auth-tabs{display:grid;grid-template-columns:1fr 1fr;padding:5px;border:1px solid #ffffff18;border-radius:12px;background:#18141f;margin-bottom:18px}#clAuthGate .auth-tabs button{height:39px;border:0;border-radius:8px;background:transparent;color:#968a9e;font-size:11px;font-weight:700;cursor:pointer}#clAuthGate .auth-tabs button.active{background:#33233f;color:#fff;box-shadow:0 2px 9px #0005}#clAuthGate form{display:grid;gap:11px}#clAuthGate .field{display:grid;gap:6px}#clAuthGate .field[hidden]{display:none!important}#clAuthGate label{color:#aaa0b2;font-size:10px;font-weight:700}#clAuthGate input{width:100%;height:48px;border:1px solid #ffffff20;border-radius:10px;padding:0 14px;background:#19151f;color:#f8f6fa;font-size:12px;outline:none}#clAuthGate input::placeholder{color:#685e70}#clAuthGate input:focus{border-color:#eda32c;box-shadow:0 0 0 3px #eda32c25}#clAuthGate .branch-field select{height:43px;width:100%;border:1px solid #ffffff20;border-radius:10px;background:#19151f;color:#f8f6fa;padding:0 12px;font-size:11px}#clAuthGate .error{min-height:0;color:#ff8585;font-size:10px}#clAuthGate .error:not(:empty){min-height:15px}#clAuthGate .submit{height:50px;border:0;border-radius:11px;background:linear-gradient(100deg,#ffc258,#e58b13);color:#26172b;display:flex;align-items:center;justify-content:center;gap:12px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 24px #e59a2633}#clAuthGate .submit:hover{filter:brightness(1.07);transform:translateY(-1px)}#clAuthGate .secure{display:flex;justify-content:center;gap:7px;color:#817488;font-size:9px;margin-top:1px}#clAuthGate .secure span{color:#65c895}#clAuthGate .role-access{margin-top:14px;padding-top:12px;border-top:1px solid #ffffff16}#clAuthGate .role-label{display:block;margin:0 0 8px;color:#817488;font-size:8px;font-weight:800;letter-spacing:1px}#clAuthGate .roles{display:flex;flex-wrap:wrap;gap:6px}#clAuthGate .role-chip{border:1px solid #ffffff1e;border-radius:999px;background:#19151f;color:#a99eb0;padding:7px 9px;font-size:9px;font-weight:700;cursor:pointer}#clAuthGate .role-chip:hover,#clAuthGate .role-chip.active{border-color:#eda32c;color:#ffc258;background:#eda32c14}#clAuthGate .guest{display:block;margin:12px auto 0;border:0;background:transparent;color:#93879b;font-size:10px;text-decoration:underline;cursor:pointer}@media(max-width:680px){#clAuthGate .auth-shell{grid-template-columns:1fr;min-height:0;max-height:calc(100dvh - 24px);overflow:auto;border-radius:20px}#clAuthGate .auth-brand{min-height:112px;flex-direction:row;justify-content:flex-start;gap:15px;padding:16px 20px;text-align:left}#clAuthGate .brand-mark{width:54px;height:54px;border-radius:16px;font-size:28px}#clAuthGate .brand-copy{gap:5px}#clAuthGate .brand-copy strong{font-size:18px}#clAuthGate .brand-copy span{font-size:8px}#clAuthGate .brand-copy small{font-size:9px}#clAuthGate .brand-orbit{width:220px;height:120px;left:50%;top:0}#clAuthGate .auth-content{max-height:none;overflow:visible;padding:25px 21px 20px}#clAuthGate .auth-close{right:12px;top:12px;width:33px;height:33px}}
+</style></head>
+<body class="min-h-screen antialiased selection:bg-crimson-600 selection:text-white">
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- MAIN WRAPPER -->
+  <div class="flex min-h-screen relative">
+
+    <!-- ================= LEFT FLOATING / FIXED SIDEBAR ================= -->
+    <aside id="sidebar" class="w-[248px] shrink-0 bg-white/95 backdrop-blur-md border-r border-[#ebe4e4] shadow-sidebar flex flex-col justify-between sticky top-0 h-screen z-30 select-none transition-all duration-300">
+      <!-- Top Brand & Navigation -->
+      <div class="p-4 overflow-y-auto">
+        <!-- Brand Logo Header -->
+        <div class="flex items-center gap-3 pb-4 mb-3 border-b border-[#f0eaea]">
+          <div class="w-9 h-9 rounded-lg bg-crimson-600 flex items-center justify-center text-white font-serif font-bold text-sm shadow-sm tracking-tighter shrink-0">
+            <span class="border border-white/40 px-1 py-0.5 rounded text-[11px] leading-none">CL</span>
+          </div>
+          <div class="leading-tight">
+            <h1 class="font-serif font-bold text-[16px] tracking-wide text-ink-900">CITY LITE</h1>
+            <p class="text-[8.5px] font-mono uppercase tracking-[0.14em] text-ink-400 mt-0.5">CINEMA PALANPUR • ERP</p>
+          </div>
+        </div>
+
+        <!-- Section 1: OPERATIONAL TERMINALS -->
+        <div class="mb-5">
+          <div class="px-2.5 mb-2 flex items-center justify-between">
+            <span class="text-[9px] font-mono font-semibold uppercase tracking-[0.14em] text-ink-400">OPERATIONAL TERMINALS</span>
+          </div>
+          <nav class="space-y-1" id="navOperational"></nav>
+        </div>
+
+        <!-- Section 2: EXECUTIVE MANAGEMENT -->
+        <div>
+          <div class="px-2.5 mb-2 flex items-center justify-between">
+            <span class="text-[9px] font-mono font-semibold uppercase tracking-[0.14em] text-ink-400">EXECUTIVE MANAGEMENT</span>
+          </div>
+          <nav class="space-y-1" id="navExecutive"></nav>
+        </div>
+      </div>
+
+      <!-- Bottom Live KDM Vault Widget (Matches Screenshot) -->
+      <div class="p-3.5 m-3 rounded-xl bg-[#faf7f7] border border-[#ece4e4]">
+        <div class="flex items-center justify-between text-[9px] font-mono uppercase tracking-wider text-ink-500 mb-1">
+          <span class="flex items-center gap-1.5 font-semibold text-ink-700">
+            <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+            LIVE KDM VAULT
+          </span>
+          <span class="text-ink-400">3/3 KEYS VALID</span>
+        </div>
+        <p class="text-[10.5px] font-medium text-ink-700 truncate" id="sidebarKdmText">Screen 1 • Dolby Atmos 7.1</p>
+        <div class="w-full h-1 bg-[#e6dede] rounded-full overflow-hidden mt-2">
+          <div class="bg-crimson-600 h-full w-4/5 rounded-full"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN RIGHT CONTENT AREA ================= -->
+    <div class="flex-1 flex flex-col min-w-0">
+
+      <!-- TOP STATUS BAR (Exact Match to Screenshot) -->
+      <header class="sticky top-0 z-20 bg-[#f6f3f3]/90 backdrop-blur-md border-b border-[#eae2e2] px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        <!-- Left System Telemetry Pills -->
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <button onclick="openModule('screens')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#e6dede] shadow-sm text-[10px] font-mono uppercase tracking-wider text-ink-700 hover:border-crimson-500 transition">
+            <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+            <span>SERVER SYNC ACTIVE (RAID-10)</span>
+          </button>
+
+          <button onclick="openModule('boxoffice')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#e6dede] shadow-sm text-[10px] font-mono uppercase tracking-wider text-ink-700 hover:border-crimson-500 transition">
+            <i data-lucide="printer" class="w-3 h-3 text-ink-500"></i>
+            <span>3/3 POS THERMAL ONLINE</span>
+          </button>
+        </div>
+
+        <!-- Right Clock, LIVE Badge & Executive Owner Profile -->
+        <div class="flex items-center gap-3">
+          <!-- Live IST Clock Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e6dede] shadow-sm text-[10.5px] font-mono text-ink-700">
+            <i data-lucide="clock" class="w-3 h-3 text-crimson-600"></i>
+            <span id="liveIstClock" class="tabular-nums font-medium">IST 21:42:18</span>
+          </div>
+
+          <!-- Red LIVE / ERP Pill -->
+          <div class="inline-flex items-center bg-white border border-[#e6dede] rounded-full p-0.5 shadow-sm">
+            <span class="px-2.5 py-0.5 rounded-full bg-crimson-600 text-white text-[9.5px] font-mono font-bold uppercase tracking-wider">LIVE</span>
+            <span class="px-2 py-0.5 text-[9.5px] font-mono font-semibold text-ink-500 uppercase">ERP</span>
+          </div>
+
+          <!-- Owner Profile -->
+          <div class="flex items-center gap-2.5 pl-2 border-l border-[#e5dddd]">
+            <div class="text-right leading-tight">
+              <div class="text-[12px] font-bold text-ink-900">Ashok Patel</div>
+              <div class="text-[9px] font-mono uppercase tracking-wider text-ink-400">EXECUTIVE OWNER</div>
+            </div>
+            <button onclick="showOwnerProfileModal()" title="Executive Owner Settings" class="w-8 h-8 rounded-full bg-[#7f1d1d] text-white flex items-center justify-center shadow-sm hover:ring-2 hover:ring-crimson-500/40 transition">
+              <i data-lucide="user" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- MAIN DYNAMIC WORKSPACE -->
+      <main class="flex-1 px-6 py-6 max-w-[1260px] w-full mx-auto space-y-6">
+
+        <!-- VIEW SWITCHBANNER (Visible only when browsing sub-modules so user can return to exact Command Center screenshot in 1 click) -->
+        <div id="subViewBreadcrumb" class="hidden items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#e8dfdf] shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <span class="px-2.5 py-1 rounded-md bg-crimson-50 text-crimson-700 font-mono text-[10px] font-bold uppercase tracking-wider" id="activeModuleTag">TERMINAL MODULE</span>
+            <span class="text-xs text-ink-500">All transactions made here update the <strong class="text-ink-900">Cinema Owner Command Center</strong> ledger in real time.</span>
+          </div>
+          <button onclick="openModule('owner')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-semibold shadow-sm transition">
+            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+            <span>Return to Owner Command Center</span>
+          </button>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- 1. DEFAULT VIEW: OWNER ERP COMMAND CENTER (EXACT SCREENSHOT MATCH)  -->
+        <!-- =================================================================== -->
+        <div id="view-owner" class="space-y-6">
+
+          <!-- HERO COMMAND CENTER BANNER CARD -->
+          <section class="hero-surface rounded-2xl p-6 shadow-card relative overflow-hidden">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+              <!-- Left Title & Status Pills -->
+              <div class="space-y-2.5 max-w-xl">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 border border-[#eadcdc] text-[9.5px] font-mono font-semibold uppercase tracking-wider text-crimson-700">
+                    <span class="w-1.5 h-1.5 rounded-full bg-crimson-600 live-dot"></span>
+                    ALL 3 AUDIS ONLINE
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 border border-[#e8e2e2] text-[9.5px] font-mono uppercase tracking-wider text-ink-500">
+                    <i data-lucide="refresh-cw" class="w-2.5 h-2.5 text-ink-400"></i>
+                    DCR LEDGER SYNC: LIVE
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 border border-[#eadcdc] text-[9.5px] font-mono uppercase tracking-wider text-crimson-700">
+                    <i data-lucide="sun" class="w-2.5 h-2.5 text-crimson-600"></i>
+                    AUTOMATED DAY CLOSING READY
+                  </span>
+                </div>
+
+                <h2 class="font-serif font-bold text-3xl sm:text-[34px] text-ink-900 tracking-tight leading-[1.15]">
+                  Cinema Owner Command<br class="hidden sm:inline" /> Center
+                </h2>
+
+                <p class="text-xs sm:text-[13px] text-ink-500 leading-relaxed">
+                  Flagship Palanpur • Multi-Screen Theatrical ERP • Dual GST &amp; Live<br class="hidden sm:inline" />
+                  Distributor Settlement Ledger
+                </p>
+              </div>
+
+              <!-- Right Action CTA Buttons -->
+              <div class="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
+                <button onclick="openDcrExportModal()" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#faf6f6] text-ink-900 border border-[#e3d8d8] shadow-sm text-[11px] font-mono font-semibold uppercase tracking-wider transition">
+                  <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-crimson-600"></i>
+                  <span>EXPORT DCR (PDF/EXCEL)</span>
+                </button>
+                <button onclick="openGstrDispatchModal()" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white shadow-crimson-btn text-[11px] font-mono font-semibold uppercase tracking-wider transition">
+                  <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                  <span>GSTR-1 FILE DISPATCH</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4 EXECUTIVE KPI METRIC CARDS ROW -->
+          <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+            <!-- KPI 1: GROSS BOX OFFICE -->
+            <div onclick="openModule('boxoffice')" class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between mb-3">
+                  <span class="text-[9.5px] font-mono font-semibold uppercase tracking-wider text-ink-400">GROSS BOX OFFICE</span>
+                  <div class="w-6 h-6 rounded-md bg-crimson-50 text-crimson-600 flex items-center justify-center">
+                    <i data-lucide="ticket" class="w-3.5 h-3.5"></i>
+                  </div>
+                </div>
+                <div class="font-serif font-bold text-[28px] text-ink-900 tabular-nums leading-none mb-2" id="kpiBoxOffice">₹1,42,850</div>
+                <div class="flex items-center gap-1 text-[11px] font-medium text-crimson-600">
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                  <span id="kpiBoxGrowth">+14.2% vs Yesterday</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 px-3 pb-2.5 rounded-xl bg-[#faf7f7] border border-[#f0eaea] text-[11px] space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-ink-500">Overall Occupancy:</span>
+                  <span class="font-mono font-bold text-ink-900" id="kpiOverallOcc">81.4%</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-ink-500">Admissions:</span>
+                  <span class="font-mono font-medium text-ink-700" id="kpiTotalAdmissions">642 Tix (Aud 1-3)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI 2: CONCESSION F&B REVENUE -->
+            <div onclick="openModule('concession')" class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between mb-3">
+                  <span class="text-[9.5px] font-mono font-semibold uppercase tracking-wider text-ink-400 leading-tight">CONCESSION F&amp;B<br/>REVENUE</span>
+                  <div class="w-6 h-6 rounded-md bg-crimson-50 text-crimson-600 flex items-center justify-center">
+                    <i data-lucide="coffee" class="w-3.5 h-3.5"></i>
+                  </div>
+                </div>
+                <div class="font-serif font-bold text-[28px] text-ink-900 tabular-nums leading-none mb-2" id="kpiFnbRevenue">₹48,600</div>
+                <div class="flex items-center gap-1.5 text-[11px] text-ink-500">
+                  <i data-lucide="trending-up" class="w-3.5 h-3.5 text-ink-400"></i>
+                  <span id="kpiSphText">Avg SPH: ₹154.20</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 px-3 pb-2.5 rounded-xl bg-[#faf7f7] border border-[#f0eaea] text-[11px] space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-ink-500">Combo Conversion:</span>
+                  <span class="font-mono font-bold text-ink-900">68% attach rate</span>
+                </div>
+                <div class="flex items-start justify-between gap-2">
+                  <span class="text-ink-500 shrink-0">Top Item:</span>
+                  <span class="text-right font-medium text-ink-700 leading-tight">XL Caramel Tub + Coke</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI 3: COMBINED NET REVENUE -->
+            <div onclick="openModule('ledger')" class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between mb-3">
+                  <span class="text-[9.5px] font-mono font-semibold uppercase tracking-wider text-ink-400">COMBINED NET REVENUE</span>
+                  <div class="w-6 h-6 rounded-md bg-crimson-50 text-crimson-600 flex items-center justify-center">
+                    <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
+                  </div>
+                </div>
+                <div class="font-serif font-bold text-[28px] text-ink-900 tabular-nums leading-none mb-2" id="kpiCombinedRevenue">₹1,91,450</div>
+                <div class="text-[11px] text-ink-500">Today's Total Run Rate</div>
+              </div>
+
+              <div class="mt-4 pt-3 px-3 pb-3 rounded-xl bg-[#faf7f7] border border-[#f0eaea]">
+                <div class="grid grid-cols-3 text-[10px] font-mono text-ink-500 mb-1.5">
+                  <div>UPI<br/><strong class="text-ink-900" id="splitUpiLabel">64%</strong></div>
+                  <div class="text-center">Cash<br/><strong class="text-ink-900" id="splitCashLabel">23%</strong></div>
+                  <div class="text-right">Card<br/><strong class="text-ink-900" id="splitCardLabel">13%</strong></div>
+                </div>
+                <div class="w-full h-1.5 rounded-full bg-[#e6dede] overflow-hidden flex gap-0.5">
+                  <div class="bg-crimson-600 h-full" style="width: 64%"></div>
+                  <div class="bg-crimson-800 h-full" style="width: 23%"></div>
+                  <div class="bg-ink-400 h-full" style="width: 13%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI 4: TILL AUDIT TOTAL -->
+            <div onclick="toggleSupervisorSignoff()" class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between mb-3">
+                  <span class="text-[9.5px] font-mono font-semibold uppercase tracking-wider text-ink-400">TILL AUDIT TOTAL</span>
+                  <div class="w-6 h-6 rounded-md bg-crimson-50 text-crimson-600 flex items-center justify-center">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                  </div>
+                </div>
+                <div class="font-serif font-bold text-[28px] text-ink-900 tabular-nums leading-none mb-2" id="kpiTillAudit">₹84,200</div>
+                <div class="flex items-start gap-1 text-[10.5px] text-crimson-600 leading-tight">
+                  <span class="font-bold">⚑</span>
+                  <span>Flagged surplus: ₹50 in Desk #1</span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2.5 px-3 pb-2.5 rounded-xl bg-[#faf7f7] border border-[#f0eaea] flex items-center justify-between">
+                <div>
+                  <div class="text-[9px] font-mono uppercase tracking-wider text-ink-400">Verification</div>
+                  <div class="text-[11px] font-medium text-ink-800 leading-tight mt-0.5">Dual<br/>Supervisor<br/>Sign-off</div>
+                </div>
+                <span id="supervisorBadge" class="px-2 py-0.5 rounded bg-crimson-50 border border-crimson-100 text-crimson-700 font-mono text-[9px] font-bold uppercase tracking-wider">
+                  VERIFIED
+                </span>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- REAL-TIME HALL TELEMETRY: MULTI-AUDITORIUM OPERATIONS DISPATCHER -->
+          <section class="space-y-3">
+            <div class="flex flex-wrap items-end justify-between gap-2">
+              <div>
+                <div class="text-[9px] font-mono font-bold uppercase tracking-[0.16em] text-crimson-600">REAL-TIME HALL TELEMETRY</div>
+                <h3 class="font-serif font-bold text-xl text-ink-900">Multi-Auditorium Operations Dispatcher</h3>
+              </div>
+              <div class="text-[10px] font-mono uppercase tracking-widest text-ink-500">
+                3 / 3 SCREENS ACTIVE • PALANPUR SITE
+              </div>
+            </div>
+
+            <!-- 3 Screen Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" id="auditoriumCardsGrid">
+              <!-- Populated dynamically by renderAuditoriumCards() to stay in sync with bookings -->
+            </div>
+          </section>
+
+          <!-- MIDDLE SPLIT: STATUTORY DUAL GST CALCULATION & DISTRIBUTOR SETTLEMENTS -->
+          <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+
+            <!-- LEFT 7 COLS: COMPLIANCE ENGINE - Statutory Dual GST Calculation -->
+            <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+              <div>
+                <div class="text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-crimson-600 mb-0.5">COMPLIANCE ENGINE</div>
+                <h3 class="font-serif font-bold text-xl text-ink-900">Statutory Dual GST Calculation</h3>
+                <p class="text-[11px] text-ink-500 font-mono mt-0.5">Municipal Cinema Tax (C&amp;S) Act • GSTIN: 24AAAPC2209H1ZV</p>
+
+                <div class="mt-3 mb-4">
+                  <button onclick="downloadGstrJson()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#faf7f7] hover:bg-crimson-50 border border-[#e6dddd] text-[10px] font-mono font-semibold text-ink-700 uppercase tracking-wider transition">
+                    <i data-lucide="code-2" class="w-3 h-3 text-crimson-600"></i>
+                    <span>EXPORT GSTR-1 JSON</span>
+                  </button>
+                </div>
+
+                <!-- Statutory GST Table -->
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse">
+                    <thead>
+                      <tr class="border-y border-[#eee8e8] text-[9px] font-mono uppercase tracking-wider text-ink-400">
+                        <th class="py-2.5 pr-2">SLAB /<br/>CATEGORY</th>
+                        <th class="py-2.5 px-2">RATE</th>
+                        <th class="py-2.5 px-2">TAXABLE<br/>BASE</th>
+                        <th class="py-2.5 px-2">CGST</th>
+                        <th class="py-2.5 px-2">SGST</th>
+                        <th class="py-2.5 pl-2 text-right">TAX<br/>LIABILITY</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#f3eeee] text-xs font-mono tabular-nums" id="gstTableBody">
+                      <!-- Dynamically computed from live state -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Total Day Tax Liability Footer Box -->
+              <div class="mt-5 p-4 rounded-xl bg-[#faf6f6] border border-[#ede2e2] flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-white border border-[#e8dfdf] flex items-center justify-center text-crimson-600 shadow-sm">
+                    <i data-lucide="landmark" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <div class="text-[9px] font-mono uppercase tracking-wider text-ink-400">TOTAL DAY TAX LIABILITY</div>
+                    <div class="font-serif font-bold text-xl text-ink-900 tabular-nums" id="totalGstLiabilityDisplay">₹24,974.00</div>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-[9px] font-mono font-bold uppercase tracking-wider text-crimson-600">HSN 999614 SAC SYNCHRONIZED</div>
+                  <div class="text-[10.5px] text-ink-500 mt-0.5">Auto-reconciliation at 23:59:59 IST</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT 5 COLS: DISTRIBUTION CONTRACTS - Distributor Settlements -->
+            <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-4">
+                  <div>
+                    <div class="text-[9px] font-mono font-bold uppercase tracking-[0.15em] text-crimson-600 mb-0.5">DISTRIBUTION CONTRACTS</div>
+                    <h3 class="font-serif font-bold text-xl text-ink-900">Distributor Settlements</h3>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-md bg-[#faf6f6] border border-[#e8dfdf] text-[9.5px] font-mono text-ink-500">DCR • Wk 2</span>
+                </div>
+
+                <!-- 3 Distributor Rows -->
+                <div class="space-y-2.5" id="distributorRowsContainer">
+                  <div onclick="openModule('distributors')" class="p-3.5 rounded-xl bg-[#faf7f7] hover:bg-[#f7f0f0] border border-[#eee6e6] flex items-center justify-between cursor-pointer transition">
+                    <div>
+                      <div class="font-bold text-xs text-ink-900">Yash Raj Films</div>
+                      <div class="text-[11px] text-ink-500 mt-0.5">Stree 2 • 50.0% Net Share</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-mono font-bold text-xs text-ink-900 tabular-nums" id="distYrfAmt">₹24,100</div>
+                      <div class="text-[9.5px] font-mono text-crimson-600 mt-0.5">Week 1 Hold</div>
+                    </div>
+                  </div>
+
+                  <div onclick="openModule('distributors')" class="p-3.5 rounded-xl bg-[#faf7f7] hover:bg-[#f7f0f0] border border-[#eee6e6] flex items-center justify-between cursor-pointer transition">
+                    <div>
+                      <div class="font-bold text-xs text-ink-900">PVR INOX Pictures</div>
+                      <div class="text-[11px] text-ink-500 mt-0.5">Deadpool &amp; Wolverine • 42.5% Net</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-mono font-bold text-xs text-ink-900 tabular-nums" id="distPvrAmt">₹16,320</div>
+                      <div class="text-[9.5px] font-mono text-ink-400 mt-0.5">Week 2 Hold</div>
+                    </div>
+                  </div>
+
+                  <div onclick="openModule('distributors')" class="p-3.5 rounded-xl bg-[#faf7f7] hover:bg-[#f7f0f0] border border-[#eee6e6] flex items-center justify-between cursor-pointer transition">
+                    <div>
+                      <div class="font-bold text-xs text-ink-900">Gujarati Regional Dist.</div>
+                      <div class="text-[11px] text-ink-500 mt-0.5">Fakt Purusho Maate • 47.5% Net</div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-mono font-bold text-xs text-ink-900 tabular-nums" id="distGujAmt">₹14,155</div>
+                      <div class="text-[9.5px] font-mono text-ink-400 mt-0.5">Week 1 Regional</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Payable & Settle CTA -->
+              <div class="mt-5 pt-4 border-t border-[#eee6e6] flex items-center justify-between gap-3">
+                <div>
+                  <div class="text-[9px] font-mono uppercase tracking-wider text-ink-400">TOTAL PAYABLE<br/>ACCRUED</div>
+                  <div class="font-serif font-bold text-xl text-ink-900 tabular-nums mt-0.5" id="totalDistributorPayable">₹54,575</div>
+                </div>
+                <button id="btnSettleLedger" onclick="settleDistributorLedger()" class="px-4 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-[10px] font-bold uppercase tracking-wider shadow-crimson-btn transition">
+                  SETTLE &amp; ISSUE<br/>CREDIT
+                </button>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- BOTTOM 3-COLUMN OPERATIONAL CARDS ROW -->
+          <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+            <!-- COL 1: Concession Stock Warnings -->
+            <div class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="package-Check" class="w-4 h-4 text-crimson-600"></i>
+                    <h4 class="font-serif font-bold text-base text-ink-900 leading-snug">Concession Stock<br/>Warnings</h4>
+                  </div>
+                  <span id="stockAlertBadge" class="px-2 py-0.5 rounded bg-crimson-50 border border-crimson-100 text-crimson-700 font-mono text-[9px] font-bold uppercase tracking-wider">
+                    LIVE<br/>ALERT
+                  </span>
+                </div>
+
+                <div class="space-y-2.5" id="stockWarningsList">
+                  <!-- Rendered dynamically from inventory state -->
+                </div>
+              </div>
+
+              <button onclick="triggerVendorPoRestock()" class="mt-4 w-full py-2.5 rounded-xl bg-[#f3efef] hover:bg-crimson-50 hover:text-crimson-700 text-ink-700 font-mono text-[9.5px] font-bold uppercase tracking-wider border border-[#e5dddd] transition">
+                DISPATCH PALANPUR VENDOR PO
+              </button>
+            </div>
+
+            <!-- COL 2: Cash Drawers EOD Status -->
+            <div class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-4 h-4 text-ink-700"></i>
+                    <h4 class="font-serif font-bold text-base text-ink-900 leading-snug">Cash Drawers EOD<br/>Status</h4>
+                  </div>
+                  <span class="text-[9.5px] font-mono text-ink-400 text-right">DESK #01 •<br/>#02</span>
+                </div>
+
+                <div class="space-y-3">
+                  <div class="p-3.5 rounded-xl bg-[#faf7f7] border border-[#eee6e6]">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-bold text-xs text-ink-900">Counter 1 • Box Office</div>
+                        <div class="text-[10.5px] text-ink-500 mt-0.5">Operator: Rajesh S. (ID: 042)</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="font-mono font-bold text-xs text-ink-900 tabular-nums" id="drawer1Amt">₹48,250</div>
+                        <div class="text-[9.5px] font-mono text-crimson-600">+₹50 Surplus</div>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-[#ece4e4] text-[9.5px] font-mono text-ink-400">
+                      <span>Closing Time: 22:30 IST</span>
+                      <span class="px-1.5 py-0.5 rounded bg-white border border-[#e5dddd] text-ink-700">Matched</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3.5 rounded-xl bg-[#faf7f7] border border-[#eee6e6]">
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-bold text-xs text-ink-900">Counter 2 • Candy Bar</div>
+                        <div class="text-[10.5px] text-ink-500 mt-0.5">Operator: Bhavna P. (ID: 019)</div>
+                      </div>
+                      <div class="text-right">
+                        <div class="font-mono font-bold text-xs text-ink-900 tabular-nums" id="drawer2Amt">₹35,950</div>
+                        <div class="text-[9.5px] font-mono text-ink-400">Exact Zero Variance</div>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-2.5 pt-2 border-t border-[#ece4e4] text-[9.5px] font-mono text-ink-400">
+                      <span>Closing Time: 23:00 IST</span>
+                      <span class="px-1.5 py-0.5 rounded bg-white border border-[#e5dddd] text-ink-700">Submitted</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="openSafeDepositModal()" class="mt-4 w-full py-2.5 rounded-xl bg-[#f3efef] hover:bg-crimson-50 hover:text-crimson-700 text-ink-700 font-mono text-[9.5px] font-bold uppercase tracking-wider border border-[#e5dddd] transition">
+                GENERATE SAFE DEPOSIT SLIP
+              </button>
+            </div>
+
+            <!-- COL 3: Security Audit Trail -->
+            <div class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-4">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-4 h-4 text-crimson-600"></i>
+                    <h4 class="font-serif font-bold text-base text-ink-900">Security Audit Trail</h4>
+                  </div>
+                  <span class="text-[9.5px] font-mono font-bold text-crimson-600 uppercase">SHA-256</span>
+                </div>
+
+                <div class="space-y-2.5" id="ownerAuditTrailList">
+                  <!-- Populated from live audit log state -->
+                </div>
+              </div>
+
+              <div class="mt-4 pt-2 flex items-center justify-between text-[10px] font-mono">
+                <span class="flex items-center gap-1.5 text-ink-500">
+                  <span class="w-1.5 h-1.5 rounded-full bg-crimson-600"></span>
+                  Immutable Event Log
+                </span>
+                <button onclick="openModule('audit')" class="font-bold text-crimson-600 hover:underline uppercase tracking-wider">
+                  VIEW MASTER LOG
+                </button>
+              </div>
+            </div>
+
+          </section>
+
+          <!-- BOTTOM LASER PROJECTION TELEMETRY BANNER (EXACT MATCH) -->
+          <section class="footer-laser-banner rounded-2xl p-6 shadow-card flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative overflow-hidden">
+            <div class="space-y-1.5 max-w-xl">
+              <div class="flex items-center gap-2 text-[9.5px] font-mono uppercase tracking-[0.15em] text-ink-500">
+                <span class="w-2 h-2 rounded-full bg-crimson-600 live-dot"></span>
+                <span>CITY LITE CINEMA • PALANPUR ARCHITECTURE</span>
+              </div>
+              <h3 class="font-serif font-bold text-2xl text-ink-900">
+                Direct Laser Projection • Soundstage 7.1 Rig
+              </h3>
+              <p class="text-xs text-ink-500 leading-relaxed">
+                Real-time KDM licensing keys confirmed across Christie 4K and Barco digital systems. Automated Day-Closing schedule primed for 23:59:59 IST.
+              </p>
+            </div>
+
+            <!-- Right Dark Glass Countdown & Lock Register CTA -->
+            <div class="flex items-center gap-5 self-start lg:self-center bg-black/25 backdrop-blur-md px-5 py-3.5 rounded-xl border border-white/15 text-white">
+              <div class="text-right">
+                <div class="text-[8.5px] font-mono uppercase tracking-widest text-white/75">EOD AUTOMATED CLOSE</div>
+                <div class="font-serif font-bold text-xl tracking-tight tabular-nums" id="eodCountdownTimer">02h 17m Rem.</div>
+              </div>
+              <button id="btnLockSafe" onclick="toggleSafeLock()" class="px-4 py-2.5 rounded-lg bg-white/95 hover:bg-white text-ink-900 font-mono text-[9.5px] font-bold uppercase tracking-wider shadow transition">
+                LOCK SAFE &amp; CLOSE<br/>REGISTER
+              </button>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- 2. INTERACTIVE SIDEBAR WORKSPACE CONTAINER (ALL 10 OTHER MODULES)   -->
+        <!-- =================================================================== -->
+        <div id="view-dynamic-module" class="hidden space-y-6"></div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= UNIVERSAL INTERACTIVE MODAL (HALL MAP, DCR, GSTR-1, ETC.) ================= -->
+  <div id="modalOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-[#e6dddd] shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden animate-fadeIn">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-[#faf6f6] border-b border-[#ece2e2] flex items-center justify-between">
+        <div>
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600" id="modalSubtitle">PALANPUR TELEMETRY</span>
+          <h3 class="font-serif font-bold text-xl text-ink-900" id="modalTitle">Modal Title</h3>
+        </div>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-white border border-[#e4dada] flex items-center justify-center text-ink-500 hover:text-crimson-600 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div id="modalBody" class="p-6 overflow-y-auto space-y-4 flex-1"></div>
+      <!-- Modal Footer -->
+      <div id="modalFooter" class="px-6 py-3.5 bg-[#faf6f6] border-t border-[#ece2e2] flex items-center justify-end gap-2.5"></div>
+    </div>
+  </div>
+
+  <!-- ================= APPLICATION STATE & INTERACTIVE ENGINE ================= -->
+  <script>
+    // ---------------------------------------------------------------------------
+    // 1. MASTER REAL-TIME APPLICATION STATE
+    // ---------------------------------------------------------------------------
+    const state = {
+      activeModule: 'owner',
+      expandedSidebarGroup: null,
+      supervisorVerified: true,
+      safeLocked: false,
+      distributorsSettled: false,
+
+      // Financials matching exact screenshot numbers initially
+      grossBoxOffice: 142850,
+      fnbRevenue: 48600,
+      tillAuditTotal: 84200,
+      drawer1Cash: 48250,
+      drawer2Cash: 35950,
+
+      // Tax Base Breakdown matching exact screenshot table
+      gstSlabs: {
+        highTicketBase: 108055, // 18% slab (CGST 9,725 + SGST 9,725 = 19,450)
+        lowTicketBase: 26750,   // 12% slab (CGST 1,605 + SGST 1,605 = 3,210)
+        concessionBase: 46286   // 5% slab  (CGST 1,157 + SGST 1,157 = 2,314)
+      },
+
+      // 3 Auditoriums matching screenshot telemetry
+      screens: [
+        {
+          id: 1,
+          badge: 'SCREEN 1',
+          techSpec: 'DOLBY ATMOS 7.1 • 4K LASER',
+          movie: 'Stree 2',
+          cert: 'UA',
+          showtime: '18:30 Evening Show • 2h 29m',
+          occupied: 264,
+          capacity: 298,
+          gross: 48200,
+          ticketPrice: 220,
+          barColor: 'crimson',
+          cardStyle: 'screen-card-warm',
+          distributor: 'Yash Raj Films',
+          sharePct: 50.0,
+          kdmKey: 'KDM-CHRISTIE-S1-9941A',
+          lampTemp: '38.4°C',
+          audioDb: '85.0 dB',
+          bookedSeats: new Set(['A3','A4','A5','B2','B3','B4','B5','B6','C1','C2','C3','C4','C5','C6','C7','D2','D3','D4','D5','D6','E1','E2','E3','E4','E5','E6','E7','E8','F3','F4','F5','F6'])
+        },
+        {
+          id: 2,
+          badge: 'SCREEN 2',
+          techSpec: 'DIGITAL 2K • 7.1 SURROUND',
+          movie: 'Fakt Purusho Maate',
+          cert: 'U',
+          showtime: '19:15 Show • 2h 14m',
+          occupied: 187,
+          capacity: 242,
+          gross: 29800,
+          ticketPrice: 160,
+          barColor: 'emerald',
+          cardStyle: 'screen-card-neutral',
+          distributor: 'Gujarati Regional Dist.',
+          sharePct: 47.5,
+          kdmKey: 'KDM-BARCO-S2-7720B',
+          lampTemp: '36.9°C',
+          audioDb: '82.5 dB',
+          bookedSeats: new Set(['A2','A3','B3','B4','B5','C2','C3','C4','C5','C6','D1','D2','D3','D4','E3','E4','E5','F2','F3','F4'])
+        },
+        {
+          id: 3,
+          badge: 'SCREEN 3',
+          techSpec: 'GOLD VIP RECLINER • ATMOS',
+          movie: 'Deadpool & Wolverine',
+          cert: 'A',
+          showtime: '20:00 Show • 2h 08m',
+          occupied: 96,
+          capacity: 105,
+          gross: 38400,
+          ticketPrice: 380,
+          barColor: 'crimson',
+          cardStyle: 'screen-card-warm',
+          distributor: 'PVR INOX Pictures',
+          sharePct: 42.5,
+          kdmKey: 'KDM-LASER-S3-4482V',
+          lampTemp: '37.2°C',
+          audioDb: '86.5 dB',
+          bookedSeats: new Set(['A1','A2','A3','A4','B1','B2','B3','B4','B5','C2','C3','C4','C5','D1','D2','D3','D4','D5','E2','E3','E4'])
+        }
+      ],
+
+      // Concession Inventory Warnings (Exact match to screenshot)
+      stockItems: [
+        {
+          id: 'PCK-409',
+          name: 'Caramel Popcorn Kernels',
+          sub: 'Batch SKU PCK-409',
+          qtyText: '4.2 kg left',
+          status: 'CRITICAL LOW',
+          critical: true,
+          unitPrice: 240
+        },
+        {
+          id: 'BIB-18L',
+          name: 'Fountain Cola Syrup 18L',
+          sub: 'Post-mix BIB Tank',
+          qtyText: '1 can left',
+          status: 'RESTOCK',
+          critical: false,
+          unitPrice: 1850
+        },
+        {
+          id: 'FLV-09',
+          name: 'Flavacol Seasoning Salt',
+          sub: 'Theatre Butter Salt',
+          qtyText: '2 pouches',
+          status: '3-DAY BUFFER',
+          critical: false,
+          unitPrice: 420
+        }
+      ],
+
+      // Concession POS Menu Items
+      fnbMenu: [
+        { id: 'c1', name: 'XL Caramel Tub + 2 Coke Combo', category: 'Combo', price: 420, gst: 5 },
+        { id: 'c2', name: 'Large Salted Popcorn', category: 'Popcorn', price: 240, gst: 5 },
+        { id: 'c3', name: 'Loaded Jalapeño Cheese Nachos', category: 'Snacks', price: 260, gst: 5 },
+        { id: 'c4', name: 'Fountain Diet Coke (Large)', category: 'Beverage', price: 140, gst: 5 },
+        { id: 'c5', name: 'VIP Recliner Gourmet Platter', category: 'VIP', price: 540, gst: 5 },
+        { id: 'c6', name: 'Filter Cold Coffee Frappe', category: 'Beverage', price: 180, gst: 5 }
+      ],
+      fnbCart: [],
+
+      // Security Audit Trail (Exact match to screenshot)
+      auditLogs: [
+        {
+          id: 'AUD-901',
+          title: 'Seat Upgrade: E12 → VIP B04',
+          time: '21:18:12',
+          detail: 'Cashier #01 • Difference ₹120 charged via UPI',
+          hash: 'Hash: 9f4b...77a1 • Verified',
+          icon: 'lock',
+          severity: 'normal'
+        },
+        {
+          id: 'AUD-902',
+          title: 'F&B Combo Dispense #419',
+          time: '21:14:02',
+          detail: 'POS Concession • 2x Cheese Nachos + Diet Coke',
+          hash: 'Hash: 3c19...90e4 • Verified',
+          icon: 'utensils',
+          severity: 'normal'
+        },
+        {
+          id: 'AUD-903',
+          title: 'Refund Approval Tix #7819',
+          time: '20:51:40',
+          detail: 'Manager Auth PIN • ₹360 reversed to UPI VPA',
+          hash: 'Hash: 2d8a...1210 • Validated',
+          icon: 'rotate-ccw',
+          severity: 'flagged'
+        }
+      ],
+
+      // Recent QR Scans for Gate Scanner Module
+      qrScans: [
+        { pnr: 'CL-99482-S1', movie: 'Stree 2', seats: 'E11, E12', audi: 'Screen 1', time: '21:39:14', status: 'VALID' },
+        { pnr: 'CL-99479-S3', movie: 'Deadpool & Wolverine', seats: 'VIP B01, B02', audi: 'Screen 3', time: '21:36:50', status: 'VALID' },
+        { pnr: 'CL-88210-S2', movie: 'Fakt Purusho Maate', seats: 'C08, C09, C10', audi: 'Screen 2', time: '21:31:05', status: 'DUPLICATE' }
+      ]
+    };
+
+    // Sidebar Menu Configuration (Matches all 11 items + expandable quick sub-features)
+    const sidebarConfig = {
+      operational: [
+        { id: 'owner', label: 'Owner ERP', icon: 'shield', badge: null },
+        { id: 'manager', label: 'Manager Ops', icon: 'sliders', subItems: ['Shift Roster', 'HVAC & Booth', 'PIN Overrides'] },
+        { id: 'boxoffice', label: 'Box Office Desk POS', icon: 'ticket', subItems: ['Screen 1 Booking', 'Screen 2 Booking', 'VIP Recliner Desk'] },
+        { id: 'concession', label: 'Concession F&B POS', icon: 'coffee', subItems: ['Candy Bar Counter 1', 'VIP Butler Express'] },
+        { id: 'scanner', label: 'Gate QR Scanner', icon: 'qr-code', badge: 'LIVE' }
+      ],
+      executive: [
+        { id: 'screens', label: 'Screens & Auditoriums', icon: 'tv', subItems: ['Christie 4K Telemetry', 'Dolby Atmos CP950', 'KDM Key Vault'] },
+        { id: 'movies', label: 'Movies & Schedules', icon: 'film', subItems: ['Showtime Matrix', 'Interval Pacing'] },
+        { id: 'inventory', label: 'Store & Inventory', icon: 'package', subItems: ['Stock Ledger', 'Vendor Purchase Orders'] },
+        { id: 'ledger', label: 'Ledger & GST Returns', icon: 'file-text', subItems: ['GSTR-1 Table', 'ITC Reconciliation'] },
+        { id: 'distributors', label: 'Distributor Settlements', icon: 'handshake', subItems: ['YRF Contract', 'PVR INOX Split'] },
+        { id: 'audit', label: 'Audit Security Logs', icon: 'shield-check', subItems: ['SHA-256 Chain', 'Override Alerts'] }
+      ]
+    };
+
+    // ---------------------------------------------------------------------------
+    // 2. FORMATTING HELPERS (INDIAN RUPEE NUMBER SYSTEM)
+    // ---------------------------------------------------------------------------
+    function formatINR(num, decimals = 0) {
+      const n = Number(num) || 0;
+      return '₹' + n.toLocaleString('en-IN', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    function showToast(title, message, type = 'crimson') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const borderColor = type === 'emerald' ? 'border-emerald-600' : 'border-crimson-600';
+      const dotColor = type === 'emerald' ? 'bg-emerald-600' : 'bg-crimson-600';
+      toast.className = `pointer-events-auto bg-white/95 backdrop-blur-md border-l-4 ${borderColor} border border-[#e6dddd] rounded-xl p-3.5 shadow-xl flex items-start gap-3 transition-all duration-300`;
+      toast.innerHTML = `
+        <span class="w-2.5 h-2.5 rounded-full ${dotColor} mt-1 shrink-0"></span>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-bold text-ink-900">${title}</div>
+          <div class="text-[11px] text-ink-500 mt-0.5 leading-snug">${message}</div>
+        </div>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 3600);
+    }
+
+    // ---------------------------------------------------------------------------
+    // 3. SIDEBAR NAVIGATION RENDERER (WITH WORKING SUB-MENUS & ACTIVE STATES)
+    // ---------------------------------------------------------------------------
+    function renderSidebar() {
+      const renderGroup = (items, containerId) => {
+        const container = document.getElementById(containerId);
+        container.innerHTML = items.map(item => {
+          const isActive = state.activeModule === item.id;
+          const isExpanded = state.expandedSidebarGroup === item.id;
+          const hasSub = Array.isArray(item.subItems) && item.subItems.length > 0;
+
+          return `
+            <div>
+              <div class="flex items-center">
+                <button
+                  onclick="openModule('${item.id}')"
+                  class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[12px] font-medium transition-all ${
+                    isActive
+                      ? 'bg-crimson-600 text-white font-semibold shadow-crimson-btn'
+                      : 'text-ink-700 hover:bg-[#f7f2f2] hover:text-ink-900'
+                  }"
+                >
+                  <span class="flex items-center gap-2.5 truncate">
+                    <i data-lucide="${item.icon}" class="w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-ink-500'}"></i>
+                    <span class="truncate">${item.label}</span>
+                  </span>
+
+                  <span class="flex items-center gap-1">
+                    ${item.badge ? `<span class="px-1.5 py-0.2 rounded text-[8.5px] font-mono font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-crimson-50 text-crimson-600'}">${item.badge}</span>` : ''}
+                    ${hasSub ? `
+                      <span onclick="event.stopPropagation(); toggleSidebarSub('${item.id}')" class="p-0.5 rounded hover:bg-black/10">
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180' : ''} ${isActive ? 'text-white/90' : 'text-ink-400'}"></i>
+                      </span>
+                    ` : ''}
+                  </span>
+                </button>
+              </div>
+
+              ${hasSub && isExpanded ? `
+                <div class="ml-6 mt-1 pl-2.5 border-l border-[#e8dfdf] space-y-1 py-1">
+                  ${item.subItems.map(sub => `
+                    <button
+                      onclick="openModule('${item.id}', '${sub}')"
+                      class="w-full text-left px-2.5 py-1.5 rounded-lg text-[11px] text-ink-500 hover:text-crimson-600 hover:bg-crimson-50/50 transition flex items-center justify-between"
+                    >
+                      <span>${sub}</span>
+                      <i data-lucide="arrow-right" class="w-2.5 h-2.5 opacity-60"></i>
+                    </button>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+      };
+
+      renderGroup(sidebarConfig.operational, 'navOperational');
+      renderGroup(sidebarConfig.executive, 'navExecutive');
+      lucide.createIcons();
+    }
+
+    function toggleSidebarSub(id) {
+      state.expandedSidebarGroup = state.expandedSidebarGroup === id ? null : id;
+      renderSidebar();
+    }
+
+    // ---------------------------------------------------------------------------
+    // 4. OWNER ERP DASHBOARD RENDERERS (SYNCHRONIZED WITH ALL MODULES)
+    // ---------------------------------------------------------------------------
+    function updateOwnerDashboardKPIs() {
+      // Total Admissions & Occupancy across all 3 screens
+      const totalOccupied = state.screens.reduce((acc, s) => acc + s.occupied, 0);
+      const totalCapacity = state.screens.reduce((acc, s) => acc + s.capacity, 0);
+      const occPct = ((totalOccupied / totalCapacity) * 100).toFixed(1);
+
+      document.getElementById('kpiBoxOffice').textContent = formatINR(state.grossBoxOffice);
+      document.getElementById('kpiFnbRevenue').textContent = formatINR(state.fnbRevenue);
+      document.getElementById('kpiCombinedRevenue').textContent = formatINR(state.grossBoxOffice + state.fnbRevenue);
+      document.getElementById('kpiTillAudit').textContent = formatINR(state.tillAuditTotal);
+
+      document.getElementById('kpiOverallOcc').textContent = `${occPct}%`;
+      document.getElementById('kpiTotalAdmissions').textContent = `${totalOccupied} Tix (Aud 1-3)`;
+
+      // Cash Drawers
+      document.getElementById('drawer1Amt').textContent = formatINR(state.drawer1Cash);
+      document.getElementById('drawer2Amt').textContent = formatINR(state.drawer2Cash);
+
+      // Render 3 Auditorium Cards
+      renderAuditoriumCards();
+
+      // Render GST Table
+      renderStatutoryGstTable();
+
+      // Render Distributor Settlements
+      renderDistributorCard();
+
+      // Render Concession Stock Warnings
+      renderStockWarningsCard();
+
+      // Render Security Audit Trail
+      renderOwnerAuditTrail();
+    }
+
+    function renderAuditoriumCards() {
+      const grid = document.getElementById('auditoriumCardsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = state.screens.map(scr => {
+        const pct = ((scr.occupied / scr.capacity) * 100).toFixed(1);
+        const isGreen = scr.barColor === 'emerald';
+        const dotClass = isGreen ? 'bg-[#168a45]' : 'bg-crimson-600';
+        const textSpecClass = isGreen ? 'text-ink-600' : 'text-crimson-700';
+        const barBgClass = isGreen ? 'bg-[#168a45]' : 'bg-crimson-600';
+
+        return `
+          <div class="${scr.cardStyle} rounded-2xl p-5 shadow-card hover:shadow-card-hover transition flex flex-col justify-between">
+            <div>
+              <!-- Top Screen Pill & Sound Spec -->
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <span class="px-2.5 py-1 rounded-md bg-white border border-[#e6dddd] text-[9px] font-mono font-bold uppercase tracking-wider text-ink-700 shadow-2xs">
+                  ${scr.badge}
+                </span>
+                <div class="flex items-center gap-1.5 text-[9px] font-mono font-bold uppercase tracking-wider ${textSpecClass} text-right">
+                  <span class="w-2 h-2 rounded-full ${dotClass}"></span>
+                  <span>${scr.techSpec}</span>
+                </div>
+              </div>
+
+              <!-- Movie Title & Rating Badge -->
+              <div class="flex items-center gap-2">
+                <h4 class="font-serif font-bold text-lg text-ink-900">${scr.movie}</h4>
+                <span class="px-1.5 py-0.5 rounded bg-white border border-[#e2d8d8] text-[9px] font-mono font-semibold text-ink-500">${scr.cert}</span>
+              </div>
+              <p class="text-[11px] text-ink-500 mt-0.5">${scr.showtime}</p>
+
+              <!-- Occupancy Progress Bar -->
+              <div class="mt-4">
+                <div class="flex items-center justify-between text-[10.5px] font-mono mb-1.5">
+                  <span class="text-ink-500">Occupancy</span>
+                  <span class="font-bold text-ink-900 tabular-nums">${scr.occupied} / ${scr.capacity} Seats (${pct}%)</span>
+                </div>
+                <div class="w-full h-1.5 rounded-full bg-[#e9e0e0] overflow-hidden">
+                  <div class="${barBgClass} h-full rounded-full transition-all duration-500" style="width: ${Math.min(100, pct)}%"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Gross & Interactive HALL MAP Button -->
+            <div class="mt-5 pt-3.5 border-t border-[#ece2e2] flex items-end justify-between">
+              <div>
+                <div class="text-[8.5px] font-mono uppercase tracking-wider text-ink-400">CURRENT GROSS</div>
+                <div class="font-serif font-bold text-lg text-ink-900 tabular-nums">${formatINR(scr.gross)}</div>
+              </div>
+              <button
+                onclick="openHallSeatMapModal(${scr.id})"
+                class="px-3 py-1.5 rounded-lg bg-white hover:bg-crimson-600 hover:text-white text-ink-700 border border-[#e3d8d8] font-mono text-[9.5px] font-semibold uppercase tracking-wider shadow-2xs transition"
+              >
+                HALL MAP
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStatutoryGstTable() {
+      const tbody = document.getElementById('gstTableBody');
+      if (!tbody) return;
+
+      const s1Base = state.gstSlabs.highTicketBase;
+      const s1Cgst = Math.round(s1Base * 0.09);
+      const s1Sgst = Math.round(s1Base * 0.09);
+      const s1Total = s1Cgst + s1Sgst;
+
+      const s2Base = state.gstSlabs.lowTicketBase;
+      const s2Cgst = Math.round(s2Base * 0.06);
+      const s2Sgst = Math.round(s2Base * 0.06);
+      const s2Total = s2Cgst + s2Sgst;
+
+      const s3Base = state.gstSlabs.concessionBase;
+      const s3Cgst = Math.round(s3Base * 0.025);
+      const s3Sgst = Math.round(s3Base * 0.025);
+      const s3Total = s3Cgst + s3Sgst;
+
+      const grandTotalTax = s1Total + s2Total + s3Total;
+
+      tbody.innerHTML = `
+        <tr class="hover:bg-[#fcf9f9]">
+          <td class="py-3 pr-2 font-sans text-xs text-ink-800">Tickets (&gt;<br/>₹100)</td>
+          <td class="py-3 px-2 text-ink-600">18%</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s1Base)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s1Cgst)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s1Sgst)}</td>
+          <td class="py-3 pl-2 text-right font-bold text-ink-900">${formatINR(s1Total)}</td>
+        </tr>
+        <tr class="hover:bg-[#fcf9f9]">
+          <td class="py-3 pr-2 font-sans text-xs text-ink-800">Tickets (&le;<br/>₹100)</td>
+          <td class="py-3 px-2 text-ink-600">12%</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s2Base)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s2Cgst)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s2Sgst)}</td>
+          <td class="py-3 pl-2 text-right font-bold text-ink-900">${formatINR(s2Total)}</td>
+        </tr>
+        <tr class="hover:bg-[#fcf9f9]">
+          <td class="py-3 pr-2 font-sans text-xs text-ink-800">Concessions<br/>(F&amp;B)</td>
+          <td class="py-3 px-2 text-ink-600">5%</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s3Base)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s3Cgst)}</td>
+          <td class="py-3 px-2 text-ink-700">${formatINR(s3Sgst)}</td>
+          <td class="py-3 pl-2 text-right font-bold text-ink-900">${formatINR(s3Total)}</td>
+        </tr>
+      `;
+
+      document.getElementById('totalGstLiabilityDisplay').textContent = formatINR(grandTotalTax, 2);
+    }
+
+    function renderDistributorCard() {
+      const yrfShare = Math.round(state.screens[0].gross * 0.50);
+      const pvrShare = Math.round(state.screens[2].gross * 0.425);
+      const gujShare = Math.round(state.screens[1].gross * 0.475);
+      const totalPayable = yrfShare + pvrShare + gujShare;
+
+      document.getElementById('distYrfAmt').textContent = formatINR(yrfShare);
+      document.getElementById('distPvrAmt').textContent = formatINR(pvrShare);
+      document.getElementById('distGujAmt').textContent = formatINR(gujShare);
+      document.getElementById('totalDistributorPayable').textContent = state.distributorsSettled ? '₹0 (SETTLED)' : formatINR(totalPayable);
+    }
+
+    function renderStockWarningsCard() {
+      const container = document.getElementById('stockWarningsList');
+      if (!container) return;
+
+      container.innerHTML = state.stockItems.map(item => `
+        <div class="p-3 rounded-xl bg-[#faf7f7] border border-[#eee6e6] flex items-center justify-between gap-2">
+          <div>
+            <div class="font-bold text-xs text-ink-900 leading-snug">${item.name}</div>
+            <div class="text-[10px] text-ink-400 mt-0.5">${item.sub}</div>
+          </div>
+          <div class="text-right shrink-0">
+            <div class="font-mono font-bold text-xs ${item.critical ? 'text-crimson-600' : 'text-ink-900'}">${item.qtyText}</div>
+            <div class="text-[8.5px] font-mono uppercase tracking-wider ${item.critical ? 'text-crimson-600 font-bold' : 'text-ink-400'}">${item.status}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderOwnerAuditTrail() {
+      const container = document.getElementById('ownerAuditTrailList');
+      if (!container) return;
+
+      container.innerHTML = state.auditLogs.slice(0, 3).map(log => `
+        <div class="p-3 rounded-xl bg-[#faf7f7] border border-[#eee6e6] space-y-1">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-1.5 font-bold text-xs text-ink-900">
+              <i data-lucide="${log.icon}" class="w-3.5 h-3.5 text-crimson-600 shrink-0"></i>
+              <span>${log.title}</span>
+            </div>
+            <span class="text-[9.5px] font-mono text-ink-400">${log.time}</span>
+          </div>
+          <p class="text-[10.5px] text-ink-600 pl-5">${log.detail}</p>
+          <div class="text-[9px] font-mono text-ink-400 pl-5">${log.hash}</div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // ---------------------------------------------------------------------------
+    // 5. INTERACTIVE ACTIONS ON OWNER COMMAND CENTER
+    // ---------------------------------------------------------------------------
+    function openHallSeatMapModal(screenId) {
+      const scr = state.screens.find(s => s.id === screenId);
+      if (!scr) return;
+
+      const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+      const cols = scr.id === 3 ? 6 : 8;
+
+      document.getElementById('modalSubtitle').textContent = `${scr.badge} • ${scr.techSpec}`;
+      document.getElementById('modalTitle').textContent = `${scr.movie} (${scr.cert}) — Interactive Live Hall Map`;
+
+      const renderSeatsHtml = () => {
+        return rows.map(r => `
+          <div class="flex items-center justify-center gap-2">
+            <span class="w-5 text-right font-mono text-xs font-bold text-ink-400">${r}</span>
+            <div class="flex items-center gap-1.5">
+              ${Array.from({ length: cols }, (_, i) => {
+                const seatCode = `${r}${i + 1}`;
+                const isBooked = scr.bookedSeats.has(seatCode);
+                return `
+                  <button
+                    onclick="toggleSeatInModal(${scr.id}, '${seatCode}')"
+                    class="seat-btn w-8 h-8 rounded-lg font-mono text-[10px] font-bold border transition flex items-center justify-center ${
+                      isBooked
+                        ? 'bg-crimson-600 text-white border-crimson-700 shadow-xs'
+                        : 'bg-white text-ink-700 border-[#ded4d4] hover:border-crimson-500'
+                    }"
+                    title="${isBooked ? 'Occupied (Click to release)' : 'Available (Click to quick-issue ticket)'}"
+                  >
+                    ${seatCode}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `).join('');
+      };
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="space-y-5">
+          <!-- Screen Arc Indicator -->
+          <div class="text-center space-y-1">
+            <div class="w-3/4 mx-auto h-2 rounded-t-full bg-gradient-to-r from-transparent via-crimson-500 to-transparent opacity-75"></div>
+            <div class="text-[9.5px] font-mono uppercase tracking-[0.25em] text-ink-400">CHRISTIE 4K DIRECT LASER SCREEN</div>
+          </div>
+
+          <!-- Seat Matrix -->
+          <div id="modalSeatMatrix" class="py-4 px-3 rounded-2xl bg-[#faf7f7] border border-[#eee4e4] space-y-2.5">
+            ${renderSeatsHtml()}
+          </div>
+
+          <!-- Legend & Live Telemetry -->
+          <div class="flex flex-wrap items-center justify-between gap-4 pt-2 text-xs">
+            <div class="flex items-center gap-4 font-mono text-[11px]">
+              <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-crimson-600 inline-block"></span> Sold / Occupied</span>
+              <span class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-white border border-[#ded4d4] inline-block"></span> Available (${formatINR(scr.ticketPrice)})</span>
+            </div>
+            <div class="font-mono text-xs text-ink-700">
+              Live Occupancy: <strong id="modalOccStat">${scr.occupied} / ${scr.capacity}</strong> • Gross: <strong id="modalGrossStat">${formatINR(scr.gross)}</strong>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('modalFooter').innerHTML = `
+        <button onclick="openModule('boxoffice'); closeModal();" class="px-4 py-2 rounded-xl bg-[#f3efef] hover:bg-[#e8e0e0] text-ink-800 font-mono text-xs font-semibold">
+          OPEN FULL POS DESK
+        </button>
+        <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-semibold">
+          DONE
+        </button>
+      `;
+
+      openModal();
+    }
+
+    function toggleSeatInModal(screenId, seatCode) {
+      const scr = state.screens.find(s => s.id === screenId);
+      if (!scr) return;
+
+      if (scr.bookedSeats.has(seatCode)) {
+        scr.bookedSeats.delete(seatCode);
+        scr.occupied = Math.max(0, scr.occupied - 1);
+        scr.gross = Math.max(0, scr.gross - scr.ticketPrice);
+        state.grossBoxOffice = Math.max(0, state.grossBoxOffice - scr.ticketPrice);
+        showToast(`Seat ${seatCode} Released`, `${scr.badge} (${scr.movie}) inventory updated.`, 'crimson');
+      } else {
+        scr.bookedSeats.add(seatCode);
+        scr.occupied = Math.min(scr.capacity, scr.occupied + 1);
+        scr.gross += scr.ticketPrice;
+        state.grossBoxOffice += scr.ticketPrice;
+        state.gstSlabs.highTicketBase += Math.round(scr.ticketPrice / 1.18);
+        state.auditLogs.unshift({
+          id: 'AUD-' + Math.floor(100 + Math.random() * 899),
+          title: `Quick POS Issue: Seat ${seatCode}`,
+          time: new Date().toTimeString().slice(0, 8),
+          detail: `${scr.badge} • ${scr.movie} • ${formatINR(scr.ticketPrice)} via UPI`,
+          hash: 'Hash: 8a2e...41c9 • Verified',
+          icon: 'ticket',
+          severity: 'normal'
+        });
+        showToast(`Ticket Issued • Seat ${seatCode}`, `${scr.movie} (+${formatINR(scr.ticketPrice)}) synced to Owner Ledger.`, 'emerald');
+      }
+
+      updateOwnerDashboardKPIs();
+      openHallSeatMapModal(screenId);
+    }
+
+    function openDcrExportModal() {
+      document.getElementById('modalSubtitle').textContent = 'DAILY COLLECTION REPORT (DCR)';
+      document.getElementById('modalTitle').textContent = 'Export Palanpur Flagship DCR Ledger';
+      document.getElementById('modalBody').innerHTML = `
+        <div class="space-y-4 text-xs">
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2] grid grid-cols-3 gap-4 font-mono">
+            <div>
+              <div class="text-[10px] text-ink-400">GROSS BOX OFFICE</div>
+              <div class="text-base font-bold text-ink-900 mt-0.5">${formatINR(state.grossBoxOffice)}</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-ink-400">CONCESSION F&B</div>
+              <div class="text-base font-bold text-ink-900 mt-0.5">${formatINR(state.fnbRevenue)}</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-ink-400">NET COMBINED</div>
+              <div class="text-base font-bold text-crimson-600 mt-0.5">${formatINR(state.grossBoxOffice + state.fnbRevenue)}</div>
+            </div>
+          </div>
+          <p class="text-ink-600 leading-relaxed">
+            Includes show-wise admissions for <strong>Stree 2</strong>, <strong>Fakt Purusho Maate</strong>, and <strong>Deadpool &amp; Wolverine</strong>, along with HSN 999614 Dual-GST schedules.
+          </p>
+        </div>
+      `;
+      document.getElementById('modalFooter').innerHTML = `
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl border border-[#e2d8d8] text-xs font-mono">CANCEL</button>
+        <button onclick="downloadCsvReport(); closeModal();" class="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-mono font-bold">DOWNLOAD DCR CSV / EXCEL</button>
+      `;
+      openModal();
+    }
+
+    function downloadCsvReport() {
+      const csvRows = [
+        ['Screen', 'Movie', 'Occupied', 'Capacity', 'Current Gross (INR)', 'Distributor Share %'],
+        ...state.screens.map(s => [s.badge, s.movie, s.occupied, s.capacity, s.gross, s.sharePct + '%'])
+      ];
+      const csvContent = 'data:text/csv;charset=utf-8,' + csvRows.map(e => e.join(',')).join('\n');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'CityLite_Palanpur_DCR_Report.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      showToast('DCR Report Exported', 'CityLite_Palanpur_DCR_Report.csv downloaded.', 'emerald');
+    }
+
+    function openGstrDispatchModal() {
+      document.getElementById('modalSubtitle').textContent = 'GSTN PORTAL API GATEWAY';
+      document.getElementById('modalTitle').textContent = 'GSTR-1 Electronic Dispatch • 24AAAPC2209H1ZV';
+      document.getElementById('modalBody').innerHTML = `
+        <div class="space-y-4 text-xs">
+          <div class="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-emerald-900 flex items-center gap-3">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0"></i>
+            <div>
+              <div class="font-bold">HSN 999614 SAC Payload Verified</div>
+              <div class="text-[11px] mt-0.5">All B2C theatrical admission slabs (18% &amp; 12%) and F&amp;B supplies (5%) balanced with POS thermal logs.</div>
+            </div>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2] font-mono text-[11px] space-y-1.5">
+            <div class="flex justify-between"><span>GSTIN:</span><strong>24AAAPC2209H1ZV (Gujarat)</strong></div>
+            <div class="flex justify-between"><span>Total Taxable Value:</span><strong>${formatINR(state.gstSlabs.highTicketBase + state.gstSlabs.lowTicketBase + state.gstSlabs.concessionBase)}</strong></div>
+            <div class="flex justify-between"><span>Total CGST + SGST Liability:</span><strong class="text-crimson-600">${document.getElementById('totalGstLiabilityDisplay').textContent}</strong></div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalFooter').innerHTML = `
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl border border-[#e2d8d8] text-xs font-mono">CLOSE</button>
+        <button onclick="confirmGstrDispatch()" class="px-5 py-2 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-mono font-bold">TRANSMIT TO GST PORTAL</button>
+      `;
+      openModal();
+      lucide.createIcons();
+    }
+
+    function confirmGstrDispatch() {
+      closeModal();
+      showToast('GSTR-1 Payload Dispatched', 'ARN #AA241126094812Z generated and filed with Gujarat GSTN.', 'emerald');
+    }
+
+    function downloadGstrJson() {
+      const payload = {
+        gstin: '24AAAPC2209H1ZV',
+        fp: '112026',
+        hsn_sac: '999614',
+        slabs: state.gstSlabs,
+        timestamp: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'GSTR1_24AAAPC2209H1ZV.json';
+      a.click();
+      showToast('GSTR-1 JSON Exported', 'Ready for offline GST utility or direct ERP upload.', 'emerald');
+    }
+
+    function toggleSupervisorSignoff() {
+      state.supervisorVerified = !state.supervisorVerified;
+      const badge = document.getElementById('supervisorBadge');
+      if (state.supervisorVerified) {
+        badge.textContent = 'VERIFIED';
+        badge.className = 'px-2 py-0.5 rounded bg-crimson-50 border border-crimson-100 text-crimson-700 font-mono text-[9px] font-bold uppercase tracking-wider';
+        showToast('Dual Supervisor Sign-Off', 'Desk #1 & #2 till audit verified by Ashok Patel.', 'emerald');
+      } else {
+        badge.textContent = 'PENDING REVIEW';
+        badge.className = 'px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-700 font-mono text-[9px] font-bold uppercase tracking-wider';
+        showToast('Audit Flag Re-Opened', 'Till audit set to manual inspection mode.', 'crimson');
+      }
+    }
+
+    function settleDistributorLedger() {
+      state.distributorsSettled = true;
+      const btn = document.getElementById('btnSettleLedger');
+      btn.innerHTML = 'SETTLED &amp; CREDITED ✓';
+      btn.className = 'px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-mono text-[10px] font-bold uppercase tracking-wider shadow transition';
+      renderDistributorCard();
+      showToast('Distributor Credit Notes Issued', 'NEFT settlement vouchers generated for YRF, PVR INOX & Gujarati Dist.', 'emerald');
+    }
+
+    function triggerVendorPoRestock() {
+      state.stockItems = [
+        { id: 'PCK-409', name: 'Caramel Popcorn Kernels', sub: 'Batch SKU PCK-409 • PO Sent', qtyText: '50.0 kg incoming', status: 'PO DISPATCHED', critical: false, unitPrice: 240 },
+        { id: 'BIB-18L', name: 'Fountain Cola Syrup 18L', sub: 'Post-mix BIB Tank • PO Sent', qtyText: '6 cans incoming', status: 'PO DISPATCHED', critical: false, unitPrice: 1850 },
+        { id: 'FLV-09', name: 'Flavacol Seasoning Salt', sub: 'Theatre Butter Salt • PO Sent', qtyText: '12 pouches', status: 'REPLENISHED', critical: false, unitPrice: 420 }
+      ];
+      const badge = document.getElementById('stockAlertBadge');
+      badge.innerHTML = 'PO<br/>SENT';
+      badge.className = 'px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-[9px] font-bold uppercase tracking-wider';
+      renderStockWarningsCard();
+      showToast('Palanpur Vendor PO Dispatched', 'Purchase Order #PO-8841 transmitted to AgroTech Concessions.', 'emerald');
+    }
+
+    function openSafeDepositModal() {
+      document.getElementById('modalSubtitle').textContent = 'EOD TREASURY VAULT';
+      document.getElementById('modalTitle').textContent = 'Safe Deposit Slip • Palanpur Main Branch';
+      document.getElementById('modalBody').innerHTML = `
+        <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2] font-mono text-xs space-y-2">
+          <div class="flex justify-between"><span>Counter 1 • Box Office (Rajesh S.):</span><strong>${formatINR(state.drawer1Cash)}</strong></div>
+          <div class="flex justify-between"><span>Counter 2 • Candy Bar (Bhavna P.):</span><strong>${formatINR(state.drawer2Cash)}</strong></div>
+          <div class="border-t border-[#e2d8d8] pt-2 flex justify-between text-sm font-bold text-crimson-600">
+            <span>Total Physical Cash Sealed:</span>
+            <span>${formatINR(state.drawer1Cash + state.drawer2Cash)}</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalFooter').innerHTML = `
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl border border-[#e2d8d8] text-xs font-mono">CLOSE</button>
+        <button onclick="closeModal(); showToast('Safe Deposit Slip Printed', 'Thermal slip printed on Desk #1.', 'emerald');" class="px-5 py-2 rounded-xl bg-crimson-600 text-white text-xs font-mono font-bold">PRINT THERMAL SLIP</button>
+      `;
+      openModal();
+    }
+
+    function toggleSafeLock() {
+      state.safeLocked = !state.safeLocked;
+      const btn = document.getElementById('btnLockSafe');
+      if (state.safeLocked) {
+        btn.innerHTML = 'SAFE LOCKED • EOD ARMED ✓';
+        btn.className = 'px-4 py-2.5 rounded-lg bg-crimson-600 text-white font-mono text-[9.5px] font-bold uppercase tracking-wider shadow transition';
+        showToast('Barco & Safe Register Locked', 'Automated 23:59:59 IST day-closing sequence armed.', 'emerald');
+      } else {
+        btn.innerHTML = 'LOCK SAFE &amp; CLOSE<br/>REGISTER';
+        btn.className = 'px-4 py-2.5 rounded-lg bg-white/95 hover:bg-white text-ink-900 font-mono text-[9.5px] font-bold uppercase tracking-wider shadow transition';
+        showToast('Register Unlocked', 'Manual POS overrides re-enabled.', 'crimson');
+      }
+    }
+
+    function showOwnerProfileModal() {
+      document.getElementById('modalSubtitle').textContent = 'EXECUTIVE CREDENTIALS';
+      document.getElementById('modalTitle').textContent = 'Ashok Patel — Executive Owner (City Lite Cinema)';
+      document.getElementById('modalBody').innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2]">
+            <div class="font-mono text-[10px] text-ink-400">LICENSE & GSTIN</div>
+            <div class="font-bold text-ink-900 mt-1">24AAAPC2209H1ZV</div>
+            <div class="text-ink-500 mt-0.5">Palanpur Municipal Cinema License #GJ-BK-09</div>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2]">
+            <div class="font-mono text-[10px] text-ink-400">SECURITY CLEARANCE</div>
+            <div class="font-bold text-crimson-600 mt-1">Level 5 • Master Root Token</div>
+            <div class="text-ink-500 mt-0.5">Hardware YubiKey + Biometric Active</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalFooter').innerHTML = `
+        <button onclick="closeModal()" class="px-5 py-2 rounded-xl bg-crimson-600 text-white text-xs font-mono font-bold">CLOSE</button>
+      `;
+      openModal();
+    }
+
+    function openModal() {
+      const m = document.getElementById('modalOverlay');
+      m.classList.remove('hidden');
+      m.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeModal() {
+      const m = document.getElementById('modalOverlay');
+      m.classList.add('hidden');
+      m.classList.remove('flex');
+    }
+
+    // ---------------------------------------------------------------------------
+    // 6. FULL INTERACTIVE SIDEBAR MODULE ROUTER (ALL 11 SIDEBAR VIEWS WORK!)
+    // ---------------------------------------------------------------------------
+    function openModule(moduleId, subFilter = null) {
+      state.activeModule = moduleId;
+      renderSidebar();
+
+      const ownerView = document.getElementById('view-owner');
+      const dynamicView = document.getElementById('view-dynamic-module');
+      const breadcrumb = document.getElementById('subViewBreadcrumb');
+      const tag = document.getElementById('activeModuleTag');
+
+      if (moduleId === 'owner') {
+        ownerView.classList.remove('hidden');
+        dynamicView.classList.add('hidden');
+        breadcrumb.classList.add('hidden');
+        breadcrumb.classList.remove('flex');
+        updateOwnerDashboardKPIs();
+        lucide.createIcons();
+        return;
+      }
+
+      // Show dynamic workspace
+      ownerView.classList.add('hidden');
+      dynamicView.classList.remove('hidden');
+      breadcrumb.classList.remove('hidden');
+      breadcrumb.classList.add('flex');
+
+      const allItems = [...sidebarConfig.operational, ...sidebarConfig.executive];
+      const currentObj = allItems.find(i => i.id === moduleId);
+      tag.textContent = currentObj ? `${currentObj.label.toUpperCase()}${subFilter ? ' • ' + subFilter.toUpperCase() : ''}` : 'MODULE';
+
+      switch (moduleId) {
+        case 'boxoffice':
+          renderBoxOfficePosModule(dynamicView, subFilter);
+          break;
+        case 'concession':
+          renderConcessionPosModule(dynamicView, subFilter);
+          break;
+        case 'scanner':
+          renderQrScannerModule(dynamicView);
+          break;
+        case 'manager':
+          renderManagerOpsModule(dynamicView, subFilter);
+          break;
+        case 'screens':
+          renderScreensModule(dynamicView, subFilter);
+          break;
+        case 'movies':
+          renderMoviesModule(dynamicView, subFilter);
+          break;
+        case 'inventory':
+          renderInventoryModule(dynamicView, subFilter);
+          break;
+        case 'ledger':
+          renderLedgerGstModule(dynamicView, subFilter);
+          break;
+        case 'distributors':
+          renderDistributorsModule(dynamicView, subFilter);
+          break;
+        case 'audit':
+          renderAuditModule(dynamicView, subFilter);
+          break;
+      }
+      lucide.createIcons();
+    }
+
+    // --- MODULE A: BOX OFFICE DESK POS (LIVE SEAT TICKET ISSUANCE) ---
+    let selectedPosScreenId = 1;
+    let selectedPosSeats = [];
+
+    function renderBoxOfficePosModule(container) {
+      const scr = state.screens.find(s => s.id === selectedPosScreenId) || state.screens[0];
+      const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
+      const cols = scr.id === 3 ? 6 : 8;
+      const subtotal = selectedPosSeats.length * scr.ticketPrice;
+      const gstRate = scr.ticketPrice > 100 ? 18 : 12;
+
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">OPERATIONAL TERMINAL • COUNTER #01</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Box Office Desk POS — Thermal Ticket Terminal</h2>
+            <p class="text-xs text-ink-500">Select auditorium and seats below. Every ticket sold updates the Owner ERP Box Office &amp; GST ledger immediately.</p>
+          </div>
+          <div class="flex gap-2">
+            ${state.screens.map(s => `
+              <button onclick="selectPosScreen(${s.id})" class="px-3.5 py-2 rounded-xl font-mono text-xs font-bold border transition ${
+                s.id === scr.id ? 'bg-crimson-600 text-white border-crimson-600 shadow-sm' : 'bg-white text-ink-700 border-[#e2d8d8]'
+              }">
+                ${s.badge}: ${s.movie}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Seat Picker -->
+          <div class="lg:col-span-8 bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-5">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-serif font-bold text-lg text-ink-900">${scr.movie} (${scr.cert}) — ${scr.badge}</h3>
+                <p class="text-xs text-ink-500">${scr.showtime} • ${scr.techSpec}</p>
+              </div>
+              <span class="font-mono text-xs font-bold text-crimson-600">${formatINR(scr.ticketPrice)} / Seat (Incl. ${gstRate}% GST)</span>
+            </div>
+
+            <div class="w-2/3 mx-auto h-1.5 rounded-full bg-crimson-500/40 text-center"></div>
+
+            <div class="py-4 px-3 rounded-xl bg-[#faf7f7] border border-[#eee4e4] space-y-2.5">
+              ${rows.map(r => `
+                <div class="flex items-center justify-center gap-2">
+                  <span class="w-5 text-right font-mono text-xs font-bold text-ink-400">${r}</span>
+                  <div class="flex gap-1.5">
+                    ${Array.from({ length: cols }, (_, i) => {
+                      const code = `${r}${i + 1}`;
+                      const sold = scr.bookedSeats.has(code);
+                      const picked = selectedPosSeats.includes(code);
+                      return `
+                        <button
+                          ${sold ? 'disabled' : ''}
+                          onclick="togglePosSeat('${code}')"
+                          class="seat-btn w-9 h-9 rounded-lg font-mono text-xs font-bold border transition ${
+                            sold
+                              ? 'bg-[#e2d8d8] text-ink-400 border-[#d5c8c8] cursor-not-allowed'
+                              : picked
+                              ? 'bg-crimson-600 text-white border-crimson-700 shadow-sm'
+                              : 'bg-white text-ink-800 border-[#dcd0d0] hover:border-crimson-500'
+                          }"
+                        >${code}</button>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Checkout Bill Box -->
+          <div class="lg:col-span-4 bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="text-[10px] font-mono uppercase tracking-wider text-crimson-600 font-bold">LIVE THERMAL CART</div>
+              <h4 class="font-serif font-bold text-xl text-ink-900">Booking Summary</h4>
+              <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#ece2e2] space-y-2 text-xs font-mono">
+                <div class="flex justify-between"><span>Selected Seats:</span><strong>${selectedPosSeats.length ? selectedPosSeats.join(', ') : 'None'}</strong></div>
+                <div class="flex justify-between"><span>Rate per Ticket:</span><span>${formatINR(scr.ticketPrice)}</span></div>
+                <div class="flex justify-between"><span>Statutory GST (${gstRate}%):</span><span>Included</span></div>
+                <div class="border-t border-[#e5dddd] pt-2 flex justify-between text-base font-bold text-ink-900">
+                  <span>Total Payable:</span>
+                  <span class="text-crimson-600">${formatINR(subtotal)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 mt-6">
+              <button onclick="completePosBooking('UPI')" class="w-full py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson-btn transition">
+                ISSUE TICKETS • UPI QR (${formatINR(subtotal)})
+              </button>
+              <button onclick="completePosBooking('CASH')" class="w-full py-2.5 rounded-xl bg-[#f3efef] hover:bg-[#e7dfdf] text-ink-800 font-mono text-xs font-bold uppercase tracking-wider transition">
+                COLLECT CASH • DESK #01
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function selectPosScreen(id) {
+      selectedPosScreenId = id;
+      selectedPosSeats = [];
+      renderBoxOfficePosModule(document.getElementById('view-dynamic-module'));
+    }
+
+    function togglePosSeat(code) {
+      if (selectedPosSeats.includes(code)) {
+        selectedPosSeats = selectedPosSeats.filter(s => s !== code);
+      } else {
+        selectedPosSeats.push(code);
+      }
+      renderBoxOfficePosModule(document.getElementById('view-dynamic-module'));
+    }
+
+    function completePosBooking(mode) {
+      if (!selectedPosSeats.length) {
+        showToast('Select Seats First', 'Click one or more available white seats on the auditorium map.', 'crimson');
+        return;
+      }
+      const scr = state.screens.find(s => s.id === selectedPosScreenId);
+      const count = selectedPosSeats.length;
+      const amount = count * scr.ticketPrice;
+
+      selectedPosSeats.forEach(s => scr.bookedSeats.add(s));
+      scr.occupied = Math.min(scr.capacity, scr.occupied + count);
+      scr.gross += amount;
+      state.grossBoxOffice += amount;
+      state.gstSlabs.highTicketBase += Math.round(amount / 1.18);
+      if (mode === 'CASH') {
+        state.drawer1Cash += amount;
+        state.tillAuditTotal += amount;
+      }
+
+      state.auditLogs.unshift({
+        id: 'AUD-' + Math.floor(100 + Math.random() * 899),
+        title: `Box Office POS: ${ selectedPosSeats.join(', ') }`,
+        time: new Date().toTimeString().slice(0, 8),
+        detail: `${scr.badge} (${scr.movie}) • ${formatINR(amount)} via ${mode}`,
+        hash: 'Hash: 6b12...88f1 • Verified',
+        icon: 'ticket',
+        severity: 'normal'
+      });
+
+      selectedPosSeats = [];
+      showToast('Thermal Tickets Printed!', `${count}x tickets for ${scr.movie} (${formatINR(amount)}) added to Owner Ledger.`, 'emerald');
+      renderBoxOfficePosModule(document.getElementById('view-dynamic-module'));
+    }
+
+    // --- MODULE B: CONCESSION F&B POS ---
+    function renderConcessionPosModule(container) {
+      const cartTotal = state.fnbCart.reduce((acc, i) => acc + i.price * i.qty, 0);
+
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">CANDY BAR • COUNTER #02</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Concession F&amp;B Point of Sale (5% GST Slab)</h2>
+          </div>
+          <div class="font-mono text-right">
+            <div class="text-[10px] text-ink-400">LIVE F&B REVENUE</div>
+            <div class="text-xl font-bold text-crimson-600">${formatINR(state.fnbRevenue)}</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.fnbMenu.map(item => `
+              <div onclick="addFnbToCart('${item.id}')" class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card hover:shadow-card-hover cursor-pointer transition flex flex-col justify-between">
+                <div>
+                  <span class="px-2 py-0.5 rounded bg-crimson-50 text-crimson-700 font-mono text-[9.5px] font-bold uppercase">${item.category}</span>
+                  <h4 class="font-serif font-bold text-base text-ink-900 mt-2">${item.name}</h4>
+                </div>
+                <div class="mt-4 pt-3 border-t border-[#f2ecec] flex items-center justify-between">
+                  <span class="font-mono font-bold text-base text-ink-900">${formatINR(item.price)}</span>
+                  <span class="text-xs font-mono font-bold text-crimson-600">+ ADD TO TRAY</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="lg:col-span-4 bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card flex flex-col justify-between">
+            <div>
+              <h3 class="font-serif font-bold text-xl text-ink-900 mb-4">Concession Order Tray</h3>
+              <div class="space-y-2.5 max-h-64 overflow-y-auto">
+                ${state.fnbCart.length === 0 ? `<p class="text-xs text-ink-400 py-8 text-center">Click any item on the left to add to tray.</p>` : state.fnbCart.map(c => `
+                  <div class="p-3 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex items-center justify-between text-xs">
+                    <div>
+                      <div class="font-bold text-ink-900">${c.name}</div>
+                      <div class="font-mono text-ink-400">${c.qty} x ${formatINR(c.price)}</div>
+                    </div>
+                    <div class="font-mono font-bold text-ink-900">${formatINR(c.qty * c.price)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-[#eee4e4] space-y-3">
+              <div class="flex justify-between font-mono text-base font-bold">
+                <span>Total (Incl. 5% GST):</span>
+                <span class="text-crimson-600">${formatINR(cartTotal)}</span>
+              </div>
+              <button onclick="checkoutFnbOrder()" class="w-full py-3 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase tracking-wider shadow-crimson-btn transition">
+                DISPENSE &amp; BILL ORDER
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function addFnbToCart(itemId) {
+      const item = state.fnbMenu.find(m => m.id === itemId);
+      const existing = state.fnbCart.find(c => c.id === itemId);
+      if (existing) existing.qty += 1;
+      else state.fnbCart.push({ ...item, qty: 1 });
+      renderConcessionPosModule(document.getElementById('view-dynamic-module'));
+    }
+
+    function checkoutFnbOrder() {
+      if (!state.fnbCart.length) {
+        showToast('Tray is Empty', 'Select popcorn, beverages, or combos to bill.', 'crimson');
+        return;
+      }
+      const total = state.fnbCart.reduce((acc, i) => acc + i.price * i.qty, 0);
+      state.fnbRevenue += total;
+      state.drawer2Cash += total;
+      state.tillAuditTotal += total;
+      state.gstSlabs.concessionBase += Math.round(total / 1.05);
+      state.fnbCart = [];
+      showToast('Concession Order Dispensed', `${formatINR(total)} added to Concession F&B Revenue & 5% GST ledger.`, 'emerald');
+      renderConcessionPosModule(document.getElementById('view-dynamic-module'));
+    }
+
+    // --- MODULE C: GATE QR SCANNER ---
+    function renderQrScannerModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">FOYER TURNSTILE TELEMETRY</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Optical Gate QR &amp; E-Ticket Validator</h2>
+          </div>
+          <button onclick="simulateLiveQrScan()" class="px-5 py-2.5 rounded-xl bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-bold uppercase shadow-crimson-btn transition">
+            SIMULATE NEW PATRON QR SCAN
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-4">
+          <h3 class="font-serif font-bold text-lg text-ink-900">Recent Gate Turnstile Scans</h3>
+          <div class="space-y-2.5">
+            ${state.qrScans.map(s => `
+              <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex items-center justify-between">
+                <div>
+                  <div class="font-mono font-bold text-xs text-ink-900">${s.pnr} • ${s.movie}</div>
+                  <div class="text-xs text-ink-500 mt-0.5">${s.audi} • Seats: <strong>${s.seats}</strong></div>
+                </div>
+                <div class="text-right font-mono">
+                  <span class="px-2.5 py-1 rounded text-[10px] font-bold ${s.status === 'VALID' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-crimson-50 text-crimson-700 border border-crimson-200'}">${s.status}</span>
+                  <div class="text-[10px] text-ink-400 mt-1">${s.time} IST</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function simulateLiveQrScan() {
+      const pnr = 'CL-' + Math.floor(10000 + Math.random() * 89999) + '-S1';
+      state.qrScans.unshift({
+        pnr,
+        movie: 'Stree 2',
+        seats: 'D08, D09',
+        audi: 'Screen 1',
+        time: new Date().toTimeString().slice(0, 8),
+        status: 'VALID'
+      });
+      showToast('Gate Turnstile Admitted', `Ticket ${pnr} verified for Screen 1 (Stree 2).`, 'emerald');
+      renderQrScannerModule(document.getElementById('view-dynamic-module'));
+    }
+
+    // --- MODULE D: MANAGER OPS, SCREENS, MOVIES, INVENTORY, LEDGER, DISTRIBUTORS, AUDIT ---
+    function renderManagerOpsModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card">
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">FLOOR OPERATIONS</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Duty Manager Operations &amp; Booth HVAC</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          ${state.screens.map(s => `
+            <div class="bg-white rounded-2xl p-5 border border-[#ece4e4] shadow-card space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-mono text-xs font-bold text-crimson-600">${s.badge}</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono text-[10px] font-bold">HVAC 21.5°C</span>
+              </div>
+              <h4 class="font-serif font-bold text-lg">${s.movie}</h4>
+              <div class="text-xs font-mono space-y-1 text-ink-600">
+                <div>Laser Lamp Temp: <strong>${s.lampTemp}</strong></div>
+                <div>Dolby Processor: <strong>${s.audioDb}</strong></div>
+                <div>KDM Vault Key: <strong>${s.kdmKey}</strong></div>
+              </div>
+              <button onclick="openHallSeatMapModal(${s.id})" class="w-full py-2 rounded-xl bg-[#faf7f7] hover:bg-crimson-600 hover:text-white border border-[#e5dddd] font-mono text-[10px] font-bold uppercase transition">
+                INSPECT LIVE SEAT MAP
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderScreensModule(container) {
+      renderManagerOpsModule(container);
+    }
+
+    function renderMoviesModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card">
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">PROGRAMMING MATRIX</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Movies, Showtime Schedules &amp; Distributor Splits</h2>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card">
+          <div class="space-y-3">
+            ${state.screens.map(s => `
+              <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <span class="font-mono text-[10px] font-bold text-crimson-600">${s.badge} • ${s.techSpec}</span>
+                  <h4 class="font-serif font-bold text-lg text-ink-900">${s.movie} (${s.cert})</h4>
+                  <p class="text-xs text-ink-500">${s.showtime} • Distributor: <strong>${s.distributor} (${s.sharePct}%)</strong></p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="text-right font-mono">
+                    <div class="text-xs text-ink-400">Show Gross</div>
+                    <div class="text-base font-bold text-ink-900">${formatINR(s.gross)}</div>
+                  </div>
+                  <button onclick="openHallSeatMapModal(${s.id})" class="px-4 py-2 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold">HALL MAP</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderInventoryModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">CONCESSION STOREHOUSE</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Store &amp; Raw Material Inventory</h2>
+          </div>
+          <button onclick="triggerVendorPoRestock(); renderInventoryModule(document.getElementById('view-dynamic-module'));" class="px-5 py-2.5 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold">
+            DISPATCH VENDOR RESTOCK PO
+          </button>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-3">
+          ${state.stockItems.map(i => `
+            <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-ink-900">${i.name}</div>
+                <div class="text-xs font-mono text-ink-400">${i.sub}</div>
+              </div>
+              <div class="text-right font-mono">
+                <div class="text-sm font-bold text-crimson-600">${i.qtyText}</div>
+                <div class="text-[10px] text-ink-500">${i.status}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderLedgerGstModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">STATUTORY COMPLIANCE</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Dual-GST Returns &amp; HSN 999614 Ledger</h2>
+          </div>
+          <button onclick="downloadGstrJson()" class="px-4 py-2.5 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold">
+            DOWNLOAD GSTR-1 JSON
+          </button>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-4 font-mono text-xs">
+          <div class="flex justify-between py-2 border-b"><span>Tickets (&gt; ₹100) @ 18% GST Base:</span><strong>${formatINR(state.gstSlabs.highTicketBase)}</strong></div>
+          <div class="flex justify-between py-2 border-b"><span>Tickets (&le; ₹100) @ 12% GST Base:</span><strong>${formatINR(state.gstSlabs.lowTicketBase)}</strong></div>
+          <div class="flex justify-between py-2 border-b"><span>Concessions F&B @ 5% GST Base:</span><strong>${formatINR(state.gstSlabs.concessionBase)}</strong></div>
+        </div>
+      `;
+    }
+
+    function renderDistributorsModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card flex items-center justify-between">
+          <div>
+            <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">DISTRIBUTOR SETTLEMENT LEDGER</span>
+            <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Weekly Holdover &amp; Net Revenue Share</h2>
+          </div>
+          <button onclick="settleDistributorLedger(); openModule('owner');" class="px-5 py-2.5 rounded-xl bg-crimson-600 text-white font-mono text-xs font-bold">
+            SETTLE &amp; ISSUE CREDIT
+          </button>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-3">
+          ${state.screens.map(s => `
+            <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-ink-900">${s.distributor}</div>
+                <div class="text-xs text-ink-500">${s.movie} • ${s.sharePct}% Net Share</div>
+              </div>
+              <div class="font-mono font-bold text-base text-crimson-600">${formatINR(Math.round(s.gross * (s.sharePct / 100)))}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function renderAuditModule(container) {
+      container.innerHTML = `
+        <div class="hero-surface rounded-2xl p-6 shadow-card">
+          <span class="text-[9.5px] font-mono font-bold uppercase tracking-widest text-crimson-600">SHA-256 IMMUTABLE EVENT CHAIN</span>
+          <h2 class="font-serif font-bold text-2xl text-ink-900 mt-0.5">Master Security Audit Logs</h2>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-[#ece4e4] shadow-card space-y-3">
+          ${state.auditLogs.map(log => `
+            <div class="p-4 rounded-xl bg-[#faf7f7] border border-[#eee4e4] flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-ink-900">${log.title}</div>
+                <div class="text-xs text-ink-600 mt-0.5">${log.detail}</div>
+                <div class="text-[10px] font-mono text-ink-400 mt-1">${log.hash}</div>
+              </div>
+              <span class="font-mono text-xs text-ink-500">${log.time} IST</span>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // ---------------------------------------------------------------------------
+    // 7. LIVE IST CLOCK & INITIALIZATION
+    // ---------------------------------------------------------------------------
+    let clockSeconds = 18;
+    let clockMinutes = 42;
+    let clockHours = 21;
+
+    function startLiveClock() {
+      setInterval(() => {
+        clockSeconds++;
+        if (clockSeconds >= 60) {
+          clockSeconds = 0;
+          clockMinutes++;
+          if (clockMinutes >= 60) {
+            clockMinutes = 0;
+            clockHours = (clockHours + 1) % 24;
+          }
+        }
+        const pad = n => String(n).padStart(2, '0');
+        const el = document.getElementById('liveIstClock');
+        if (el) el.textContent = `IST ${pad(clockHours)}:${pad(clockMinutes)}:${pad(clockSeconds)}`;
+      }, 1000);
+    }
+
+    window.onload = function () {
+      renderSidebar();
+      updateOwnerDashboardKPIs();
+      startLiveClock();
+      lucide.createIcons();
+    };
+  </script>
+<script id="royalRoleAuth">
+(()=>{
+ const files={SUPER_ADMIN:'city_lite_cinema_erp_multi_counter_role_login.html',BRANCH_MANAGER:'city_lite_cinema_erp_multi_counter_role_login.html',COUNTER_STAFF:'city_lite_f_b_counter_pos_role_login.html',ENTRY_STAFF:'city_lite_cinema_erp_command_center_role_login.html'};
+ const labels={SUPER_ADMIN:'Super Admin',BRANCH_MANAGER:'Branch Manager',COUNTER_STAFF:'Counter Staff',ENTRY_STAFF:'Entry Staff'};
+ const current=location.pathname.split(/[\\/]/).pop();
+ const defaultRole=current===files.COUNTER_STAFF?'COUNTER_STAFF':current===files.ENTRY_STAFF?'ENTRY_STAFF':'SUPER_ADMIN';
+ const gate=document.createElement('section');gate.id='clAuthGate';document.body.appendChild(gate);
+ function normalizeRole(value){const valueKey=String(value||'').toUpperCase().replace(/[\s-]+/g,'_');const aliases={ADMIN:'SUPER_ADMIN',SUPERADMIN:'SUPER_ADMIN',OWNER:'SUPER_ADMIN',MANAGER:'BRANCH_MANAGER',BRANCHMANAGER:'BRANCH_MANAGER',CASHIER:'COUNTER_STAFF',COUNTER:'COUNTER_STAFF',TICKETING:'ENTRY_STAFF',ENTRY:'ENTRY_STAFF',GATE_STAFF:'ENTRY_STAFF'};return aliases[valueKey]||valueKey}
+ function showApp(session){gate.remove();document.body.style.overflow='';try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}}
+ function readStore(key){try{const value=window.localStorage.getItem(key);if(value!==null)return value}catch(_){}try{const data=JSON.parse(window.name||'{}');return data[key]??null}catch(_){return null}}
+ function writeStore(key,value){try{window.localStorage.setItem(key,String(value));return}catch(_){}try{const data=JSON.parse(window.name||'{}');data[key]=String(value);window.name=JSON.stringify(data)}catch(_){}} const incoming=location.hash.startsWith('#cl-session=')?location.hash.slice(12):'';
+ if(incoming){try{const session=JSON.parse(decodeURIComponent(incoming)),sessionRole=normalizeRole(session.role);if(files[sessionRole]===current){try{history.replaceState(null,'',location.pathname+location.search)}catch(_){}showApp({...session,role:sessionRole});return}}catch(_){}}
+ try{const saved=JSON.parse(readStore('cityLiteSession')||'null');if(saved&&files[normalizeRole(saved.role)]===current){showApp({...saved,role:normalizeRole(saved.role)});return}}catch(_){}
+ let mode='signin',role=defaultRole;
+ function render(){gate.innerHTML=`<div class="auth-shell"><aside class="auth-brand"><div class="brand-mark">R</div><div class="brand-copy"><span>YOUR NIGHT.</span><strong>YOUR STORY.</strong><small>One cinema account. The right workspace.</small></div><div class="brand-orbit" aria-hidden="true"></div></aside><main class="auth-content"><button class="auth-close" type="button" id="authClose" aria-label="Close sign in">×</button><div><span class="eyebrow" id="authEyebrow">${mode==='signin'?'WELCOME BACK':'JOIN ROYAL CINEMA'}</span><h1 id="authTitle">${mode==='signin'?'Sign in to continue':'Create your account'}</h1><p class="intro" id="authIntro">${mode==='signin'?'Access your Royal Cinema workspace.':'Create an account for your assigned cinema role.'}</p></div><div class="auth-tabs" role="tablist"><button id="signInTab" class="${mode==='signin'?'active':''}" type="button" role="tab" aria-selected="${mode==='signin'}">Sign in</button><button id="registerTab" class="${mode==='register'?'active':''}" type="button" role="tab" aria-selected="${mode==='register'}">Create account</button></div><form id="authForm"><div class="field" id="nameField" ${mode==='register'?'':'hidden'}><label for="authName">Full name</label><input id="authName" name="name" autocomplete="name" placeholder="Your full name" ${mode==='register'?'required minlength="2"':''}></div><div class="field branch-field" id="branchField" ${role==='BRANCH_MANAGER'?'':'hidden'}><label for="authBranch">Assigned branch</label><select id="authBranch"><option value="branch_pal">Palanpur</option><option value="branch_ahm">Ahmedabad</option><option value="branch_meh">Mehsana</option><option value="branch_sur">Surat</option></select></div><div class="field"><label for="authEmail">Email address</label><input id="authEmail" name="email" type="email" autocomplete="username" placeholder="you@example.com" required></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" name="password" type="password" autocomplete="${mode==='signin'?'current-password':'new-password'}" placeholder="${mode==='register'?'Minimum 8 characters':'Your password'}" required ${mode==='register'?'minlength="8"':''}></div><div class="field" id="confirmField" ${mode==='register'?'':'hidden'}><label for="authConfirm">Confirm password</label><input id="authConfirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Enter your password again" ${mode==='register'?'required':''}></div><div class="error" id="authError" role="alert" aria-live="polite"></div><button class="submit" type="submit"><span id="submitLabel">${mode==='signin'?'Sign in securely':'Create my account'}</span><span aria-hidden="true">→</span></button><div class="secure"><span aria-hidden="true">♙</span> Secure role-based access</div></form><div class="role-access"><span class="role-label">STAFF ACCESS · CHOOSE YOUR ROLE</span><div class="roles">${Object.entries(labels).map(([key,label])=>`<button type="button" class="role-chip ${role===key?'active':''}" data-role="${key}">${label}</button>`).join('')}</div></div><button type="button" class="guest" id="guestButton">Continue browsing as guest</button></main></div>`;
+ gate.querySelector('#signInTab').onclick=()=>setMode('signin');gate.querySelector('#registerTab').onclick=()=>setMode('register');gate.querySelector('#authClose').onclick=()=>{gate.remove();document.body.style.overflow=''};gate.querySelector('#guestButton').onclick=()=>{gate.remove();document.body.style.overflow=''};
+ gate.querySelectorAll('[data-role]').forEach(button=>button.onclick=()=>{role=button.dataset.role;render()});gate.querySelector('#authForm').onsubmit=submit;document.body.style.overflow='hidden';
+ }
+ function setMode(next){mode=next;render()}
+ function showError(message){const error=gate.querySelector('#authError');if(error)error.textContent=message||''}
+ function selectedBranch(){return role==='BRANCH_MANAGER'?gate.querySelector('#authBranch').value:''}
+ function navigate(user){const returned=normalizeRole(user.role||role);if(!files[returned]){showError('Your account does not have a supported cinema role.');return}const session={name:user.name||user.fullName||'',email:user.email||'',role:returned,branchId:user.branchId||selectedBranch()};try{writeStore('cityLiteSession',JSON.stringify(session))}catch(_){}if(files[returned]!==current){location.href=files[returned]+'#cl-session='+encodeURIComponent(JSON.stringify(session));return}showApp(session)}
+ async function submit(event){event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const email=gate.querySelector('#authEmail').value.trim().toLowerCase(),password=gate.querySelector('#authPassword').value,branchId=selectedBranch();
+ if(mode==='register'){
+  const name=gate.querySelector('#authName').value.trim(),confirm=gate.querySelector('#authConfirm').value;if(password.length<8){showError('Use at least 8 characters for your password.');return}if(password!==confirm){showError('Passwords do not match.');return}
+  const account={name,email,password,role,branchId};
+  if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),key=email+'|'+role;if(users[key]){showError('This email is already registered for the selected role.');return}users[key]=account;writeStore('cityLiteUsers',JSON.stringify(users));navigate(account)}catch(_){showError('Could not save this demo account in the browser.')}return}
+  try{const response=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(account)}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Account registration was not accepted.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema registration service. Please retry when it is online.')}return;
+ }
+ if(location.protocol==='file:'){try{const users=JSON.parse(readStore('cityLiteUsers')||'{}'),user=users[email+'|'+role];if(!user||user.password!==password){showError('Email or password is incorrect for the selected role. Register first or choose the account role.');return}navigate({...user,branchId:user.branchId||branchId})}catch(_){showError('Browser storage is unavailable.')}return}
+ try{const response=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,role,branchId})}),data=await response.json();if(!response.ok||!data.success){showError(data.error||'Email, password, or role is incorrect.');return}navigate({...data.user,email:data.user?.email||email,role:data.user?.role||data.role||role,branchId:data.user?.branchId||branchId})}catch(_){showError('Could not reach the cinema login service. Please retry when it is online.')}
+ }
+ render();
+})();
+</script></body>
+</html>
+
+

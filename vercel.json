@@ -1,0 +1,9 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/super-admin", "destination": "/city_lite_cinema_erp_multi_counter_role_login.html" },
+    { "source": "/pos", "destination": "/city_lite_f_b_counter_pos_role_login.html" },
+    { "source": "/ticketing", "destination": "/city_lite_cinema_erp_command_center_role_login.html" }
+  ]
+}
